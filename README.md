@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/Anuken/Mindustry/workflows/Tests/badge.svg?event=push)](https://github.com/Anuken/Mindustry/actions)
 
-This version is going to improve the [mindustry](github.com/Anuken/Mindustry) of [V4](https://github.com/Anuken/Mindustry/releases/tag/v63), while not changing the style of the game itself much.
+This version is going to improve the [mindustry](https://github.com/Anuken/Mindustry) of [V4](https://github.com/Anuken/Mindustry/releases/tag/v63), while not changing the style of the game itself much.
 
 _[Trello Board](https://trello.com/b/IvmwyEwH/mindustry-v4-reforked)_
 
