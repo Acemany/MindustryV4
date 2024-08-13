@@ -98,15 +98,16 @@ public class CrashHandler{
             t.printStackTrace();
         }
 
-        Log.info("Sending crash report.");
+        Log.info("&lcSending crash reports is not yet implemented.");
+        //Log.info("Sending crash report.");
         //post to crash report URL
-        Net.http(Vars.crashReportURL, "POST", value.toJson(OutputType.json), r -> {
-            Log.info("Crash sent successfully.");
-            System.exit(1);
-        }, t -> {
-            t.printStackTrace();
-            System.exit(1);
-        });
+        //Net.http(Vars.crashReportURL, "POST", value.toJson(OutputType.json), r -> {
+        //    Log.info("Crash sent successfully.");
+        //    System.exit(1);
+        //}, t -> {
+        //    t.printStackTrace();
+        //    System.exit(1);
+        //});
 
         //sleep forever
         try{ Thread.sleep(Long.MAX_VALUE); }catch(InterruptedException ignored){}

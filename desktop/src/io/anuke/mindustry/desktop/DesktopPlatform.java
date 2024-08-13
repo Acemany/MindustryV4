@@ -1,28 +1,28 @@
 package io.anuke.mindustry.desktop;
 
-import club.minnced.discord.rpc.DiscordEventHandlers;
-import club.minnced.discord.rpc.DiscordRPC;
-import club.minnced.discord.rpc.DiscordRichPresence;
+//import club.minnced.discord.rpc.DiscordEventHandlers;
+//import club.minnced.discord.rpc.DiscordRPC;
+//import club.minnced.discord.rpc.DiscordRichPresence;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Base64Coder;
 import io.anuke.mindustry.Vars;
-import io.anuke.mindustry.core.GameState.State;
+//import io.anuke.mindustry.core.GameState.State;
 import io.anuke.mindustry.core.Platform;
-import io.anuke.mindustry.game.GameMode;
-import io.anuke.mindustry.net.Net;
+//import io.anuke.mindustry.game.GameMode;
+//import io.anuke.mindustry.net.Net;
 import io.anuke.mindustry.ui.dialogs.FileChooser;
 import io.anuke.ucore.function.Consumer;
-import io.anuke.ucore.util.OS;
-import io.anuke.ucore.util.Strings;
+//import io.anuke.ucore.util.OS;
+//import io.anuke.ucore.util.Strings;
 
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
-import static io.anuke.mindustry.Vars.*;
+//import static io.anuke.mindustry.Vars.*;
 
 public class DesktopPlatform extends Platform{
-    final static boolean useDiscord = OS.is64Bit;
+    //final static boolean useDiscord = OS.is64Bit;
     final static String applicationId = "398246104468291591";
     String[] args;
 
@@ -31,10 +31,10 @@ public class DesktopPlatform extends Platform{
 
         Vars.testMobile = Array.with(args).contains("-testMobile", false);
 
-        if(useDiscord){
+        /*if(useDiscord){
             DiscordEventHandlers handlers = new DiscordEventHandlers();
             DiscordRPC.INSTANCE.Discord_Initialize(applicationId, handlers, true, "");
-        }
+        }*/
     }
 
     @Override
@@ -42,7 +42,7 @@ public class DesktopPlatform extends Platform{
         new FileChooser(text, file -> file.extension().equalsIgnoreCase(filter), open, cons).show();
     }
 
-    @Override
+    /*@Override
     public void updateRPC(){
 
         if(!useDiscord) return;
@@ -87,7 +87,7 @@ public class DesktopPlatform extends Platform{
     @Override
     public void onGameExit(){
         if(useDiscord) DiscordRPC.INSTANCE.Discord_Shutdown();
-    }
+    }*/
 
     @Override
     public String getUUID(){

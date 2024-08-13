@@ -214,7 +214,7 @@ public class NetServer extends Module{
 
             sendWorldData(player, id);
 
-            Platform.instance.updateRPC();
+            //Platform.instance.updateRPC();
         });
 
         Net.handleServer(InvokePacket.class, (id, packet) -> {

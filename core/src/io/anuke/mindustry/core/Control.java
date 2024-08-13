@@ -98,11 +98,11 @@ public class Control extends Module{
 
         saves.load();
 
-        Events.on(StateChangeEvent.class, event -> {
+        /*Events.on(StateChangeEvent.class, event -> {
             if((event.from == State.playing && event.to == State.menu) || (event.from == State.menu && event.to != State.menu)){
                 Timers.runTask(5f, Platform.instance::updateRPC);
             }
-        });
+        });*/
 
         Events.on(PlayEvent.class, event -> {
             for(Player player : players){
@@ -138,7 +138,7 @@ public class Control extends Module{
                 hiscore = true;
             }
 
-            Platform.instance.updateRPC();
+            //Platform.instance.updateRPC();
         });
 
         Events.on(GameOverEvent.class, event -> {
@@ -300,7 +300,7 @@ public class Control extends Module{
     public void init(){
         EntityQuery.init();
 
-        Platform.instance.updateRPC();
+        //Platform.instance.updateRPC();
 
         if(!Settings.getBool("4.0-warning-2", false)){
 
@@ -344,10 +344,10 @@ public class Control extends Module{
                 input.update();
             }
 
-            //auto-update rpc every 5 seconds
+            /*auto-update rpc every 5 seconds
             if(timerRPC.get(60 * 5)){
                 Platform.instance.updateRPC();
-            }
+            }*/
 
             //check unlocks every 2 seconds
             if(!state.mode.infiniteResources && timerUnlock.get(120)){

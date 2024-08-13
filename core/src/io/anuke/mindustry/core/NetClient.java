@@ -121,7 +121,7 @@ public class NetClient extends Module{
             ui.showError("$text.disconnect");
             connecting = false;
 
-            Platform.instance.updateRPC();
+            //Platform.instance.updateRPC();
         });
 
         Net.handleClient(WorldStream.class, data -> {
@@ -370,7 +370,7 @@ public class NetClient extends Module{
         ui.join.hide();
         Net.setClientLoaded(true);
         Gdx.app.postRunnable(Call::connectConfirm);
-        Timers.runTask(40f, Platform.instance::updateRPC);
+        //Timers.runTask(40f, Platform.instance::updateRPC);
     }
 
     private void reset(){

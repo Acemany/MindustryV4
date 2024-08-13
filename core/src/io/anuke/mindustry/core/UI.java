@@ -48,7 +48,7 @@ public class UI extends SceneModule{
     public CustomGameDialog levels;
     public MapsDialog maps;
     public LoadDialog load;
-    public DiscordDialog discord;
+    //public DiscordDialog discord;
     public JoinDialog join;
     public HostDialog host;
     public PausedDialog paused;
@@ -153,7 +153,7 @@ public class UI extends SceneModule{
         controls = new ControlsDialog();
         restart = new RestartDialog();
         join = new JoinDialog();
-        discord = new DiscordDialog();
+        //discord = new DiscordDialog();
         load = new LoadDialog();
         levels = new CustomGameDialog();
         language = new LanguageDialog();

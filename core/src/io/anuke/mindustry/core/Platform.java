@@ -65,7 +65,7 @@ public abstract class Platform {
         });
     }
     /**Update discord RPC.*/
-    public void updateRPC(){}
+    //public void updateRPC(){}
     /**Called when the game is exited.*/
     public void onGameExit(){}
     /**Open donation dialog. Currently android only.*/

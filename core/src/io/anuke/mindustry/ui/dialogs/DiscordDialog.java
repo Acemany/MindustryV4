@@ -1,4 +1,4 @@
-package io.anuke.mindustry.ui.dialogs;
+/*package io.anuke.mindustry.ui.dialogs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -50,3 +50,4 @@ public class DiscordDialog extends Dialog{
         });
     }
 }
+*/

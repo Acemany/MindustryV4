@@ -221,11 +221,11 @@ public class MapEditorDialog extends Dialog implements Disposable{
             }
             shownWithMap = false;
 
-            Timers.runTask(10f, Platform.instance::updateRPC);
+            //Timers.runTask(10f, Platform.instance::updateRPC);
         });
 
         hidden(() -> {
-            Platform.instance.updateRPC();
+            //Platform.instance.updateRPC();
             Platform.instance.endForceLandscape();
         });
     }

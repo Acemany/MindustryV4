@@ -132,7 +132,7 @@ public class Net{
         active = true;
         server = true;
 
-        Timers.runTask(60f, Platform.instance::updateRPC);
+        //Timers.runTask(60f, Platform.instance::updateRPC);
     }
 
     /**

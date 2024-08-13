@@ -23,7 +23,7 @@ import static io.anuke.mindustry.Vars.ui;
 
 public class AboutDialog extends FloatingDialog{
     private Array<Contributor> contributors = new Array<>();
-    private static ObjectSet<String> bannedItems = ObjectSet.with("google-play", "itch.io", "dev-builds", "trello");
+    private static ObjectSet<String> bannedItems = ObjectSet.with("dev-builds", "trello");
 
     public AboutDialog(){
         super("$text.about.button");
