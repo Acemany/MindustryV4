@@ -5405,7 +5405,7 @@ cursor
   orig: 4, 4
   offset: 0, 0
   index: -1
-discord-banner
+telegram-banner
   rotate: false
   xy: 204, 466
   size: 84, 45
@@ -5636,7 +5636,7 @@ icon-dev-builds
   orig: 14, 14
   offset: 0, 0
   index: -1
-icon-discord
+icon-telegram
   rotate: false
   xy: 189, 242
   size: 14, 14

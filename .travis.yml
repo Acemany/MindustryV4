@@ -16,5 +16,5 @@ deploy:
   - "desktop/build/libs/desktop-release.jar"
   - "server/build/libs/server-release.jar"
   on:
-    repo: Anuken/Mindustry
+    repo: Acemany/Mindustry
     tags: true

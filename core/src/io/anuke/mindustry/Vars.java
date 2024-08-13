@@ -31,7 +31,7 @@ import java.util.Locale;
 @SuppressWarnings("unchecked")
 public class Vars{
     public static final String appName = "Mindustry";
-    //public static final String discordURL = "https://discord.gg/mindustry";
+    //public static final String telegramURL = "https://t.me/mindustryV4";
     public static final String releasesURL = "https://api.github.com/repos/acemany/MindustryV4_reforked/releases";
     public static final String contributorsURL = "https://api.github.com/repos/acemany/MindustryV4_reforked/contributors";
     //public static final String crashReportURL = "http://mindustry.us.to/report";

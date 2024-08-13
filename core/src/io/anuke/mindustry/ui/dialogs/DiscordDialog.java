@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import io.anuke.mindustry.graphics.Palette;
 import io.anuke.ucore.scene.ui.Dialog;
 
-import static io.anuke.mindustry.Vars.discordURL;
+import static io.anuke.mindustry.Vars.telegramURL;
 import static io.anuke.mindustry.Vars.ui;
 
 public class DiscordDialog extends Dialog{
@@ -33,19 +33,19 @@ public class DiscordDialog extends Dialog{
                 i.addImage("icon-discord").size(14 * 3);
             }).size(h).left();
 
-            t.add("$text.discord").color(Palette.accent).growX().padLeft(10f);
+            t.add("$text.telegram").color(Palette.accent).growX().padLeft(10f);
         }).size(470f, h).pad(10f);
 
         buttons().defaults().size(170f, 50);
 
         buttons().addButton("$text.back", this::hide);
         buttons().addButton("$text.copylink", () -> {
-            Gdx.app.getClipboard().setContents(discordURL);
+            Gdx.app.getClipboard().setContents(telegramURL);
         });
         buttons().addButton("$text.openlink", () -> {
-            if(!Gdx.net.openURI(discordURL)){
+            if(!Gdx.net.openURI(telegramURL)){
                 ui.showError("$text.linkfail");
-                Gdx.app.getClipboard().setContents(discordURL);
+                Gdx.app.getClipboard().setContents(telegramURL);
             }
         });
     }
