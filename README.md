@@ -1,6 +1,6 @@
 # ![Logo](core/assets-raw/sprites/ui/logotext.png)
 
-[![Build Status](https://github.com/acemany/MindustryV4_reforked/workflows/Tests/badge.svg?event=push)](https://github.com/acemany/MindustryV4_reforked/actions)
+[![Build Status](https://github.com/acemany/MindustryV4_reforked/actions/workflows/push.yml/badge.svg)](https://github.com/acemany/MindustryV4_reforked/actions)
 
 This version is going to improve the [mindustry](https://github.com/Anuken/Mindustry) of [V4](https://github.com/Anuken/Mindustry/releases/tag/v63), while not changing the style of the game itself much.
 
