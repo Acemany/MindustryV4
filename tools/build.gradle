@@ -11,7 +11,7 @@ import java.util.concurrent.Executors
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.files.*
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Files
 
 def textureFolder = "../core/assets-raw/sprites/generated/"
 
@@ -155,13 +155,13 @@ task updateBundles{
         }
 
         OrderedMap<String, String> base = new OrderedMap<>();
-        PropertiesUtils.load(base, Gdx.files.internal("core/assets/bundles/bundle.properties").reader());
+        PropertiesUtils.load((ObjectMap<String, String>)base, new FileHandle("core/assets/bundles/bundle.properties", Files.FileType.Local).reader());
         Array<String> removals = new Array<>();
 
-        def idkIJustWantThisToWork = {child ->
+        def updateBundle = {FileHandle child ->
             if(child.name().equals("bundle.properties") || child.toString().contains("output")) return;
 
-            Log.info("Parsing bundle: @", child);
+            println("\nParsing bundle: " + child);
 
             OrderedMap<String, String> other = new OrderedMap<>();
 
@@ -181,8 +181,8 @@ task updateBundles{
                 }
             }
 
-            ObjectMap<String, String> extras = new OrderedMap<>();
-            PropertiesUtils.load(other, child.reader());
+            OrderedMap<String, String> extras = new OrderedMap<>();
+            PropertiesUtils.load((ObjectMap<String, String>)other, child.reader());
             removals.clear();
 
             for(String key : other.orderedKeys()){
@@ -190,10 +190,10 @@ task updateBundles{
                     extras.put(key, other.get(key));
                 }else if(!base.containsKey(key)){
                     removals.add(key);
-                    Log.info("&lr- Removing unused key '@'...", key);
+                    println("[I] Removing unused key '" + key + "'...");
                 }
             }
-            Log.info("&lr@ keys removed.", removals.size);
+            println("--- " + removals.size + " keys removed.");
             for(String s : removals){
                 other.remove(s);
             }
@@ -204,7 +204,7 @@ task updateBundles{
                 if(other.get(key) == null || other.get(key).trim().isEmpty()){
                     other.put(key, base.get(key));
                     added++;
-                    Log.info("&lc- Adding missing key '@'...", key);
+                    println("[I] Adding missing key '" + key + "'...");
                 }
             }
 
@@ -213,23 +213,23 @@ task updateBundles{
                         (key + " =" + (value.trim().isEmpty() ? "" : " ") + uniEscape(value)).replace("\n", "\\n") + "\n";}
             FileHandle output = child.sibling("output/" + child.name());
 
-            Log.info("&lc@ keys added.", added);
-            Log.info("Writing bundle to @", output);
+            println("--- " + added + " keys added.");
+            println("Writing bundle to " + output);
             StringBuilder result = new StringBuilder();
 
             //add everything ordered
-            for(String key : base.orderedKeys().copy().and(extras.keys().toSeq())){
+            for(String key : base.orderedKeys() + extras.keys().toArray()){
                 if(other.get(key) == null) continue;
 
-                result.append(processor.get(key, other.get(key)));
+                result.append(processor(key, other.get(key)));
                 other.remove(key);
             }
 
-            child.writeString(result.toString());
+            child.writeString(result.toString(), false);
         }
 
-        for (FileHandle file : Gdx.files.internal("core/assets/bundles").list()){
-            idkIJustWantThisToWork(file)
+        for (FileHandle file : new FileHandle("core/assets/bundles", Files.FileType.Local).list()){
+            updateBundle(file)
         };
     }
 }
