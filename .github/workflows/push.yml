@@ -40,4 +40,4 @@ jobs:
           git push
         fi
     - name: Run unit tests
-      run: ./gradlew tests:test --rerun --stacktrace
+      run: ./gradlew tests:test --rerun-tasks --stacktrace
