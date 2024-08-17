@@ -3,13 +3,13 @@ package io.anuke.kryonet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.*;
-import io.anuke.mindustry.net.Host;
-import io.anuke.mindustry.net.Net;
-import io.anuke.mindustry.net.Net.ClientProvider;
-import io.anuke.mindustry.net.Net.SendMode;
-import io.anuke.mindustry.net.NetworkIO;
-import io.anuke.mindustry.net.Packets.Connect;
-import io.anuke.mindustry.net.Packets.Disconnect;
+import io.acemany.mindustryV4.net.Host;
+import io.acemany.mindustryV4.net.Net;
+import io.acemany.mindustryV4.net.Net.ClientProvider;
+import io.acemany.mindustryV4.net.Net.SendMode;
+import io.acemany.mindustryV4.net.NetworkIO;
+import io.acemany.mindustryV4.net.Packets.Connect;
+import io.acemany.mindustryV4.net.Packets.Disconnect;
 import io.anuke.ucore.function.Consumer;
 import io.anuke.ucore.util.Pooling;
 import net.jpountz.lz4.LZ4Factory;
@@ -23,7 +23,7 @@ import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedSelectorException;
 
-import static io.anuke.mindustry.Vars.*;
+import static io.acemany.mindustryV4.Vars.*;
 
 public class KryoClient implements ClientProvider{
     final Client client;

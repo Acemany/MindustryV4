@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static io.anuke.mindustry.Vars.headless;
+import static io.acemany.mindustryV4.Vars.headless;
 
 /**Utilities and configs for kryo module.*/
 public class KryoCore {

@@ -2,8 +2,8 @@ package io.anuke.kryonet;
 
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.serialization.Serialization;
-import io.anuke.mindustry.net.Packet;
-import io.anuke.mindustry.net.Registrator;
+import io.acemany.mindustryV4.net.Packet;
+import io.acemany.mindustryV4.net.Registrator;
 import io.anuke.ucore.function.Supplier;
 import io.anuke.ucore.util.Pooling;
 

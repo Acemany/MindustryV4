@@ -29,7 +29,7 @@ public class RemoteMethodAnnotationProcessor extends AbstractProcessor{
     /** Maximum size of each event packet. */
     public static final int maxPacketSize = 4096;
     /** Name of the base package to put all the generated classes. */
-    private static final String packageName = "io.anuke.mindustry.gen";
+    private static final String packageName = "io.acemany.mindustryV4.gen";
 
     /** Name of class that handles reading and invoking packets on the server. */
     private static final String readServerName = "RemoteReadServer";

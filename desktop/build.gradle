@@ -3,7 +3,7 @@ apply plugin: "java"
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "io.anuke.mindustry.desktop.DesktopLauncher"
+project.ext.mainClassName = "io.acemany.mindustryV4.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
 def PACKR_DIR = "$System.env.PACKR_DIR"
@@ -42,7 +42,7 @@ task run(dependsOn: classes, type: JavaExec) {
     }
 
     if(args.contains("debug")){
-        main = "io.anuke.mindustry.DebugLauncher"
+        main = "io.acemany.mindustryV4.DebugLauncher"
     }
 }
 

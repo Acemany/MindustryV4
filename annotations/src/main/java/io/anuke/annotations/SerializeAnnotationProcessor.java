@@ -23,7 +23,7 @@ public class SerializeAnnotationProcessor extends AbstractProcessor{
     /**Target class name.*/
     private static final String className = "Serialization";
     /** Name of the base package to put all the generated classes. */
-    private static final String packageName = "io.anuke.mindustry.gen";
+    private static final String packageName = "io.acemany.mindustryV4.gen";
 
     private int round;
 

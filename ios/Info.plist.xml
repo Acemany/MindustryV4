@@ -70,8 +70,8 @@
                 <string>Owner</string>
                 <key>LSItemContentTypes</key>
                 <array>
-                    <string>io.anuke.mindustry.mapfile</string>
-                    <string>io.anuke.mindustry.savefile</string>
+                    <string>io.acemany.mindustryV4.mapfile</string>
+                    <string>io.acemany.mindustryV4.savefile</string>
                 </array>
             </dict>
         </array>
@@ -86,7 +86,7 @@
                 <key>UTTypeDescription</key>
                 <string>Mindustry Save File</string>
                 <key>UTTypeIdentifier</key>
-                <string>io.anuke.mindustry.savefile</string>
+                <string>io.acemany.mindustryV4.savefile</string>
                 <key>UTTypeTagSpecification</key>
                 <dict>
                     <key>public.filename-extension</key>
@@ -107,7 +107,7 @@
                 <key>UTTypeDescription</key>
                 <string>Mindustry Map File</string>
                 <key>UTTypeIdentifier</key>
-                <string>io.anuke.mindustry.mapfile</string>
+                <string>io.acemany.mindustryV4.mapfile</string>
                 <key>UTTypeTagSpecification</key>
                 <dict>
                     <key>public.filename-extension</key>

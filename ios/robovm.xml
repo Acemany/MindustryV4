@@ -20,8 +20,8 @@
   <forceLinkClasses>
     <pattern>net.jpountz.lz4.**</pattern>
     <pattern>io.anuke.ucore.scene.**</pattern>
-    <pattern>io.anuke.mindustry.gen.Call</pattern>
-    <pattern>io.anuke.mindustry.net.**</pattern>
+    <pattern>io.acemany.mindustryV4.gen.Call</pattern>
+    <pattern>io.acemany.mindustryV4.net.**</pattern>
     <pattern>com.android.okhttp.HttpHandler</pattern>
     <pattern>com.android.okhttp.HttpsHandler</pattern>
     <pattern>com.android.org.conscrypt.**</pattern>

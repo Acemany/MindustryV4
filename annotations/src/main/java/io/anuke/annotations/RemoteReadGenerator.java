@@ -51,7 +51,7 @@ public class RemoteReadGenerator{
             Constructor<TypeName> cons = TypeName.class.getDeclaredConstructor(String.class);
             cons.setAccessible(true);
 
-            TypeName playerType = cons.newInstance("io.anuke.mindustry.entities.Player");
+            TypeName playerType = cons.newInstance("io.acemany.mindustryV4.entities.Player");
             //add player parameter
             readMethod.addParameter(playerType, "player");
         }

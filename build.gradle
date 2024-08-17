@@ -22,7 +22,7 @@ allprojects {
         versionNumber = '4'
         versionModifier = 'alpha'
         versionType = 'official'
-        appName = 'Mindustry'
+        appName = 'Mindustry V4'
         gdxVersion = '1.9.9'
         roboVMVersion = '2.3.0'
         uCoreVersion = '3dfb820142a0fc583ad19413a24fc5038aa29d89'
@@ -96,7 +96,6 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        //compile 'com.github.MinnDevelopment:java-discord-rpc:v2.0.0'
     }
 }
 
@@ -128,11 +127,11 @@ project(":ios") {
             props.load(new FileInputStream(vfile))
         }
 
-        props['app.id'] = 'io.anuke.mindustry'
+        props['app.id'] = 'io.acemany.mindustryV4'
         props['app.version'] = '4.0'
-        props['app.mainclass'] = 'io.anuke.mindustry.IOSLauncher'
+        props['app.mainclass'] = 'io.acemany.mindustryV4.IOSLauncher'
         props['app.executable'] = 'IOSLauncher'
-        props['app.name'] = 'Mindustry'
+        props['app.name'] = 'Mindustry V4'
         props['app.build'] = (!props.hasProperty("app.build") ? 40 : props['app.build'].toInteger() + 1)+""
         props.store(vfile.newWriter(), null)
     }

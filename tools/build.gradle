@@ -100,7 +100,7 @@ task pack(dependsOn: [classes, configurations.runtimeClasspath]){
 task generateSprites(dependsOn: classes, type: JavaExec) {
     file(textureFolder).mkdirs()
 
-    main = "io.anuke.mindustry.PackerLauncher"
+    main = "io.acemany.mindustryV4.PackerLauncher"
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = textureFolder
