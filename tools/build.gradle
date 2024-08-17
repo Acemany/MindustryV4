@@ -33,67 +33,31 @@ task tileImages(){
     }
 }
 
-task pack(dependsOn: [classes, configurations.runtimeClasspath]){
+task pack(){
+    dependsOn 'prePack'
+
+    doLast {
+        TexturePacker.process("core/assets-raw/sprites/", "core/assets/sprites/", "sprites.atlas")
+
+        delete{
+            delete textureFolder
+        }
+    }
+}
+
+task prePack(){
+    dependsOn "cleanup"
 
     doLast{
-        //cleanup old sprites
-        delete{
-            delete "../core/assets-raw/sprites_out/"
-        }
+        TexturePacker.process("core/assets-raw/sprites/", "core/assets/sprites/", "sprites.atlas")
+    }
 
-        //copy in new sprites
-        copy{
-            from "../core/assets-raw/sprites/"
-            into "../core/assets-raw/sprites_out/"
-        }
+    finalizedBy 'generateSprites'
+}
 
-        //run generation task; generate all needed sprites
-        file(genFolder).mkdirs()
-        javaexec{
-            main = "mindustry.tools.ImagePacker"
-            classpath = sourceSets.main.runtimeClasspath
-            workingDir = genFolder
-        }
-
-        copy{
-            from "../core/assets-raw/sprites_out/ui/icons"
-            into "../core/assets-raw/sprites_out/ui/"
-        }
-
-        delete{
-            delete "../core/assets-raw/sprites_out/ui/icons"
-        }
-
-        ExecutorService executor = Executors.newFixedThreadPool(16)
-        long ms = System.currentTimeMillis()
-
-        //antialias everything except UI elements
-        fileTree(dir: new File(rootDir, 'core/assets-raw/sprites_out/').absolutePath, include: "**/*.png").visit{ file ->
-            if(file.isDirectory() || (file.toString().replace("\\", "/").contains("/ui/") && file.toString().startsWith("icon-")) || file.toString().contains(".9.png")) return
-
-            executor.submit{
-                antialias(file.file)
-            }
-        }
-
-        Threads.await(executor)
-
-        println "Time taken for AA: ${(System.currentTimeMillis() - ms) / 1000f}"
-
-        println("\n\nPacking normal 4096 sprites...\n\n")
-
-        //pack normal sprites
-        TexturePacker.process(new File(rootDir, "core/assets-raw/sprites_out/").absolutePath, new File(rootDir, "core/assets/sprites/").absolutePath, "sprites.aatls")
-
-        println("\n\nPacking fallback 2048 sprites...\n\n")
-
-        //replace config file contents
-        fileTree(dir: '../core/assets-raw/sprites_out/', include: "**/*.json").visit{ file ->
-            if(!file.isDirectory()) file.file.text = file.file.text.replace("4096", "2048")
-        }
-
-        //pack fallback 2048x2048 sprites
-        TexturePacker.process(new File(rootDir, "core/assets-raw/sprites_out/").absolutePath, new File(rootDir, "core/assets/sprites/fallback/").absolutePath, "sprites.aatls")
+task cleanup(){
+    delete{
+        delete textureFolder
     }
 }
 

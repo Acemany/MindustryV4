@@ -5405,13 +5405,6 @@ cursor
   orig: 4, 4
   offset: 0, 0
   index: -1
-telegram-banner
-  rotate: false
-  xy: 204, 466
-  size: 84, 45
-  orig: 84, 45
-  offset: 0, 0
-  index: -1
 empty-sector
   rotate: false
   xy: 983, 479
@@ -5636,37 +5629,30 @@ icon-dev-builds
   orig: 14, 14
   offset: 0, 0
   index: -1
-icon-telegram
+icon-donate
   rotate: false
   xy: 189, 242
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
-icon-donate
+icon-dots
   rotate: false
   xy: 69, 188
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
-icon-dots
+icon-editor
   rotate: false
   xy: 256, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
-icon-editor
-  rotate: false
-  xy: 602, 326
-  size: 14, 14
-  orig: 14, 14
-  offset: 0, 0
-  index: -1
 icon-egg
   rotate: false
-  xy: 69, 172
+  xy: 602, 326
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5687,7 +5673,7 @@ icon-eraser
   index: -1
 icon-exit
   rotate: false
-  xy: 272, 296
+  xy: 69, 172
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5708,7 +5694,7 @@ icon-file-image
   index: -1
 icon-file-text
   rotate: false
-  xy: 258, 322
+  xy: 272, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5722,7 +5708,7 @@ icon-fill
   index: -1
 icon-floppy
   rotate: false
-  xy: 288, 296
+  xy: 258, 322
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5736,14 +5722,14 @@ icon-floppy-16
   index: -1
 icon-folder
   rotate: false
-  xy: 304, 296
+  xy: 288, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-folder-parent
   rotate: false
-  xy: 320, 296
+  xy: 304, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5757,14 +5743,14 @@ icon-generated
   index: -1
 icon-github
   rotate: false
-  xy: 336, 296
+  xy: 320, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-google-play
   rotate: false
-  xy: 352, 296
+  xy: 336, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5792,14 +5778,14 @@ icon-holdDelete
   index: -1
 icon-home
   rotate: false
-  xy: 368, 296
+  xy: 352, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-host
   rotate: false
-  xy: 384, 296
+  xy: 368, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5813,7 +5799,7 @@ icon-info
   index: -1
 icon-itch.io
   rotate: false
-  xy: 620, 398
+  xy: 384, 296
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5841,7 +5827,7 @@ icon-line
   index: -1
 icon-link
   rotate: false
-  xy: 620, 382
+  xy: 620, 398
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5855,7 +5841,7 @@ icon-liquid-small
   index: -1
 icon-load
   rotate: false
-  xy: 620, 366
+  xy: 620, 382
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5897,7 +5883,7 @@ icon-logic
   index: -1
 icon-map
   rotate: false
-  xy: 620, 350
+  xy: 620, 366
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -5988,7 +5974,7 @@ icon-pencil
   index: -1
 icon-pencil-small
   rotate: false
-  xy: 191, 226
+  xy: 620, 350
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -6009,7 +5995,7 @@ icon-play
   index: -1
 icon-play-2
   rotate: false
-  xy: 191, 210
+  xy: 191, 226
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -6030,7 +6016,7 @@ icon-power-small
   index: -1
 icon-quit
   rotate: false
-  xy: 85, 174
+  xy: 191, 210
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -6044,14 +6030,14 @@ icon-redo
   index: -1
 icon-refresh
   rotate: false
-  xy: 101, 174
+  xy: 85, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-rename
   rotate: false
-  xy: 117, 174
+  xy: 101, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -6065,35 +6051,35 @@ icon-resize
   index: -1
 icon-rotate
   rotate: false
-  xy: 133, 174
+  xy: 117, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-rotate-arrow
   rotate: false
-  xy: 149, 174
+  xy: 133, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-rotate-left
   rotate: false
-  xy: 165, 174
+  xy: 149, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-rotate-right
   rotate: false
-  xy: 181, 174
+  xy: 165, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 icon-save
   rotate: false
-  xy: 590, 290
+  xy: 181, 174
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -6117,6 +6103,13 @@ icon-settings
   xy: 660, 337
   size: 10, 10
   orig: 10, 10
+  offset: 0, 0
+  index: -1
+icon-telegram
+  rotate: false
+  xy: 590, 290
+  size: 14, 14
+  orig: 14, 14
   offset: 0, 0
   index: -1
 icon-terrain
@@ -6219,7 +6212,7 @@ icon-zoom-small
   index: -1
 info-banner
   rotate: false
-  xy: 1, 240
+  xy: 204, 466
   size: 84, 45
   orig: 84, 45
   offset: 0, 0
@@ -6341,6 +6334,13 @@ slider-vertical
   xy: 638, 484
   size: 8, 1
   orig: 8, 1
+  offset: 0, 0
+  index: -1
+telegram-banner
+  rotate: false
+  xy: 1, 240
+  size: 84, 45
+  orig: 84, 45
   offset: 0, 0
   index: -1
 underline

@@ -149,3 +149,4 @@ gradle-app.setting
 .DS_Store
 Thumbs.db
 android/libs/
+/core/assets-raw/sprites_out
