@@ -9,6 +9,7 @@ import io.acemany.mindustryV4.graphics.Palette;
 import io.acemany.mindustryV4.input.PlaceUtils.NormalizeDrawResult;
 import io.acemany.mindustryV4.input.PlaceUtils.NormalizeResult;
 import io.acemany.mindustryV4.net.Net;
+import io.acemany.mindustryV4.type.*;
 import io.acemany.mindustryV4.world.Block;
 import io.acemany.mindustryV4.world.Tile;
 import io.anuke.ucore.core.Graphics;
@@ -19,7 +20,7 @@ import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.scene.ui.layout.Unit;
-import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.util.*;
 
 import static io.acemany.mindustryV4.Vars.*;
 import static io.acemany.mindustryV4.input.CursorType.*;
@@ -236,6 +237,13 @@ public class DesktopInput extends InputHandler{
             selectY = tileY(Gdx.input.getY());
         }
 
+        if(Inputs.keyTap(section, "pick_select")){
+            Tile picked_tile = tileAt(Gdx.input.getX(), Gdx.input.getY());
+            if(picked_tile.block() != null){
+                rotation = picked_tile.getRotation();
+                recipe = Recipe.getByResult(picked_tile.block());
+            }
+        }
 
         if(Inputs.keyRelease(section, "break") || Inputs.keyRelease(section, "select")){
 
@@ -268,7 +276,7 @@ public class DesktopInput extends InputHandler{
 
             mode = none;
         }
-        
+
     }
 
     @Override

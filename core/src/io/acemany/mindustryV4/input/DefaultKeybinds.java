@@ -20,6 +20,7 @@ public class DefaultKeybinds{
                 "move_x", new Axis(Input.A, Input.D),
                 "move_y", new Axis(Input.S, Input.W),
                 "select", Input.MOUSE_LEFT,
+                "pick_select", Input.MOUSE_MIDDLE,
                 "deselect", Input.MOUSE_RIGHT,
                 "break", Input.MOUSE_RIGHT,
                 "rotate", new Axis(Input.SCROLL),
