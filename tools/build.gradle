@@ -15,24 +15,6 @@ import com.badlogic.gdx.Files
 
 def textureFolder = "../core/assets-raw/sprites/generated/"
 
-task antialiasImages(){
-    doLast{
-        for(def img : project.getProperty("images").split(",")){
-            println(project.getProperty("startdir") + "/" + img)
-            antialias(new File(project.getProperty("startdir") + "/" + img))
-        }
-    }
-}
-
-task tileImages(){
-    doLast{
-        for(def img : project.getProperty("images").split(",")){
-            println(project.getProperty("startdir") + "/" + img)
-            tileImage(new File(project.getProperty("startdir") + "/" + img))
-        }
-    }
-}
-
 task pack(){
     dependsOn 'prePack'
 

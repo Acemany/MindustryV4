@@ -34,7 +34,7 @@ public class TelegramDialog extends Dialog{
             }).size(h).left();
 
             t.add("$text.telegram").color(Palette.accent).growX().padLeft(10f);
-        }).size(470f, h).pad(10f);
+        }).size(520f, h).pad(10f);
 
         buttons().defaults().size(170f, 50);
 
