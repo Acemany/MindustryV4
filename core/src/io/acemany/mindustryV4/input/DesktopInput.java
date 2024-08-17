@@ -2,6 +2,7 @@ package io.acemany.mindustryV4.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.acemany.mindustryV4.*;
 import io.acemany.mindustryV4.content.blocks.Blocks;
 import io.acemany.mindustryV4.core.GameState.State;
 import io.acemany.mindustryV4.entities.Player;
@@ -239,9 +240,11 @@ public class DesktopInput extends InputHandler{
 
         if(Inputs.keyTap(section, "pick_select")){
             Tile picked_tile = tileAt(Gdx.input.getX(), Gdx.input.getY());
-            if(picked_tile.block() != null){
+            if(picked_tile.block() != null && picked_tile.discovered()){
+                Recipe picked_recipe = Recipe.getByResult(picked_tile.block());
+                if(!control.unlocks.isUnlocked(picked_recipe)) return;
                 rotation = picked_tile.getRotation();
-                recipe = Recipe.getByResult(picked_tile.block());
+                recipe = picked_recipe;
             }
         }
 

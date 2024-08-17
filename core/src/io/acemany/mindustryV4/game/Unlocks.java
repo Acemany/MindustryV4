@@ -18,7 +18,7 @@ public class Unlocks{
 
     /** Returns whether or not this piece of content is unlocked yet.*/
     public boolean isUnlocked(UnlockableContent content){
-        if(content.alwaysUnlocked()) return true;
+        if(content == null || content.alwaysUnlocked()) return true;
 
         if(!unlocked.containsKey(content.getContentType())){
             unlocked.put(content.getContentType(), new ObjectSet<>());
