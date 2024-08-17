@@ -37,7 +37,7 @@
         <key>LSSupportsOpeningDocumentsInPlace</key>
         <true/>
         <key>NSPhotoLibraryAddUsageDescription</key>
-        <string>Mindustry</string>
+        <string>Mindustry V4</string>
         <key>UIDeviceFamily</key>
         <array>
             <integer>1</integer>
