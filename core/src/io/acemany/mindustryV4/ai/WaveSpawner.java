@@ -28,8 +28,8 @@ public class WaveSpawner{
     private Array<SpawnGroup> groups;
     private boolean dynamicSpawn;
 
-    private Array<FlyerSpawn> flySpawns = new Array<>();
-    private Array<GroundSpawn> groundSpawns = new Array<>();
+    private final Array<FlyerSpawn> flySpawns = new Array<>();
+    private final Array<GroundSpawn> groundSpawns = new Array<>();
 
     public WaveSpawner(){
         Events.on(WorldLoadEvent.class, this::reset);
@@ -164,7 +164,7 @@ public class WaveSpawner{
             for(int y = quady * quadsize; y < world.height() && y < (quady + 1) * quadsize; y++){
                 Tile tile = world.tile(x, y);
 
-                if(tile == null || tile.solid() || world.pathfinder.getValueforTeam(Team.red, x, y) == Float.MAX_VALUE){
+                if(tile == null || tile.solid() || world.pathfinder.getValueForTeam(Team.red, x, y) == Float.MAX_VALUE){
                     setQuad(quadx, quady, false);
                     break outer;
                 }
@@ -247,12 +247,12 @@ public class WaveSpawner{
         return Mathf.ceil(world.height() / (float) quadsize);
     }
 
-    private class FlyerSpawn{
+    private static class FlyerSpawn{
         //square angle
         float angle;
     }
 
-    private class GroundSpawn{
+    private static class GroundSpawn{
         //quadrant spawn coordinates
         int x, y;
     }

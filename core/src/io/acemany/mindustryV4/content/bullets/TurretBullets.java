@@ -43,7 +43,7 @@ public class TurretBullets extends BulletList implements ContentList{
         };
 
         healBullet = new BulletType(5.2f, 13){
-            float healPercent = 3f;
+            final float healPercent = 3f;
 
             {
                 hiteffect = BulletFx.hitLaser;
@@ -131,16 +131,13 @@ public class TurretBullets extends BulletList implements ContentList{
                 status = StatusEffects.burning;
             }
 
-            @Override
-            public void draw(Bullet b){
-            }
         };
 
         lancerLaser = new BulletType(0.001f, 140){
-            Color[] colors = {Palette.lancerLaser.cpy().mul(1f, 1f, 1f, 0.4f), Palette.lancerLaser, Color.WHITE};
-            float[] tscales = {1f, 0.7f, 0.5f, 0.2f};
-            float[] lenscales = {1f, 1.1f, 1.13f, 1.14f};
-            float length = 100f;
+            final Color[] colors = {Palette.lancerLaser.cpy().mul(1f, 1f, 1f, 0.4f), Palette.lancerLaser, Color.WHITE};
+            final float[] tscales = {1f, 0.7f, 0.5f, 0.2f};
+            final float[] lenscales = {1f, 1.1f, 1.13f, 1.14f};
+            final float length = 100f;
 
             {
                 hiteffect = BulletFx.hitLancer;
@@ -173,12 +170,12 @@ public class TurretBullets extends BulletList implements ContentList{
         };
 
         meltdownLaser = new BulletType(0.001f, 26){
-            Color tmpColor = new Color();
-            Color[] colors = {Color.valueOf("ec745855"), Color.valueOf("ec7458aa"), Color.valueOf("ff9c5a"), Color.WHITE};
-            float[] tscales = {1f, 0.7f, 0.5f, 0.2f};
-            float[] strokes = {2f, 1.5f, 1f, 0.3f};
-            float[] lenscales = {1f, 1.12f, 1.15f, 1.17f};
-            float length = 200f;
+            final Color tmpColor = new Color();
+            final Color[] colors = {Color.valueOf("ec745855"), Color.valueOf("ec7458aa"), Color.valueOf("ff9c5a"), Color.WHITE};
+            final float[] tscales = {1f, 0.7f, 0.5f, 0.2f};
+            final float[] strokes = {2f, 1.5f, 1f, 0.3f};
+            final float[] lenscales = {1f, 1.12f, 1.15f, 1.17f};
+            final float length = 200f;
 
             {
                 hiteffect = BulletFx.hitMeltdown;
@@ -223,9 +220,9 @@ public class TurretBullets extends BulletList implements ContentList{
         };
 
         fuseShot = new BulletType(0.01f, 70){
-            int rays = 3;
-            float raySpace = 2f;
-            float rayLength = 80f;
+            final int rays = 3;
+            final float raySpace = 2f;
+            final float rayLength = 80f;
             {
                 hiteffect = BulletFx.hitFuse;
                 lifetime = 13f;
@@ -236,7 +233,7 @@ public class TurretBullets extends BulletList implements ContentList{
             @Override
             public void init(Bullet b) {
                 for (int i = 0; i < rays; i++) {
-                    float offset = (i-rays/2)*raySpace;
+                    float offset = ((float)(i-rays/2))*raySpace;
                     vector.trns(b.angle(), 0.01f, offset);
                     Damage.collideLine(b, b.getTeam(), hiteffect, b.x, b.y, b.angle(), rayLength - Math.abs(i - (rays/2))*20f);
                 }
@@ -300,10 +297,6 @@ public class TurretBullets extends BulletList implements ContentList{
             }
 
             @Override
-            public void draw(Bullet b){
-            }
-
-            @Override
             public void init(Bullet b){
                 Lightning.create(b.getTeam(), Palette.lancerLaser, damage, b.x, b.y, b.angle(), 30);
             }
@@ -314,10 +307,6 @@ public class TurretBullets extends BulletList implements ContentList{
                 lifetime = 1;
                 despawneffect = Fx.none;
                 hiteffect = BulletFx.hitLancer;
-            }
-
-            @Override
-            public void draw(Bullet b){
             }
 
             @Override

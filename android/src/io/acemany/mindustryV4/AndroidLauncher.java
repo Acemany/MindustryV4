@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.support.annotation.*;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import com.badlogic.gdx.Gdx;
@@ -132,7 +133,7 @@ public class AndroidLauncher extends PatchedAndroidApplication{
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         if(requestCode == PERMISSION_REQUEST_CODE){
             for(int i : grantResults){
                 if(i != PackageManager.PERMISSION_GRANTED) return;
@@ -149,6 +150,7 @@ public class AndroidLauncher extends PatchedAndroidApplication{
             if(uri != null){
                 File myFile = null;
                 String scheme = uri.getScheme();
+                if(scheme == null) return;
                 if(scheme.equals("file")){
                     String fileName = uri.getEncodedPath();
                     myFile = new File(fileName);

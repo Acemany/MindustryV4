@@ -122,8 +122,7 @@ public class KryoServer implements ServerProvider {
 
     @Override
     public KryoConnection getByID(int id){
-        for(int i = 0; i < connections.size(); i ++){
-            KryoConnection con = connections.get(i);
+        for(KryoConnection con : connections){
             if(con.id == id){
                 return con;
             }
@@ -221,8 +220,8 @@ public class KryoServer implements ServerProvider {
 
     @Override
     public void send(Object object, SendMode mode) {
-        for(int i = 0; i < connections.size(); i ++){
-            connections.get(i).send(object, mode);
+        for(KryoConnection connection : connections){
+            connection.send(object, mode);
         }
     }
 
@@ -240,8 +239,7 @@ public class KryoServer implements ServerProvider {
 
     @Override
     public void sendExcept(int id, Object object, SendMode mode) {
-        for(int i = 0; i < connections.size(); i ++){
-            KryoConnection conn = connections.get(i);
+        for(KryoConnection conn : connections){
             if(conn.id != id) conn.send(object, mode);
         }
     }
@@ -257,8 +255,7 @@ public class KryoServer implements ServerProvider {
     }
 
     KryoConnection getByKryoID(int id){
-        for(int i = 0; i < connections.size(); i ++){
-            KryoConnection con = connections.get(i);
+        for(KryoConnection con : connections){
             if(con.connection != null && con.connection.getID() == id){
                 return con;
             }

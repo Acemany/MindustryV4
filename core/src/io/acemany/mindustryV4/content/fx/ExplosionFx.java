@@ -47,7 +47,7 @@ public class ExplosionFx extends FxList implements ContentList{
 
             Angles.randLenVectors(e.id, 6, 2f + 19f * e.finpow(), (x, y) -> {
                 Fill.circle(e.x + x, e.y + y, e.fout() * 3f + 0.5f);
-                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout() * 1f);
+                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
             });
 
             Draw.color(Palette.lighterOrange, Palette.lightOrange, Color.GRAY, e.fin());
@@ -70,7 +70,7 @@ public class ExplosionFx extends FxList implements ContentList{
 
             Angles.randLenVectors(e.id, 6, 2f + 19f * e.finpow(), (x, y) -> {
                 Fill.circle(e.x + x, e.y + y, e.fout() * 3f + 0.5f);
-                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout() * 1f);
+                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
             });
 
             Draw.color(Palette.lighterOrange, Palette.lightOrange, Color.GRAY, e.fin());
@@ -88,7 +88,7 @@ public class ExplosionFx extends FxList implements ContentList{
 
             Angles.randLenVectors(e.id, 6, 4f + 30f * e.finpow(), (x, y) -> {
                 Fill.circle(e.x + x, e.y + y, e.fout() * 3f);
-                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout() * 1f);
+                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
             });
 
             Draw.reset();

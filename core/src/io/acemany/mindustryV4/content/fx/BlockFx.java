@@ -77,7 +77,7 @@ public class BlockFx extends FxList implements ContentList{
         plasticburn = new Effect(40, e -> {
             Angles.randLenVectors(e.id, 5, 3f + e.fin() * 5f, (x, y) -> {
                 Draw.color(Color.valueOf("e9ead3"), Color.GRAY, e.fin());
-                Fill.circle(e.x + x, e.y + y, e.fout() * 1f);
+                Fill.circle(e.x + x, e.y + y, e.fout());
                 Draw.reset();
             });
         });
@@ -105,14 +105,14 @@ public class BlockFx extends FxList implements ContentList{
         pulverizeSmall = new Effect(30, e -> {
             Angles.randLenVectors(e.id, 3, e.fin() * 5f, (x, y) -> {
                 Draw.color(Palette.stoneGray);
-                Fill.square(e.x + x, e.y + y, e.fout() * 1f + 0.5f, 45);
+                Fill.square(e.x + x, e.y + y, e.fout() + 0.5f, 45);
                 Draw.reset();
             });
         });
         pulverizeMedium = new Effect(30, e -> {
             Angles.randLenVectors(e.id, 5, 3f + e.fin() * 8f, (x, y) -> {
                 Draw.color(Palette.stoneGray);
-                Fill.square(e.x + x, e.y + y, e.fout() * 1f + 0.5f, 45);
+                Fill.square(e.x + x, e.y + y, e.fout() + 0.5f, 45);
                 Draw.reset();
             });
         });
@@ -295,7 +295,7 @@ public class BlockFx extends FxList implements ContentList{
 
         overdriveWave = new Effect(50, e -> {
             Draw.color(e.color);
-            Lines.stroke(e.fout() * 1f);
+            Lines.stroke(e.fout());
             Lines.poly(e.x, e.y, 30, e.finpow() * e.rotation);
             Draw.color();
         });

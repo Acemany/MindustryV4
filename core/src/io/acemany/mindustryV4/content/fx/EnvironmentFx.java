@@ -101,7 +101,7 @@ public class EnvironmentFx extends FxList implements ContentList{
             Draw.color(Liquids.water.color);
 
             Angles.randLenVectors(e.id, 2, 1f + e.fin() * 2f, (x, y) -> {
-                Fill.circle(e.x + x, e.y + y, e.fout() * 1f);
+                Fill.circle(e.x + x, e.y + y, e.fout());
             });
 
             Draw.color();
@@ -111,7 +111,7 @@ public class EnvironmentFx extends FxList implements ContentList{
             Draw.color(Liquids.oil.color);
 
             Angles.randLenVectors(e.id, 2, 1f + e.fin() * 2f, (x, y) -> {
-                Fill.circle(e.x + x, e.y + y, e.fout() * 1f);
+                Fill.circle(e.x + x, e.y + y, e.fout());
             });
 
             Draw.color();

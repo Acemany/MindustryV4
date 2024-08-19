@@ -68,7 +68,7 @@ public class ServerControl extends Module{
         );
 
         Log.setLogger(new LogHandler(){
-            DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("MM-dd-yyyy | HH:mm:ss");
+            final DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("MM-dd-yyyy | HH:mm:ss");
 
             @Override
             public void info(String text, Object... args){
@@ -308,7 +308,7 @@ public class ServerControl extends Module{
                 info("  &ly{0} FPS.", (int) (60f / Timers.delta()));
                 info("  &ly{0} MB used.", Gdx.app.getJavaHeap() / 1024 / 1024);
 
-                if(playerGroup.size() > 0){
+                if(!playerGroup.isEmpty()){
                     info("  &lyPlayers: {0}", playerGroup.size());
                     for(Player p : playerGroup.all()){
                         info("    &y{0} / {1}", p.name, p.uuid);
@@ -442,22 +442,27 @@ public class ServerControl extends Module{
         });
 
         handler.register("ban", "<type-id/name/ip> <username/IP/ID...>", "Ban a person.", arg -> {
-            if(arg[0].equals("id")){
-                netServer.admins.banPlayerID(arg[1]);
-                info("Banned.");
-            }else if(arg[0].equals("name")){
-                Player target = playerGroup.find(p -> p.name.equalsIgnoreCase(arg[1]));
-                if(target != null){
-                    netServer.admins.banPlayer(target.uuid);
+            switch(arg[0]){
+                case "id":
+                    netServer.admins.banPlayerID(arg[1]);
                     info("Banned.");
-                }else{
-                    err("No matches found.");
-                }
-            }else if(arg[0].equals("ip")){
-                netServer.admins.banPlayerIP(arg[1]);
-                info("Banned.");
-            }else{
-                err("Invalid type.");
+                    break;
+                case "name":
+                    Player target = playerGroup.find(p -> p.name.equalsIgnoreCase(arg[1]));
+                    if(target != null){
+                        netServer.admins.banPlayer(target.uuid);
+                        info("Banned.");
+                    }else{
+                        err("No matches found.");
+                    }
+                    break;
+                case "ip":
+                    netServer.admins.banPlayerIP(arg[1]);
+                    info("Banned.");
+                    break;
+                default:
+                    err("Invalid type.");
+                    break;
             }
 
             for(Player player : playerGroup.all()){

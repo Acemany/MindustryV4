@@ -90,7 +90,6 @@ public class IOSLauncher extends IOSApplication.Delegate {
     }
 
     void openURL(NSURL url){
-
         Gdx.app.postRunnable(() -> {
             FileHandle file = Gdx.files.absolute(getDocumentsDirectory()).child(url.getLastPathComponent());
             Gdx.files.absolute(url.getPath()).copyTo(file);

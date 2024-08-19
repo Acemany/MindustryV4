@@ -20,9 +20,9 @@ import static io.acemany.mindustryV4.Vars.state;
 import static io.acemany.mindustryV4.Vars.world;
 
 public class Pathfinder{
-    private long maxUpdate = TimeUtils.millisToNanos(4);
+    private final long maxUpdate = TimeUtils.millisToNanos(4);
     private PathData[] paths;
-    private IntArray blocked = new IntArray();
+    private final IntArray blocked = new IntArray();
 
     public Pathfinder(){
         Events.on(WorldLoadEvent.class, event -> clear());
@@ -82,7 +82,7 @@ public class Pathfinder{
         return target;
     }
 
-    public float getValueforTeam(Team team, int x, int y){
+    public float getValueForTeam(Team team, int x, int y){
         return paths == null || team.ordinal() >= paths.length ? 0 : Structs.inBounds(x, y, paths[team.ordinal()].weights) ? paths[team.ordinal()].weights[x][y] : 0;
     }
 
@@ -185,7 +185,7 @@ public class Pathfinder{
         world.spawner.checkAllQuadrants();
     }
 
-    class PathData{
+    static class PathData{
         float[][] weights;
         int[][] searches;
         int search = 0;

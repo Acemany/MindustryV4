@@ -147,7 +147,7 @@ public class BulletFx extends FxList implements ContentList{
             });
 
             Draw.color(Palette.lighterOrange);
-            Lines.stroke(1f * e.fout());
+            Lines.stroke(e.fout());
 
             Angles.randLenVectors(e.id + 1, 4, 1f + 23f * e.finpow(), (x, y) -> {
                 Lines.lineAngle(e.x + x, e.y + y, Mathf.atan2(x, y), 1f + e.fout() * 3f);
@@ -171,7 +171,7 @@ public class BulletFx extends FxList implements ContentList{
             });
 
             Draw.color(Palette.plastaniumBack);
-            Lines.stroke(1f * e.fout());
+            Lines.stroke(e.fout());
 
             Angles.randLenVectors(e.id + 1, 4, 1f + 25f * e.finpow(), (x, y) -> {
                 Lines.lineAngle(e.x + x, e.y + y, Mathf.atan2(x, y), 1f + e.fout() * 3f);
@@ -195,7 +195,7 @@ public class BulletFx extends FxList implements ContentList{
             });
 
             Draw.color(Palette.plastaniumBack);
-            Lines.stroke(1f * e.fout());
+            Lines.stroke(e.fout());
 
             Angles.randLenVectors(e.id + 1, 4, 1f + 30f * e.finpow(), (x, y) -> {
                 Lines.lineAngle(e.x + x, e.y + y, Mathf.atan2(x, y), 1f + e.fout() * 3f);
@@ -219,7 +219,7 @@ public class BulletFx extends FxList implements ContentList{
             });
 
             Draw.color(Palette.missileYellowBack);
-            Lines.stroke(1f * e.fout());
+            Lines.stroke(e.fout());
 
             Angles.randLenVectors(e.id + 1, 4, 1f + 23f * e.finpow(), (x, y) -> {
                 Lines.lineAngle(e.x + x, e.y + y, Mathf.atan2(x, y), 1f + e.fout() * 3f);
@@ -268,7 +268,7 @@ public class BulletFx extends FxList implements ContentList{
             });
 
             Draw.color(Palette.bulletYellow);
-            Lines.stroke(1f * e.fout());
+            Lines.stroke(e.fout());
 
             Angles.randLenVectors(e.id + 1, 4, 1f + 23f * e.finpow(), (x, y) -> {
                 Lines.lineAngle(e.x + x, e.y + y, Mathf.atan2(x, y), 1f + e.fout() * 3f);
