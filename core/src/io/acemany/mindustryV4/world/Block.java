@@ -534,7 +534,7 @@ public class Block extends BaseBlock {
 
     /** Offset for placing and drawing multiblocks. */
     public float offset(){
-        return ((size + 1) % 2) * tilesize / 2;
+        return ((size + 1) % 2) * tilesize / 2f;
     }
 
     public boolean isMultiblock(){

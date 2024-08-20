@@ -36,8 +36,8 @@ public class Mechs implements ContentList{
     public void load(){
 
         alpha = new Mech("alpha-mech", false){
-            final int maxDrones = 3;
-            final float buildTime = 20f;
+            int maxDrones = 3;
+            float buildTime = 20f;
 
             {
                 drillPower = 1;
@@ -79,7 +79,7 @@ public class Mechs implements ContentList{
         };
 
         delta = new Mech("delta-mech", false){
-            final float cooldown = 120;
+            float cooldown = 120;
 
             {
                 drillPower = -1;
@@ -107,10 +107,10 @@ public class Mechs implements ContentList{
         };
 
         tau = new Mech("tau-mech", false){
-            final float healRange = 60f;
-            final float healAmount = 10f;
-            final float healReload = 160f;
-            final Rectangle rect = new Rectangle();
+            float healRange = 60f;
+            float healAmount = 10f;
+            float healReload = 160f;
+            Rectangle rect = new Rectangle();
             boolean wasHealed;
 
             {
@@ -153,7 +153,7 @@ public class Mechs implements ContentList{
         };
 
         omega = new Mech("omega-mech", false){
-            private TextureRegion armorRegion;
+            protected TextureRegion armorRegion;
 
             {
                 drillPower = 2;
@@ -228,8 +228,8 @@ public class Mechs implements ContentList{
         }};
 
         javelin = new Mech("javelin-ship", true){
-            final float minV = 3.6f;
-            final float maxV = 6f;
+            float minV = 3.6f;
+            float maxV = 6f;
             TextureRegion shield;
             {
                 drillPower = -1;

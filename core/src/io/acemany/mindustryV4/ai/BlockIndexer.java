@@ -43,11 +43,11 @@ public class BlockIndexer{
     /**Maps teams to a map of flagged tiles by type.*/
     private ObjectSet<Tile>[][] flagMap = new ObjectSet[Team.all.length][BlockFlag.all.length];
     /**Maps tile positions to their last known tile index data.*/
-    private final IntMap<TileIndex> typeMap = new IntMap<>();
+    private IntMap<TileIndex> typeMap = new IntMap<>();
     /**Empty set used for returning.*/
-    private final ObjectSet<Tile> emptySet = new ObjectSet<>();
+    private ObjectSet<Tile> emptySet = new ObjectSet<>();
     /**Array used for returning and reusing.*/
-    private final Array<Tile> returnArray = new ThreadArray<>();
+    private Array<Tile> returnArray = new ThreadArray<>();
 
     public BlockIndexer(){
         Events.on(TileChangeEvent.class, event -> {
@@ -335,7 +335,7 @@ public class BlockIndexer{
         }
     }
 
-    private static class TileIndex{
+    private class TileIndex{
         public final EnumSet<BlockFlag> flags;
         public final Team team;
 

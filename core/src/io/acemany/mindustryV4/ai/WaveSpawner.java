@@ -28,8 +28,8 @@ public class WaveSpawner{
     private Array<SpawnGroup> groups;
     private boolean dynamicSpawn;
 
-    private final Array<FlyerSpawn> flySpawns = new Array<>();
-    private final Array<GroundSpawn> groundSpawns = new Array<>();
+    private Array<FlyerSpawn> flySpawns = new Array<>();
+    private Array<GroundSpawn> groundSpawns = new Array<>();
 
     public WaveSpawner(){
         Events.on(WorldLoadEvent.class, this::reset);
@@ -247,12 +247,12 @@ public class WaveSpawner{
         return Mathf.ceil(world.height() / (float) quadsize);
     }
 
-    private static class FlyerSpawn{
+    private class FlyerSpawn{
         //square angle
         float angle;
     }
 
-    private static class GroundSpawn{
+    private class GroundSpawn{
         //quadrant spawn coordinates
         int x, y;
     }
