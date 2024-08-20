@@ -339,6 +339,15 @@ public class Control extends Module{
             inputHandler.updateController();
         }
 
+        if(Inputs.keyTap("fullscreen")){
+            if(Settings.getBool("fullscreen")){
+                Gdx.graphics.setWindowedMode(600, 480);
+            }else{
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+            Settings.putBool("fullscreen", !Settings.getBool("fullscreen"));
+        }
+
         if(!state.is(State.menu)){
             for(InputHandler input : inputs){
                 input.update();

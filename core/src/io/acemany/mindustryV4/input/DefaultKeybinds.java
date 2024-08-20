@@ -27,6 +27,7 @@ public class DefaultKeybinds{
                 "dash", Input.SHIFT_LEFT,
                 "drop_unit", Input.SHIFT_LEFT,
                 new Category("view"),
+                "fullscreen", Input.F11,
                 "zoom_hold", Input.CONTROL_LEFT,
                 "zoom", new Axis(Input.SCROLL),
                 "zoom_minimap", new Axis(Input.MINUS, Input.PLUS),
