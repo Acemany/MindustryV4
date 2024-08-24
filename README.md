@@ -1,4 +1,4 @@
-# <img src="core/assets-raw/sprites/ui/logotext.png" width="356">Logo</img>
+# <img src="core/assets-raw/sprites/ui/logotext.png" alt="Logo" width="356">
 
 [![Build Status](https://github.com/acemany/MindustryV4_reforked/actions/workflows/push.yml/badge.svg)](https://github.com/acemany/MindustryV4_reforked/actions)
 
