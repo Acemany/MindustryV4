@@ -240,7 +240,7 @@ public class DesktopInput extends InputHandler{
 
         if(Inputs.keyTap(section, "pick_select")){
             Tile picked_tile = tileAt(Gdx.input.getX(), Gdx.input.getY());
-            if(picked_tile.block() != null && picked_tile.discovered()){
+            if(picked_tile.block() != null && (picked_tile.discovered() | Net.active())){
                 Recipe picked_recipe = Recipe.getByResult(picked_tile.block());
                 if(!control.unlocks.isUnlocked(picked_recipe)) return;
                 rotation = picked_tile.getRotation();
