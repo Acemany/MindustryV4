@@ -238,6 +238,10 @@ public class DesktopInput extends InputHandler{
             selectY = tileY(Gdx.input.getY());
         }
 
+        if(Inputs.keyTap(section, "respawn") && !player.isDead()){
+            player.setDead(true);
+        }
+
         if(Inputs.keyTap(section, "pick_select")){
             Tile picked_tile = tileAt(Gdx.input.getX(), Gdx.input.getY());
             if(picked_tile.block() != null && (picked_tile.discovered() | Net.active())){
