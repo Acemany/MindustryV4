@@ -35,10 +35,10 @@ import static io.acemany.mindustryV4.Vars.world;
 public abstract class Unit extends DestructibleEntity implements SaveTrait, TargetTrait, SyncTrait, DrawTrait, TeamTrait, CarriableTrait, InventoryTrait{
     /**Total duration of hit flash effect*/
     public static final float hitDuration = 9f;
-    /**Percision divisor of velocity, used when writing. For example a value of '2' would mean the percision is 1/2 = 0.5-size chunks.*/
-    public static final float velocityPercision = 8f;
+    /**Precision divisor of velocity, used when writing. For example a value of '2' would mean the percision is 1/2 = 0.5-size chunks.*/
+    public static final float velocityPrecision = 8f;
     /**Maximum absolute value of a velocity vector component.*/
-    public static final float maxAbsVelocity = 127f / velocityPercision;
+    public static final float maxAbsVelocity = 127f / velocityPrecision;
 
     private static final Rectangle queryRect = new Rectangle();
     private static final Vector2 moveVector = new Vector2();
@@ -157,7 +157,7 @@ public abstract class Unit extends DestructibleEntity implements SaveTrait, Targ
         this.health = health;
         this.x = x;
         this.y = y;
-        this.velocity.set(xv / velocityPercision, yv / velocityPercision);
+        this.velocity.set(xv / velocityPrecision, yv / velocityPrecision);
         this.rotation = rotation;
     }
 
@@ -166,8 +166,8 @@ public abstract class Unit extends DestructibleEntity implements SaveTrait, Targ
         stream.writeBoolean(isDead());
         stream.writeFloat(net ? interpolator.target.x : x);
         stream.writeFloat(net ? interpolator.target.y : y);
-        stream.writeByte((byte) (Mathf.clamp(velocity.x, -maxAbsVelocity, maxAbsVelocity) * velocityPercision));
-        stream.writeByte((byte) (Mathf.clamp(velocity.y, -maxAbsVelocity, maxAbsVelocity) * velocityPercision));
+        stream.writeByte((byte) (Mathf.clamp(velocity.x, -maxAbsVelocity, maxAbsVelocity) * velocityPrecision));
+        stream.writeByte((byte) (Mathf.clamp(velocity.y, -maxAbsVelocity, maxAbsVelocity) * velocityPrecision));
         stream.writeShort((short) (rotation * 2));
         stream.writeShort((short) health);
         status.writeSave(stream);
@@ -193,7 +193,7 @@ public abstract class Unit extends DestructibleEntity implements SaveTrait, Targ
         Units.getNearby(queryRect, t -> {
             if(t == this || t.getCarrier() == this || getCarrier() == t || t.isFlying() != isFlying()) return;
             float dst = distanceTo(t);
-            moveVector.set(x, y).sub(t.getX(), t.getY()).setLength(1f * (1f - (dst / queryRect.getWidth())));
+            moveVector.set(x, y).sub(t.getX(), t.getY()).setLength((1f - (dst / queryRect.getWidth())));
             applyImpulse(moveVector.x, moveVector.y);
         });
     }
@@ -266,7 +266,7 @@ public abstract class Unit extends DestructibleEntity implements SaveTrait, Targ
             }
 
             if(onLiquid && floor.drownTime > 0){
-                drownTime += Timers.delta() * 1f / floor.drownTime;
+                drownTime += Timers.delta() / floor.drownTime;
                 if(Mathf.chance(Timers.delta() * 0.05f)){
                     Effects.effect(floor.drownUpdateEffect, floor.liquidColor, x, y);
                 }
