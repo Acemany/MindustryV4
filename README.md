@@ -27,5 +27,6 @@ Server builds are bundled with each released build (in Releases). If you'd rathe
 
 ---
 
-Gradle may take up to several minutes to download files. Be patient. <br>
+Gradle may take up to several minutes to download files. Be patient.
+
 After building, the output .JAR file should be in `/desktop/build/libs/desktop-release.jar` for desktop builds, and in `/server/build/libs/server-release.jar` for server builds.
