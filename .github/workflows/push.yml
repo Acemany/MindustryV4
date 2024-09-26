@@ -20,12 +20,12 @@ jobs:
     - name: Trigger BE build
       if: ${{ github.repository == 'acemany/MindustryV4_reforked' }}
       run: |
-        git clone --depth=1 --branch=master https://github.com/acemany/MindustryBuilds ../MindustryBuilds
-        cd ../MindustryBuilds
+        git clone --depth=1 --branch=master https://github.com/acemany/MindustryV4Builds ../MindustryV4Builds
+        cd ../MindustryV4Builds
         BNUM=$(($GITHUB_RUN_NUMBER))
         git tag ${BNUM}
         git config --global user.name "Github Actions"
-        git push https://acemany:${{ secrets.API_TOKEN_GITHUB }}@github.com/acemany/MindustryBuilds ${BNUM}
+        git push https://acemany:${{ secrets.API_TOKEN_GITHUB }}@github.com/acemany/MindustryV4Builds ${BNUM}
 
     - name: Set up JDK 8
       uses: actions/setup-java@v1
