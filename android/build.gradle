@@ -93,6 +93,7 @@ android {
 
         applicationId "io.acemany.mindustryV4"
         minSdkVersion 14
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         versionCode code
         versionName versionNameResult
@@ -110,19 +111,27 @@ android {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
         }
     }
-
     signingConfigs {
-        debug {
-            null
+        release {
+            if(project.hasProperty("RELEASE_STORE_FILE")) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }else{
+                println("No keystore info property found!")
+            }
         }
     }
 
+
     buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
+
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
