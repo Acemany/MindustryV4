@@ -4,6 +4,8 @@
 
 This version is going to improve the [mindustry](https://github.com/Anuken/Mindustry) of [V4](https://github.com/Anuken/Mindustry/releases/tag/v63), while not changing the style of the game itself much.
 
+**[Latest releases](https://github.com/acemany/MindustryV4Builds)**
+
 _[Trello Board](https://trello.com/b/IvmwyEwH/mindustry-v4-reforked)_
 
 ## Building
