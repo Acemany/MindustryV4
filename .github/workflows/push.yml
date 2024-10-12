@@ -22,7 +22,7 @@ jobs:
       run: |
         git clone --depth=1 --branch=master https://github.com/acemany/MindustryV4Builds ../MindustryV4Builds
         cd ../MindustryV4Builds
-        BNUM=$(($GITHUB_RUN_NUMBER))
+        BNUM=$(($GITHUB_RUN_NUMBER - 22))
         git tag ${BNUM}
         git config --global user.name "Github Actions"
         git push https://acemany:${{ secrets.API_TOKEN_GITHUB }}@github.com/acemany/MindustryV4Builds ${BNUM}
