@@ -145,8 +145,9 @@ gradle-app.setting
 /ios/build/
 /ios-moe/build/
 
-## OS Specific
+## Other files
 .DS_Store
 Thumbs.db
 android/libs/
 /core/assets-raw/sprites_out
+config/
