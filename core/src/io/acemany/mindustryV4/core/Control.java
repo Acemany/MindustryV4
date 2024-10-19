@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.TimeUtils;
+import io.acemany.mindustryV4.*;
 import io.acemany.mindustryV4.content.Mechs;
 import io.acemany.mindustryV4.core.GameState.State;
 import io.acemany.mindustryV4.entities.Player;
@@ -26,7 +27,10 @@ import io.acemany.mindustryV4.ui.dialogs.FloatingDialog;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.entities.EntityQuery;
 import io.anuke.ucore.modules.Module;
+import io.anuke.ucore.scene.ui.*;
+import io.anuke.ucore.scene.ui.SettingsDialog.SettingsTable.*;
 import io.anuke.ucore.util.*;
+import io.anuke.ucore.scene.*;
 
 import java.io.IOException;
 
@@ -45,7 +49,7 @@ public class Control extends Module{
     public final Saves saves;
     public final Unlocks unlocks;
 
-    private Timer timerRPC= new Timer(), timerUnlock = new Timer();
+    private Timer timerRPC = new Timer(), timerUnlock = new Timer();
     private boolean hiscore = false;
     private boolean wasPaused = false;
     private InputHandler[] inputs = {};
@@ -340,12 +344,8 @@ public class Control extends Module{
         }
 
         if(Inputs.keyTap("fullscreen")){
-            if(Settings.getBool("fullscreen")){
-                Gdx.graphics.setWindowedMode(600, 480);
-            }else{
-                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-            }
-            Settings.putBool("fullscreen", !Settings.getBool("fullscreen"));
+            Element button = ui.settings.graphics.find("fullscreen");
+            button.fireClick();
         }
 
         if(!state.is(State.menu)){

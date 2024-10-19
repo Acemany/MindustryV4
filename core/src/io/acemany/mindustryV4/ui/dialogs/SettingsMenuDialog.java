@@ -199,7 +199,7 @@ public class SettingsMenuDialog extends SettingsDialog{
                 }else{
                     Gdx.graphics.setWindowedMode(600, 480);
                 }
-            });
+            }, true);
 
             Gdx.graphics.setVSync(Settings.getBool("vsync"));
             if(Settings.getBool("fullscreen")){
