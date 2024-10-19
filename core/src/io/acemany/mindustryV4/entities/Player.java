@@ -219,6 +219,11 @@ public class Player extends Unit implements BuilderTrait, CarryTrait, ShooterTra
         return 8;
     }
 
+    @Remote(targets = Loc.both, forward = true, called = Loc.server)
+    public static void tryKYS(Player player){
+        player.setDead(true);
+    }
+
     @Override
     public void damage(float amount){
         hitTime = hitDuration;

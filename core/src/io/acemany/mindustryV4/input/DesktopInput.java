@@ -12,6 +12,7 @@ import io.acemany.mindustryV4.input.PlaceUtils.NormalizeResult;
 import io.acemany.mindustryV4.net.Net;
 import io.acemany.mindustryV4.type.*;
 import io.acemany.mindustryV4.world.Block;
+import io.acemany.mindustryV4.gen.Call;
 import io.acemany.mindustryV4.world.Tile;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
@@ -239,7 +240,7 @@ public class DesktopInput extends InputHandler{
         }
 
         if(Inputs.keyTap(section, "respawn") && !player.isDead()){
-            player.setDead(true);
+            Call.tryKYS(player);
         }
 
         if(Inputs.keyTap(section, "pick_select")){
