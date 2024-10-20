@@ -1,4 +1,4 @@
-[Logo](core/assets-raw/sprites/ui/logotext.png)
+![Logo](https://i.imgur.com/LLlfrzb.png)
 
 [![Build Status](https://github.com/acemany/MindustryV4_reforked/actions/workflows/push.yml/badge.svg)](https://github.com/acemany/MindustryV4_reforked/actions)
 
