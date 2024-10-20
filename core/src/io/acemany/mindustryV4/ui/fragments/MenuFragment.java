@@ -63,8 +63,7 @@ public class MenuFragment extends Fragment{
             join = new MobileButton("icon-add", isize, "$text.joingame", ui.join::show),
             editor = new MobileButton("icon-editor", isize, "$text.editor", () -> ui.loadGraphics(ui.editor::show)),
             tools = new MobileButton("icon-tools", isize, "$text.settings", ui.settings::show),
-            unlocks = new MobileButton("icon-unlocks", isize, "$text.unlocks", ui.unlocks::show),
-            donate = new MobileButton("icon-donate", isize, "$text.donate", Platform.instance::openDonations);
+            unlocks = new MobileButton("icon-unlocks", isize, "$text.unlocks", ui.unlocks::show);
 
         if(Gdx.graphics.getWidth() > Gdx.graphics.getHeight()){
             container.add(play);
@@ -79,8 +78,6 @@ public class MenuFragment extends Fragment{
                 table.add(editor);
                 table.add(tools);
                 table.add(unlocks);
-
-                if(Platform.instance.canDonate()) table.add(donate);
             }).colspan(4);
         }else{
             container.add(play);
@@ -97,8 +94,6 @@ public class MenuFragment extends Fragment{
                 table.defaults().set(container.defaults());
 
                 table.add(unlocks);
-
-                if(Platform.instance.canDonate()) table.add(donate);
             }).colspan(2);
         }
     }

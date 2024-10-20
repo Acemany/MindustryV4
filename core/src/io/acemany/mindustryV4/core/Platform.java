@@ -66,12 +66,7 @@ public abstract class Platform {
     }
     /**Called when the game is exited.*/
     public void onGameExit(){}
-    /**Open donation dialog. Currently android only.*/
-    public void openDonations(){}
-    /**Whether donating is supported.*/
-    public boolean canDonate(){
-        return false;
-    }
+
     /**Must be a base64 string 8 bytes in length.*/
     public String getUUID(){
         String uuid = Settings.getString("uuid", "");

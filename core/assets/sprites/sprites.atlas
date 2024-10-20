@@ -5629,13 +5629,6 @@ icon-dev-builds
   orig: 14, 14
   offset: 0, 0
   index: -1
-icon-donate
-  rotate: false
-  xy: 189, 242
-  size: 14, 14
-  orig: 14, 14
-  offset: 0, 0
-  index: -1
 icon-dots
   rotate: false
   xy: 69, 188

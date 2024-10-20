@@ -52,11 +52,6 @@ public class AndroidLauncher extends PatchedAndroidApplication{
         config.useImmersiveMode = true;
         Platform.instance = new Platform(){
 
-            /*@Override
-            public void openDonations(){
-                showDonations();
-            }*/
-
             @Override
             public String getUUID(){
                 try{
@@ -106,11 +101,6 @@ public class AndroidLauncher extends PatchedAndroidApplication{
             @Override
             public void endForceLandscape(){
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-            }
-
-            @Override
-            public boolean canDonate(){
-                return true;
             }
         };
 
@@ -207,9 +197,4 @@ public class AndroidLauncher extends PatchedAndroidApplication{
         TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE;
     }
-
-    /*private void showDonations(){
-        Intent intent = new Intent(this, DonationsActivity.class);
-        startActivity(intent);
-    }*/
 }
