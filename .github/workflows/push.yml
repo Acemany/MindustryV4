@@ -28,7 +28,7 @@ jobs:
         git push https://acemany:${{ secrets.API_TOKEN_GITHUB }}@github.com/acemany/MindustryV4Builds ${BNUM}
 
     - name: Set up JDK 8
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '8'
