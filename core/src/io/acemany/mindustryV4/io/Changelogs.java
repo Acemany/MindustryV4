@@ -20,7 +20,7 @@ public class Changelogs{
                 String name = value.getString("name");
                 String description = value.getString("body").replace("\r", "");
                 int id = value.getInt("id");
-                int build = Integer.parseInt(value.getString("tag_name").substring(1));
+                int build = Integer.parseInt(value.getString("tag_name"));
                 out.add(new VersionInfo(name, description, id, build, value.getString("published_at")));
                 value = value.next;
             }
