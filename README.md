@@ -6,7 +6,7 @@ This version is going to improve the [mindustry](https://github.com/Anuken/Mindu
 
 **[Latest releases](https://github.com/acemany/MindustryV4Builds)**
 
-_[Trello Board](https://trello.com/b/IvmwyEwH/mindustry-v4-reforked)_
+_[Tasks Board](https://github.com/users/acemany/projects/2)_
 
 ## Building
 
