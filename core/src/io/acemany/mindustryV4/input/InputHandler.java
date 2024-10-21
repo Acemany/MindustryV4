@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import io.acemany.mindustryV4.game.EventType.*;
 import io.anuke.annotations.Annotations.Loc;
 import io.anuke.annotations.Annotations.Remote;
 import io.acemany.mindustryV4.content.blocks.Blocks;
@@ -21,10 +22,7 @@ import io.acemany.mindustryV4.ui.fragments.OverlayFragment;
 import io.acemany.mindustryV4.world.Block;
 import io.acemany.mindustryV4.world.Build;
 import io.acemany.mindustryV4.world.Tile;
-import io.anuke.ucore.core.Effects;
-import io.anuke.ucore.core.Graphics;
-import io.anuke.ucore.core.Inputs;
-import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.core.*;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
@@ -119,6 +117,21 @@ public abstract class InputHandler extends InputAdapter{
     public static void onTileTapped(Player player, Tile tile){
         if(tile == null || player == null) return;
         tile.block().tapped(tile, player);
+    }
+
+    @Remote(targets = Loc.both, called = Loc.server, forward = true, unreliable = true)
+    public static void rotateBlock(Player player, Tile tile, boolean direction){
+        int previous = tile.getRotation();
+        tile.setRotation((byte)Mathf.mod(tile.getRotation() + Mathf.sign(direction), 4));
+        tile.block().update(tile);
+        tile.entity.updateProximity();
+        tile.entity.noSleep();
+        Events.fire(new BlockRotateEvent(tile, player, previous));
+    }
+
+    @Remote(targets = Loc.both, forward = true, called = Loc.server)
+    public static void respawnPlayer(Player player){
+        player.setDead(true);
     }
 
     public OverlayFragment getFrag(){

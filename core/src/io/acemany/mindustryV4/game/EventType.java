@@ -1,6 +1,7 @@
 package io.acemany.mindustryV4.game;
 
 import io.acemany.mindustryV4.core.GameState.State;
+import io.acemany.mindustryV4.entities.*;
 import io.acemany.mindustryV4.entities.traits.BuilderTrait;
 import io.acemany.mindustryV4.world.Tile;
 import io.anuke.ucore.function.Event;
@@ -104,6 +105,19 @@ public class EventType{
             this.team = team;
             this.builder = builder;
             this.breaking = breaking;
+        }
+    }
+
+    /**Called when built block is rotated*/
+    public static class BlockRotateEvent implements Event{
+        public final Tile tile;
+        public final Player player;
+        public final int previous;
+
+        public BlockRotateEvent(Tile tile, Player player, int previous){
+            this.tile = tile;
+            this.player = player;
+            this.previous = previous;
         }
     }
 

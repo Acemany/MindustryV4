@@ -2,23 +2,21 @@ package io.acemany.mindustryV4.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import io.acemany.mindustryV4.*;
 import io.acemany.mindustryV4.content.blocks.Blocks;
 import io.acemany.mindustryV4.core.GameState.State;
 import io.acemany.mindustryV4.entities.Player;
+import io.acemany.mindustryV4.game.EventType.*;
 import io.acemany.mindustryV4.graphics.Palette;
 import io.acemany.mindustryV4.input.PlaceUtils.NormalizeDrawResult;
 import io.acemany.mindustryV4.input.PlaceUtils.NormalizeResult;
-import io.acemany.mindustryV4.net.Net;
+import io.acemany.mindustryV4.net.*;
 import io.acemany.mindustryV4.type.*;
 import io.acemany.mindustryV4.world.Block;
 import io.acemany.mindustryV4.gen.Call;
 import io.acemany.mindustryV4.world.Tile;
-import io.anuke.ucore.core.Graphics;
-import io.anuke.ucore.core.Inputs;
+import io.anuke.annotations.Annotations.*;
+import io.anuke.ucore.core.*;
 import io.anuke.ucore.core.Inputs.DeviceType;
-import io.anuke.ucore.core.KeyBinds;
-import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.graphics.Draw;
 import io.anuke.ucore.graphics.Lines;
 import io.anuke.ucore.scene.ui.layout.Unit;
@@ -240,7 +238,7 @@ public class DesktopInput extends InputHandler{
         }
 
         if(Inputs.keyTap(section, "respawn") && !player.isDead()){
-            Call.tryKYS(player);
+            Call.respawnPlayer(player);
         }
 
         if(Inputs.keyTap(section, "pick_select")){
@@ -252,6 +250,10 @@ public class DesktopInput extends InputHandler{
             }
         }
 
+        if(Inputs.keyDown(section, "rotate_placed")){
+            if(selected != null && selected.block() != null && Math.abs(Inputs.getAxisTapped("rotate")) > 0 && selected.block().rotate && selected.block().quickRotate)
+                rotateBlock(player, selected, Inputs.getAxisTapped(section, "rotate") > 0);
+        }
         if(Inputs.keyRelease(section, "break") || Inputs.keyRelease(section, "select")){
 
             if(mode == placing){ //touch up while placing, place everything in selection

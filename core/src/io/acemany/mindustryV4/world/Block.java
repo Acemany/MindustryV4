@@ -47,8 +47,10 @@ public class Block extends BaseBlock {
     public boolean solid;
     /** whether this block CAN be solid. */
     public boolean solidifes;
-    /** whether this is rotateable */
+    /** whether this is rotatable */
     public boolean rotate;
+    /** whether this is rotatable after placing */
+    public boolean quickRotate = true;
     /** whether you can break this with rightclick */
     public boolean breakable;
     /** whether this floor can be placed on. */
