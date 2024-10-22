@@ -270,7 +270,7 @@ public class DesktopInput extends InputHandler{
         rotate = Inputs.keyDown(section, "rotate_placed");
         if(rotate){
             if(selected != null && selected.block() != null && Math.abs(Inputs.getAxisTapped("rotate")) > 0 && selected.block().rotate && selected.block().quickRotate)
-                rotateBlock(player, selected, Inputs.getAxisTapped(section, "rotate") > 0);
+                Call.rotateBlock(player, selected, Inputs.getAxisTapped(section, "rotate") > 0);
         }
 
         if(Inputs.keyTap(section, "clear_building") && !player.isDead()){
