@@ -40,6 +40,8 @@ public class DesktopInput extends InputHandler{
     private PlaceMode mode;
     /**Animation scale for line.*/
     private float selectScale;
+    /**Is player about to rotate block right now*/
+    private boolean rotate = false;
 
     public DesktopInput(Player player){
         super(player);
@@ -67,11 +69,12 @@ public class DesktopInput extends InputHandler{
 
     @Override
     public boolean isDrawing(){
-        return mode != none || recipe != null;
+        return mode != none || recipe != null || rotate;
     }
 
     @Override
     public void drawOutlined(){
+        Tile selected = tileAt(Gdx.input.getX(), Gdx.input.getY());
         int cursorX = tileX(Gdx.input.getX());
         int cursorY = tileY(Gdx.input.getY());
 
@@ -122,6 +125,20 @@ public class DesktopInput extends InputHandler{
             }
             drawPlace(cursorX, cursorY, recipe.result, rotation);
             recipe.result.drawPlace(cursorX, cursorY, rotation, validPlace(cursorX, cursorY, recipe.result, rotation));
+        }
+
+        if(rotate && !isPlacing()){
+            Block block = selected.block();
+            if(block != null && block.rotate && block.quickRotate){
+                Draw.reset();
+                rotation = selected.getRotation();
+                Draw.color(Palette.placeRotate);
+                Draw.grect("place-arrow", cursorX * tilesize + block.offset(),
+                cursorY * tilesize + block.offset(), rotation * 90 - 90);
+
+                Lines.square(selected.drawx(), selected.drawy(), block.size * tilesize / 2f - 1);
+                block.drawPlace(cursorX * tilesize, cursorY * tilesize, rotation, true);
+            }
         }
 
         Draw.reset();
@@ -250,7 +267,8 @@ public class DesktopInput extends InputHandler{
             }
         }
 
-        if(Inputs.keyDown(section, "rotate_placed")){
+        rotate = Inputs.keyDown(section, "rotate_placed");
+        if(rotate){
             if(selected != null && selected.block() != null && Math.abs(Inputs.getAxisTapped("rotate")) > 0 && selected.block().rotate && selected.block().quickRotate)
                 rotateBlock(player, selected, Inputs.getAxisTapped(section, "rotate") > 0);
         }
