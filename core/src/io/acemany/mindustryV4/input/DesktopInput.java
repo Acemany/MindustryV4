@@ -254,6 +254,11 @@ public class DesktopInput extends InputHandler{
             if(selected != null && selected.block() != null && Math.abs(Inputs.getAxisTapped("rotate")) > 0 && selected.block().rotate && selected.block().quickRotate)
                 rotateBlock(player, selected, Inputs.getAxisTapped(section, "rotate") > 0);
         }
+
+        if(Inputs.keyTap(section, "clear_building") && !player.isDead()){
+            player.clearBuilding();
+        }
+
         if(Inputs.keyRelease(section, "break") || Inputs.keyRelease(section, "select")){
 
             if(mode == placing){ //touch up while placing, place everything in selection
