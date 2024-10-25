@@ -23,7 +23,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v4
   
     - name: Update bundles
-      if: ${{ github.repository == 'acemany/MindustryV4_reforked' }}
+      if: ${{ github.repository == 'acemany/MindustryV4' }}
       run: |
         ./gradlew updateBundles
 
@@ -39,7 +39,7 @@ jobs:
       run: ./gradlew tests:test --rerun-tasks --stacktrace
 
     - name: Trigger BE build
-      if: ${{ github.repository == 'acemany/MindustryV4_reforked' }}
+      if: ${{ github.repository == 'acemany/MindustryV4' }}
       run: |
         git clone --depth=1 --branch=master https://github.com/acemany/MindustryV4Builds ../MindustryV4Builds
         cd ../MindustryV4Builds
