@@ -1,9 +1,9 @@
 import com.badlogic.gdx.utils.Array;
-import io.acemany.mindustryV4.Vars;
-import io.acemany.mindustryV4.core.ContentLoader;
-import io.acemany.mindustryV4.maps.SectorPresets;
-import io.acemany.mindustryV4.maps.generation.Generation;
-import io.acemany.mindustryV4.maps.missions.Mission;
+import mindustryV4.Vars;
+import mindustryV4.core.ContentLoader;
+import mindustryV4.maps.SectorPresets;
+import mindustryV4.maps.generation.Generation;
+import mindustryV4.maps.missions.Mission;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

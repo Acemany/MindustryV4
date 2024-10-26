@@ -79,7 +79,7 @@ public class RemoteWriteGenerator{
                 return;
             }
 
-            if(!elem.getParameters().get(0).asType().toString().equals("io.acemany.mindustryV4.entities.Player")){
+            if(!elem.getParameters().get(0).asType().toString().equals("mindustryV4.entities.Player")){
                 Utils.messager.printMessage(Kind.ERROR, "Client invoke methods should have a first parameter of type Player.", elem);
                 return;
             }
@@ -99,7 +99,7 @@ public class RemoteWriteGenerator{
         if(!forwarded && methodEntry.local != Loc.none){
             //add in local checks
             if(methodEntry.local != Loc.both){
-                method.beginControlFlow("if(" + getCheckString(methodEntry.local) + " || !io.acemany.mindustryV4.net.Net.active())");
+                method.beginControlFlow("if(" + getCheckString(methodEntry.local) + " || !mindustryV4.net.Net.active())");
             }
 
             //concatenate parameters
@@ -108,7 +108,7 @@ public class RemoteWriteGenerator{
             for(VariableElement var : elem.getParameters()){
                 //special case: calling local-only methods uses the local player
                 if(index == 0 && methodEntry.where == Loc.client){
-                    results.append("io.acemany.mindustryV4.Vars.players[0]");
+                    results.append("mindustryV4.Vars.players[0]");
                 }else{
                     results.append(var.getSimpleName());
                 }
@@ -129,7 +129,7 @@ public class RemoteWriteGenerator{
         method.beginControlFlow("if(" + getCheckString(methodEntry.where) + ")");
 
         //add statement to create packet from pool
-        method.addStatement("$1N packet = $2N.obtain($1N.class, $1N::new)", "io.acemany.mindustryV4.net.Packets.InvokePacket", "io.anuke.ucore.util.Pooling");
+        method.addStatement("$1N packet = $2N.obtain($1N.class, $1N::new)", "mindustryV4.net.Packets.InvokePacket", "ucore.util.Pooling");
         //assign buffer
         method.addStatement("packet.writeBuffer = TEMP_BUFFER");
         //assign priority
@@ -161,7 +161,7 @@ public class RemoteWriteGenerator{
             boolean writePlayerSkipCheck = methodEntry.where == Loc.both && i == 0;
 
             if(writePlayerSkipCheck){ //write begin check
-                method.beginControlFlow("if(io.acemany.mindustryV4.net.Net.server())");
+                method.beginControlFlow("if(mindustryV4.net.Net.server())");
             }
 
             if(Utils.isPrimitive(typeName)){ //check if it's a primitive, and if so write it
@@ -207,8 +207,8 @@ public class RemoteWriteGenerator{
         }
 
         //send the actual packet
-        method.addStatement("io.acemany.mindustryV4.net.Net." + sendString + "packet, " +
-                (methodEntry.unreliable ? "io.acemany.mindustryV4.net.Net.SendMode.udp" : "io.acemany.mindustryV4.net.Net.SendMode.tcp") + ")");
+        method.addStatement("mindustryV4.net.Net." + sendString + "packet, " +
+                (methodEntry.unreliable ? "mindustryV4.net.Net.SendMode.udp" : "mindustryV4.net.Net.SendMode.tcp") + ")");
 
 
         //end check for server/client
@@ -219,8 +219,8 @@ public class RemoteWriteGenerator{
     }
 
     private String getCheckString(Loc loc){
-        return loc.isClient && loc.isServer ? "io.acemany.mindustryV4.net.Net.server() || io.acemany.mindustryV4.net.Net.client()" :
-                loc.isClient ? "io.acemany.mindustryV4.net.Net.client()" :
-                        loc.isServer ? "io.acemany.mindustryV4.net.Net.server()" : "false";
+        return loc.isClient && loc.isServer ? "mindustryV4.net.Net.server() || mindustryV4.net.Net.client()" :
+                loc.isClient ? "mindustryV4.net.Net.client()" :
+                        loc.isServer ? "mindustryV4.net.Net.server()" : "false";
     }
 }

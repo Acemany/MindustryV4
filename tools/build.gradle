@@ -46,7 +46,7 @@ task cleanup(){
 task generateSprites(dependsOn: classes, type: JavaExec) {
     file(textureFolder).mkdirs()
 
-    main = "io.acemany.mindustryV4.PackerLauncher"
+    main = "mindustryV4.PackerLauncher"
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = textureFolder

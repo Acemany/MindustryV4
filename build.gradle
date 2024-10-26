@@ -25,7 +25,7 @@ allprojects {
         appName = 'Mindustry V4'
         gdxVersion = '1.9.9'
         roboVMVersion = '2.3.0'
-        uCoreVersion = 'b29bd8c7855b797ce80aedc1af271e2c0aca1be8'
+        uCoreVersion = '4085d65de0cc6b971ac4d8c744b1b690d940270e'
 
         getVersionString = {
             String buildVersion = getBuildVersion()
@@ -129,7 +129,7 @@ project(":ios") {
 
         props['app.id'] = 'io.acemany.mindustryV4'
         props['app.version'] = '4.0'
-        props['app.mainclass'] = 'io.acemany.mindustryV4.IOSLauncher'
+        props['app.mainclass'] = 'mindustryV4.IOSLauncher'
         props['app.executable'] = 'IOSLauncher'
         props['app.name'] = 'Mindustry V4'
         props['app.build'] = (!props.hasProperty("app.build") ? 40 : props['app.build'].toInteger() + 1)+""
