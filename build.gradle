@@ -23,7 +23,7 @@ allprojects {
         versionModifier = 'alpha'
         versionType = 'official'
         appName = 'Mindustry V4'
-        gdxVersion = '1.9.9'
+        gdxVersion = '1.9.11'
         roboVMVersion = '2.3.0'
         uCoreVersion = '4085d65de0cc6b971ac4d8c744b1b690d940270e'
 
