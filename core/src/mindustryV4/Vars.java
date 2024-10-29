@@ -30,29 +30,40 @@ import java.util.Locale;
 
 @SuppressWarnings("unchecked")
 public class Vars{
+    /**main application name, capitalized*/
     public static final String appName = "Mindustry V4";
+    /**URL for telegram invite.*/
     public static final String telegramURL = "https://t.me/mindustryV4";
+    /**URL for GitHub API for releases*/
     public static final String releasesURL = "https://api.github.com/repos/acemany/MindustryV4Builds/releases";
+    /**URL for GitHub API for contributors*/
     public static final String contributorsURL = "https://api.github.com/repos/acemany/MindustryV4_reforked/contributors";
+    /**URL for sending crash reports to*/
     //public static final String crashReportURL = "http://mindustry.us.to/report";
     //time between waves in frames (on normal mode)
     public static final float wavespace = 60 * 60 * 1.5f;
 
+    /**maximum distance between mine and core that supports automatic transferring*/
     public static final float mineTransferRange = 220f;
     //set ridiculously high for now
     public static final float coreBuildRange = 999999f;
-    //team of the player by default
+    /**team of the player by default*/
     public static final Team defaultTeam = Team.blue;
     //team of the enemy in waves
     public static final Team waveTeam = Team.red;
     public static final float unlockResourceScaling = 1f;
+    /**max chat message length*/
     public static final int maxTextLength = 150;
+    /**max player name length in bytes*/
     public static final int maxNameLength = 40;
+    /**displayed item size when ingame, TODO remove.*/
     public static final float itemSize = 5f;
+    /**size of tiles in units*/
     public static final int tilesize = 8;
     public static final int sectorSize = 256;
     public static final int invalidSector = Integer.MAX_VALUE;
     public static Locale[] locales;
+    /**all choosable player colors in join/host dialog*/
     public static final Color[] playerColors = {
         Color.valueOf("82759a"),
         Color.valueOf("c0c1c5"),
@@ -75,17 +86,19 @@ public class Vars{
     public static final int port = 6567;
     public static boolean disableUI;
     public static boolean testMobile;
-    //shorthand for whether or not this is running on android or ios
+    /**whether the game is running on a mobile device*/
     public static boolean mobile;
+    /**whether the game is running on an iOS device*/
     public static boolean ios;
+    /**whether the game is running on an Android device*/
     public static boolean android;
-    //main data directory
+    /**application data directory, equivalent to {@link io.anuke.arc.Settings#getDataDirectory()}*/
     public static FileHandle dataDirectory;
-    //subdirectory for screenshots
+    /**data subdirectory used for screenshots*/
     public static FileHandle screenshotDirectory;
-    //directory for user-created map data
+    /**data subdirectory used for saves*/
     public static FileHandle customMapDirectory;
-    //save file directory
+    /**data subdirectory used for saves*/
     public static FileHandle saveDirectory;
     public static String mapExtension = "mmap";
     public static String saveExtension = "msav";
