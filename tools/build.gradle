@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage
 
 def outFolder = "../core/assets-raw/sprites_out/"
 def genFolder = "../core/assets-raw/sprites_out/generated/"
-def doAntialias = !project.hasProperty("disableAntialias")
+def doAntialias = project.hasProperty("enableAntialias")
 
 def antialias = {File file ->
     if(!doAntialias || file.lastModified() <= 1000) return
@@ -239,7 +239,7 @@ task antialiasGen(){
 task genSprites(dependsOn: classes, type: JavaExec) {
     finalizedBy 'antialiasGen'
     
-    main = "io.anuke.mindustry.ImagePacker"
+    main = "mindustryV4.ImagePacker"
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = genFolder
@@ -248,7 +248,7 @@ task genSprites(dependsOn: classes, type: JavaExec) {
 task updateBundles(dependsOn: classes, type: JavaExec) {
     file(genFolder).mkdirs()
 
-    main = "io.anuke.mindustry.BundleLauncher"
+    main = "mindustryV4.BundleLauncher"
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = "../core/assets/bundles/"

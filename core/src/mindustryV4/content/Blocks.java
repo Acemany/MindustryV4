@@ -33,19 +33,19 @@ public class Blocks implements ContentList{
 
     //environment
     air, part, space, spawn, deepwater, water, tar, stone, craters, charr, sand, ice, snow,
-    holoStone, rocks, iceRocks, cliffs, pine, whiteTree, whiteTreeDead, sporeCluster,
+    holoStone, rocks, iceRocks, cliffs, pine, sporeCluster,
     iceSnow, sandWater, duneRocks, stainedRocks, stainedStone, stainedRocksRed, stainedStoneRed, stainedRocksYellow, stainedStoneYellow, stainedBoulder,
     metalFloor, metalFloorDamaged, metalFloor2, metalFloor3, metalFloor5, ignaRock, magmaRock, hotRock, snowrocks,
     lava, blackStone, dirt, grass, shrub, rock, iceRock, blackrock,
+
     //crafting
-    smelter, siliconSmelter, graphitePress, plastaniumCompressor, phaseWeaver, surgeSmelter, pyratiteMixer, blastMixer, cryofluidMixer,
+    smelter, siliconSmelter, plastaniumCompressor, phaseWeaver, surgeSmelter, pyratiteMixer, blastMixer, cryofluidMixer,
     melter, separator, biomatterCompressor, pulverizer, incinerator,
 
     //sandbox
     powerVoid, powerSource, itemSource, liquidSource, itemVoid,
 
     //defense
-    scrapWall, scrapWallLarge, scrapWallHuge, scrapWallGigantic, thruster, //ok, these names are getting ridiculous, but at least I don't have humongous walls yet
     copperWall, copperWallLarge, titaniumWall, titaniumWallLarge, thoriumWall, thoriumWallLarge, door, doorLarge,
     phaseWall, phaseWallLarge, surgeWall, surgeWallLarge, mendProjector, overdriveProjector, forceProjector, shockMine,
 
@@ -212,12 +212,6 @@ public class Blocks implements ContentList{
             variants = 0;
         }};
 
-        whiteTreeDead = new TreeBlock("white-tree-dead"){{
-        }};
-
-        whiteTree = new TreeBlock("white-tree"){{
-        }};
-
         sporeCluster = new Rock("spore-cluster"){{
             variants = 3;
         }};
@@ -280,12 +274,12 @@ public class Blocks implements ContentList{
             blendGroup = sand;
         }};
 
-        hotRock = new Floor("hotRock"){{
+        hotRock = new Floor("hotrock"){{
             heat = 0.5f;
             blendGroup = sand;
         }};
 
-        magmaRock = new Floor("magmaRock"){{
+        magmaRock = new Floor("magmarock"){{
             heat = 0.75f;
             updateEffect = Fx.magmasmoke;
             blendGroup = sand;
@@ -309,7 +303,7 @@ public class Blocks implements ContentList{
             playerUnmineable = true;
         }};
 
-        blackStone = new Floor("blackStone"){{
+        blackStone = new Floor("blackstone"){{
             itemDrop = Items.stone;
             playerUnmineable = true;
             hasOres = true;
@@ -533,33 +527,6 @@ public class Blocks implements ContentList{
         //region defense
 
         int wallHealthMultiplier = 3;
-
-        scrapWall = new Wall("scrap-wall"){{
-            health = 60 * wallHealthMultiplier;
-            variants = 5;
-        }};
-
-        scrapWallLarge = new Wall("scrap-wall-large"){{
-            health = 60 * 4 * wallHealthMultiplier;
-            size = 2;
-            variants = 4;
-        }};
-
-        scrapWallHuge = new Wall("scrap-wall-huge"){{
-            health = 60 * 9 * wallHealthMultiplier;
-            size = 3;
-            variants = 3;
-        }};
-
-        scrapWallGigantic = new Wall("scrap-wall-gigantic"){{
-            health = 60 * 16 * wallHealthMultiplier;
-            size = 4;
-        }};
-
-        thruster = new Wall("thruster"){{
-            health = 55 * 16 * wallHealthMultiplier;
-            size = 4;
-        }};
 
         copperWall = new Wall("copper-wall"){{
             requirements(Category.defense, ItemStack.with(Items.copper, 12));
