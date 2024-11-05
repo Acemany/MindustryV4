@@ -1,9 +1,9 @@
 package mindustryV4.maps.missions;
 
 import mindustryV4.Vars;
-import mindustryV4.entities.units.BaseUnit;
-import mindustryV4.entities.units.UnitType;
-import ucore.util.Bundles;
+import mindustryV4.entities.type.BaseUnit;
+import mindustryV4.type.UnitType;
+import io.anuke.arc.Core;
 
 public class UnitMission extends Mission{
     private final UnitType type;
@@ -24,6 +24,6 @@ public class UnitMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.format("text.mission.unit", type.localizedName());
+        return Core.bundle.format("mission.unit", type.localizedName());
     }
 }

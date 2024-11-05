@@ -1,27 +1,25 @@
 package mindustryV4.ui.dialogs;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.graphics.g2d.*;
+import io.anuke.arc.input.*;
+import io.anuke.arc.math.geom.Point2;
+import io.anuke.arc.math.geom.Vector2;
+import io.anuke.arc.util.Align;
 import mindustryV4.Vars;
-import mindustryV4.graphics.Palette;
+import mindustryV4.graphics.Pal;
 import mindustryV4.maps.Sector;
-import ucore.core.Graphics;
-import ucore.graphics.Draw;
-import ucore.scene.Element;
-import ucore.scene.Group;
-import ucore.scene.event.InputEvent;
-import ucore.scene.event.InputListener;
-import ucore.scene.event.Touchable;
-import ucore.scene.ui.layout.Cell;
-import ucore.scene.ui.layout.Table;
-import ucore.scene.ui.layout.Unit;
-import ucore.scene.utils.Cursors;
-import ucore.util.Bundles;
-import ucore.util.Geometry;
-import ucore.util.Mathf;
+import io.anuke.arc.scene.Element;
+import io.anuke.arc.scene.Group;
+import io.anuke.arc.scene.event.InputEvent;
+import io.anuke.arc.scene.event.InputListener;
+import io.anuke.arc.scene.event.Touchable;
+import io.anuke.arc.scene.ui.layout.Cell;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Unit;
+import io.anuke.arc.math.geom.Geometry;
+import io.anuke.arc.math.geom.Rectangle;
 
 import static mindustryV4.Vars.world;
 
@@ -54,13 +52,13 @@ public class SectorsDialog extends FloatingDialog{
         });
 
         Group container = new Group();
-        container.setTouchable(Touchable.childrenOnly);
+        container.touchable(Touchable.childrenOnly);
         container.addChild(table);
 
         margin(0);
-        getTitleTable().clear();
+        titleTable.clear();
         clear();
-        stack(content(), container, buttons()).grow();
+        stack(cont, container, buttons).grow();
 
         shown(this::setup);
     }
@@ -69,12 +67,12 @@ public class SectorsDialog extends FloatingDialog{
         selected = null;
 
         table.clear();
-        content().clear();
-        buttons().clear();
-        buttons().bottom().margin(15);
+        cont.clear();
+        buttons.clear();
+        buttons.bottom().margin(15);
 
         addCloseButton();
-        content().add(view = new SectorView()).grow();
+        cont.add(view = new SectorView()).grow();
     }
 
     void selectSector(Sector sector){
@@ -84,28 +82,28 @@ public class SectorsDialog extends FloatingDialog{
         table.background("button").margin(5);
 
         table.defaults().pad(3);
-        table.add(Bundles.format("text.sector", sector.x + ", " + sector.y));
+        table.add(Core.bundle.format("sector", sector.x + ", " + sector.y));
         table.row();
 
         if(selected.completedMissions < selected.missions.size && !selected.complete){
-            table.labelWrap(Bundles.format("text.mission", selected.getDominantMission().menuDisplayString())).growX();
+            table.labelWrap(Core.bundle.format("mission", selected.getDominantMission().menuDisplayString())).growX();
             table.row();
         }
 
         if(selected.hasSave()){
-            table.labelWrap(Bundles.format("text.sector.time", selected.getSave().getPlayTime())).growX();
+            table.labelWrap(Core.bundle.format("sector.time", selected.getSave().getPlayTime())).growX();
             table.row();
         }
 
         table.table(t -> {
-            Cell<?> cell = t.addImageTextButton(sector.hasSave() ? "$text.sector.resume" : "$text.sector.deploy", "icon-play", 10*3, () -> {
+            Cell<?> cell = t.addImageTextButton(sector.hasSave() ? "$sector.resume" : "$sector.deploy", "icon-play", 10*3, () -> {
                 hide();
-                Vars.ui.loadLogic(() -> world.sectors.playSector(selected));
+                Vars.ui.loadAnd(() -> world.sectors.playSector(selected));
             }).height(60f);
 
             if(selected.hasSave()){
-                t.addImageTextButton("$text.sector.abandon", "icon-cancel", 16 * 2, () ->
-                    Vars.ui.showConfirm("$text.confirm", "$text.sector.abandon.confirm", () -> {
+                t.addImageTextButton("$sector.abandon", "icon-cancel", 16 * 2, () ->
+                    Vars.ui.showConfirm("$confirm", "$sector.abandon.confirm", () -> {
                         world.sectors.abandonSector(selected);
                         // Simulate a sector selection so the buttons get updated.
                         selectSector(selected);
@@ -118,7 +116,7 @@ public class SectorsDialog extends FloatingDialog{
         }).pad(-5).growX().padTop(0);
 
         table.pack();
-        table.act(Gdx.graphics.getDeltaTime());
+        table.act(Core.graphics.getDeltaTime());
     }
 
     public Sector getSelected(){
@@ -133,7 +131,7 @@ public class SectorsDialog extends FloatingDialog{
         SectorView(){
             addListener(new InputListener(){
                 @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button){
                     if(pointer != 0) return false;
                     //Cursors.setHand();
                     lastX = x;
@@ -152,9 +150,9 @@ public class SectorsDialog extends FloatingDialog{
                 }
 
                 @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                public void touchUp(InputEvent event, float x, float y, int pointer, KeyCode button){
                     if(pointer != 0) return;
-                    Cursors.restoreCursor();
+                    Core.graphics.restoreCursor();
                 }
             });
 
@@ -163,7 +161,7 @@ public class SectorsDialog extends FloatingDialog{
 
         @Override
         public void draw(){
-            Draw.alpha(alpha);
+            //Draw.alpha(alpha);
 
             int shownSectorsX = (int)(width/sectorSize);
             int shownSectorsY = (int)(height/sectorSize);
@@ -171,7 +169,7 @@ public class SectorsDialog extends FloatingDialog{
             int offsetX = (int)(panX / sectorSize);
             int offsetY = (int)(panY / sectorSize);
 
-            Vector2 mouse = Graphics.mouse();
+            Vector2 mouse = Core.input.mouse();
 
             for(int x = -shownSectorsX; x <= shownSectorsX; x++){
                 for(int y = -shownSectorsY; y <= shownSectorsY; y++){
@@ -188,7 +186,7 @@ public class SectorsDialog extends FloatingDialog{
                         Draw.rect("empty-sector", drawX, drawY, sectorSize, sectorSize);
 
                         int i = 0;
-                        for(GridPoint2 point : Geometry.d4){
+                        for(Point2 point : Geometry.d4){
                             Sector other = world.sectors.get(sectorX + point.x, sectorY + point.y);
                             if(other != null){
                                 Draw.rect("sector-edge", drawX, drawY, sectorSize, sectorSize, i*90);
@@ -215,15 +213,15 @@ public class SectorsDialog extends FloatingDialog{
                     Color selectColor = Color.CLEAR;
 
                     if(sector == selected){
-                        selectColor = Palette.accent;
-                    }else if(Mathf.inRect(mouse.x, mouse.y, drawX - sectorSize / 2f, drawY - sectorSize / 2f,
-                        drawX + sectorSize / 2f, drawY + sectorSize / 2f)){
+                        selectColor = Pal.accent;
+                    }else if(Rectangle.tmp.set(drawX - sectorSize / 2f, drawY - sectorSize / 2f,
+                            drawX + sectorSize / 2f, drawY + sectorSize / 2f).contains(mouse.x, mouse.y)){
                         if(clicked){
                             selectSector(sector);
                         }
                         selectColor = Color.WHITE;
                     }else if(sector.hasSave()){
-                        iconColor = Palette.command;
+                        iconColor = Pal.command;
                     }else{
                         iconColor = Color.GRAY;
                     }

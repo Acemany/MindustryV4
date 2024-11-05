@@ -1,13 +1,10 @@
 package mindustryV4.maps.missions;
 
-import com.badlogic.gdx.utils.Array;
-import mindustryV4.game.GameMode;
-import mindustryV4.game.SpawnGroup;
-import mindustryV4.game.Team;
-import mindustryV4.game.Waves;
+import io.anuke.arc.Core;
+import io.anuke.arc.collection.Array;
+import mindustryV4.game.*;
 import mindustryV4.maps.Sector;
-import mindustryV4.maps.generation.Generation;
-import ucore.util.Bundles;
+import mindustryV4.maps.generators.Generation;
 
 import static mindustryV4.Vars.*;
 
@@ -36,7 +33,7 @@ public class WaveMission extends MissionWithStartingCore{
 
     @Override
     public Array<SpawnGroup> getWaves(Sector sector){
-        return Waves.getSpawns();
+        return state.rules.spawns;
     }
 
     @Override
@@ -52,30 +49,23 @@ public class WaveMission extends MissionWithStartingCore{
     }
 
     @Override
-    public GameMode getMode(){
-        return GameMode.waves;
-    }
-
-    @Override
     public String displayString(){
         return state.wave > target ?
-            Bundles.format(
+        Core.bundle.format(
                 state.enemies() > 1 ?
-                "text.mission.wave.enemies" :
-                "text.mission.wave.enemy", target, target, state.enemies()) :
-            Bundles.format("text.mission.wave", state.wave, target, (int)(state.wavetime/60));
+                "mission.wave.enemies" :
+                "mission.wave.enemy", target, target, state.enemies()) :
+            Core.bundle.format("mission.wave", state.wave, target, (int)(state.wavetime/60));
     }
 
     @Override
     public String menuDisplayString(){
-        return Bundles.format("text.mission.wave.menu", target);
+        return Core.bundle.format("mission.wave.menu", target);
     }
 
     @Override
     public void update(){
-        if(state.wave > target){
-            state.mode = GameMode.noWaves;
-        }
+
     }
 
     @Override

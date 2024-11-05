@@ -1,7 +1,7 @@
 package mindustryV4.input;
 
 import mindustryV4.world.Block;
-import ucore.util.Mathf;
+import io.anuke.arc.math.Mathf;
 
 import static mindustryV4.Vars.tilesize;
 

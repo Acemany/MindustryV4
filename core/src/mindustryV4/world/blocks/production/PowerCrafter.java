@@ -1,6 +1,6 @@
 package mindustryV4.world.blocks.production;
 
-import mindustryV4.entities.TileEntity;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Item;
 import mindustryV4.type.Liquid;
 import mindustryV4.world.Block;
@@ -8,6 +8,8 @@ import mindustryV4.world.Tile;
 import mindustryV4.world.blocks.production.GenericCrafter.GenericCrafterEntity;
 import mindustryV4.world.meta.BlockStat;
 
+/**Similar to GenericCrafter, but also optionally outputs liquids.
+ * TODO consolidate into one class*/
 public class PowerCrafter extends Block{
     protected final int timerDump = timers++;
     protected final int timerContentCheck = timers++;
@@ -61,11 +63,22 @@ public class PowerCrafter extends Block{
     }
 
     @Override
+    public boolean canProduce(Tile tile){
+        if(outputItem != null && tile.entity.items.get(outputItem) >= itemCapacity){
+            return false;
+        }
+        if(outputLiquid != null && tile.entity.liquids.get(outputLiquid) >= liquidCapacity - 0.01f){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void update(Tile tile){
         GenericCrafterEntity entity = tile.entity();
 
         if(entity.cons.valid()){
-            entity.progress += 1f / craftTime * entity.delta();
+            entity.progress += getProgressIncrease(entity, craftTime);
             entity.totalProgress += entity.delta();
         }
 

@@ -1,19 +1,15 @@
 package mindustryV4.maps;
 
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.collection.Array;
 import mindustryV4.content.Items;
 import mindustryV4.content.Liquids;
 import mindustryV4.content.Mechs;
 import mindustryV4.content.UnitTypes;
-import mindustryV4.content.blocks.CraftingBlocks;
-import mindustryV4.content.blocks.ProductionBlocks;
-import mindustryV4.content.blocks.UnitBlocks;
-import mindustryV4.content.blocks.UpgradeBlocks;
-import mindustryV4.entities.units.UnitCommand;
+import mindustryV4.content.Blocks;
 import mindustryV4.maps.missions.*;
 import mindustryV4.type.Item;
-import ucore.util.GridMap;
-import ucore.util.Structs;
+import io.anuke.arc.collection.GridMap;
+import io.anuke.arc.collection.Array;
 
 import static mindustryV4.Vars.mobile;
 
@@ -26,40 +22,31 @@ public class SectorPresets{
         //base tutorial mission
         add(new SectorPreset(0, 0,
             TutorialSector.getMissions(),
-            Array.with(Items.copper, Items.coal, Items.lead)));
-
-        //command center mission
-        add(new SectorPreset(0, 1,
-            Structs.array(
-                Missions.blockRecipe(UnitBlocks.daggerFactory),
-                new UnitMission(UnitTypes.dagger),
-                Missions.blockRecipe(UnitBlocks.commandCenter),
-                new CommandMission(UnitCommand.retreat),
-                new CommandMission(UnitCommand.attack),
-                new BattleMission()
-            ),
-            Array.with(Items.copper, Items.lead, Items.coal)));
+            Array.with(Items.copper, Items.coal, Items.lead))
+        );
 
         //pad mission
         add(new SectorPreset(0, -2,
-            Structs.array(
-                Missions.blockRecipe(mobile ? UpgradeBlocks.alphaPad : UpgradeBlocks.dartPad),
+            Array.ofRecursive(
+                Missions.blockRecipe(Blocks.alphaDartPad),
                 new MechMission(mobile ? Mechs.alpha : Mechs.dart),
                 new WaveMission(15)
             ),
-            Array.with(Items.copper, Items.lead, Items.coal, Items.titanium)));
+            Array.with(Items.copper, Items.lead, Items.coal, Items.titanium))
+        );
 
         //oil mission
         add(new SectorPreset(-2, 0,
-            Structs.array(
-                Missions.blockRecipe(ProductionBlocks.cultivator),
-                Missions.blockRecipe(ProductionBlocks.waterExtractor),
+            Array.ofRecursive(
+                Missions.blockRecipe(Blocks.cultivator),
+                Missions.blockRecipe(Blocks.waterExtractor),
                 new ContentMission(Items.biomatter),
-                Missions.blockRecipe(CraftingBlocks.biomatterCompressor),
+                Missions.blockRecipe(Blocks.biomatterCompressor),
                 new ContentMission(Liquids.oil),
                 new BattleMission()
             ),
-            Array.with(Items.copper, Items.lead, Items.coal, Items.titanium)));
+            Array.with(Items.copper, Items.lead, Items.coal, Items.titanium))
+        );
     }
 
     public Array<Item> getOres(int x, int y){
@@ -90,3 +77,4 @@ public class SectorPresets{
         }
     }
 }
+

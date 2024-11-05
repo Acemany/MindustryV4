@@ -1,12 +1,12 @@
 package mindustryV4.entities.effect;
 
-import com.badlogic.gdx.graphics.Color;
+import io.anuke.arc.graphics.Color;
 import mindustryV4.entities.traits.BelowLiquidTrait;
-import ucore.entities.EntityGroup;
-import ucore.entities.impl.TimedEntity;
-import ucore.entities.trait.DrawTrait;
-import ucore.graphics.Draw;
-import ucore.util.Mathf;
+import mindustryV4.entities.EntityGroup;
+import mindustryV4.entities.impl.TimedEntity;
+import mindustryV4.entities.traits.DrawTrait;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.math.Mathf;
 
 import static mindustryV4.Vars.groundEffectGroup;
 
@@ -14,7 +14,7 @@ import static mindustryV4.Vars.groundEffectGroup;
  * Class for creating block rubble on the ground.
  */
 public abstract class Decal extends TimedEntity implements BelowLiquidTrait, DrawTrait{
-    private static final Color color = Color.valueOf("52504e");
+    private static final Color color = Color.valueOf("3a3635");
 
     @Override
     public float lifetime(){

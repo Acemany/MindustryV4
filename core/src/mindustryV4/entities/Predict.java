@@ -1,8 +1,8 @@
 package mindustryV4.entities;
 
-import com.badlogic.gdx.math.Vector2;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Vector2;
 import mindustryV4.entities.traits.TargetTrait;
-import ucore.util.Mathf;
 
 /**
  * Class for predicting shoot angles based on velocities of targets.

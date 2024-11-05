@@ -1,11 +1,11 @@
 package mindustryV4.world.meta.values;
 
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.collection.Array;
 import mindustryV4.type.Liquid;
 import mindustryV4.ui.LiquidDisplay;
 import mindustryV4.world.meta.StatValue;
-import ucore.function.Predicate;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.function.Predicate;
+import io.anuke.arc.scene.ui.layout.Table;
 
 import static mindustryV4.Vars.content;
 

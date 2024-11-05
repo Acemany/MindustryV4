@@ -1,28 +1,28 @@
 package mindustryV4.world.blocks.defense;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import mindustryV4.content.fx.BlockFx;
-import mindustryV4.entities.Player;
-import mindustryV4.entities.TileEntity;
+import io.anuke.arc.Core;
+import io.anuke.arc.Graphics.Cursor;
+import io.anuke.arc.Graphics.Cursor.SystemCursor;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.Effects.Effect;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.TextureRegion;
+import io.anuke.arc.math.geom.Rectangle;
+import mindustryV4.content.Fx;
+import mindustryV4.entities.type.Player;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.entities.Units;
-import mindustryV4.input.CursorType;
 import mindustryV4.world.Tile;
-import ucore.core.Effects;
-import ucore.core.Effects.Effect;
-import ucore.graphics.Draw;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static mindustryV4.Vars.threads;
-
 public class Door extends Wall{
     protected final Rectangle rect = new Rectangle();
 
-    protected Effect openfx = BlockFx.dooropen;
-    protected Effect closefx = BlockFx.doorclose;
+    protected Effect openfx = Fx.dooropen;
+    protected Effect closefx = Fx.doorclose;
 
     protected TextureRegion openRegion;
 
@@ -36,7 +36,7 @@ public class Door extends Wall{
     @Override
     public void load(){
         super.load();
-        openRegion = Draw.region(name + "-open");
+        openRegion = Core.atlas.find(name + "-open");
     }
 
     @Override
@@ -51,8 +51,8 @@ public class Door extends Wall{
     }
 
     @Override
-    public CursorType getCursor(Tile tile){
-        return CursorType.hand;
+    public Cursor getCursor(Tile tile){
+        return SystemCursor.hand;
     }
 
     @Override
@@ -65,19 +65,16 @@ public class Door extends Wall{
     public void tapped(Tile tile, Player player){
         DoorEntity entity = tile.entity();
 
-        threads.run(() -> {
+        if(Units.anyEntities(tile) && entity.open){
+            return;
+        }
 
-            if(Units.anyEntities(tile) && entity.open){
-                return;
-            }
-
-            entity.open = !entity.open;
-            if(!entity.open){
-                Effects.effect(closefx, tile.drawx(), tile.drawy());
-            }else{
-                Effects.effect(openfx, tile.drawx(), tile.drawy());
-            }
-        });
+        entity.open = !entity.open;
+        if(!entity.open){
+            Effects.effect(closefx, tile.drawx(), tile.drawy());
+        }else{
+            Effects.effect(openfx, tile.drawx(), tile.drawy());
+        }
     }
 
     @Override

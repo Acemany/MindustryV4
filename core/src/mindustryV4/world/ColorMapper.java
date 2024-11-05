@@ -1,11 +1,10 @@
 package mindustryV4.world;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.ObjectIntMap;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.collection.IntMap;
+import io.anuke.arc.collection.ObjectIntMap;
 import mindustryV4.game.ContentList;
 import mindustryV4.game.Team;
-import mindustryV4.type.ContentType;
 
 import static mindustryV4.Vars.content;
 
@@ -42,16 +41,11 @@ public class ColorMapper implements ContentList{
     @Override
     public void load(){
         for(Block block : content.blocks()){
-            int color = Color.rgba8888(block.minimapColor);
+            int color = Color.rgba8888(block.color);
             if(color == 0) continue; //skip blocks that are not mapped
 
             blockMap.put(color, block);
             colorMap.put(block, color);
         }
-    }
-
-    @Override
-    public ContentType type(){
-        return ContentType.block;
     }
 }

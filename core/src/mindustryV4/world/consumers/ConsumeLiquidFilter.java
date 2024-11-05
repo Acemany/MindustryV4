@@ -1,15 +1,18 @@
 package mindustryV4.world.consumers;
 
-import com.badlogic.gdx.utils.Array;
-import mindustryV4.entities.TileEntity;
+import io.anuke.arc.collection.Array;
+import io.anuke.arc.function.Predicate;
+import io.anuke.arc.scene.ui.layout.Table;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Liquid;
+import mindustryV4.ui.MultiReqImage;
+import mindustryV4.ui.ReqImage;
 import mindustryV4.world.Block;
+import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.BlockStats;
 import mindustryV4.world.meta.StatUnit;
 import mindustryV4.world.meta.values.LiquidFilterValue;
-import ucore.function.Predicate;
-import ucore.scene.ui.layout.Table;
 
 import static mindustryV4.Vars.content;
 
@@ -29,20 +32,12 @@ public class ConsumeLiquidFilter extends Consume{
     }
 
     @Override
-    public void buildTooltip(Table table){
-        Array<Liquid> list = new Array<>();
+    public void build(Tile tile, Table table){
+        Array<Liquid> list = content.liquids().select(l -> !l.isHidden() && filter.test(l));
+        MultiReqImage image = new MultiReqImage();
+        list.each(liquid -> image.add(new ReqImage(liquid.getContentIcon(), () -> tile.entity != null && tile.entity.liquids != null && tile.entity.liquids.get(liquid) >= use(tile.block(), tile.entity))));
 
-        for(Liquid item : content.liquids()){
-            if(!item.isHidden() && filter.test(item)) list.add(item);
-        }
-
-        for(int i = 0; i < list.size; i++){
-            Liquid item = list.get(i);
-            table.addImage(item.getContentIcon()).size(8 * 3).padRight(2).padLeft(2).padTop(2).padBottom(2);
-            if(i != list.size - 1){
-                table.add("/");
-            }
-        }
+        table.add(image).size(8*4);
     }
 
     @Override
@@ -57,12 +52,12 @@ public class ConsumeLiquidFilter extends Consume{
 
     @Override
     public boolean valid(Block block, TileEntity entity){
-        return entity.liquids != null && filter.test(entity.liquids.current()) && entity.liquids.currentAmount() >= use(block, entity);
+        return entity != null && entity.liquids != null && filter.test(entity.liquids.current()) && entity.liquids.currentAmount() >= use(block, entity);
     }
 
     @Override
     public void display(BlockStats stats){
-        if(optional){
+        if(boost){
             stats.add(BlockStat.boostLiquid, new LiquidFilterValue(filter));
         }else if(isFuel){
             stats.add(BlockStat.inputLiquidFuel, new LiquidFilterValue(filter));

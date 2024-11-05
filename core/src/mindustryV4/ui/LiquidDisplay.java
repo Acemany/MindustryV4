@@ -1,8 +1,8 @@
 package mindustryV4.ui;
 
 import mindustryV4.type.Liquid;
-import ucore.scene.ui.Image;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.Image;
+import io.anuke.arc.scene.ui.layout.Table;
 
 /**An ItemDisplay, but for liquids.*/
 public class LiquidDisplay extends Table{

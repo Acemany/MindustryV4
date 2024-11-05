@@ -1,37 +1,30 @@
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import com.badlogic.gdx.math.GridPoint2;
+import io.anuke.arc.*;
+import io.anuke.arc.backends.headless.HeadlessApplication;
+import io.anuke.arc.backends.headless.HeadlessApplicationConfiguration;
+import io.anuke.arc.math.geom.Point2;
 import mindustryV4.Vars;
 import mindustryV4.content.Items;
 import mindustryV4.content.UnitTypes;
-import mindustryV4.content.blocks.Blocks;
-import mindustryV4.content.blocks.CraftingBlocks;
-import mindustryV4.content.blocks.PowerBlocks;
-import mindustryV4.content.blocks.StorageBlocks;
+import mindustryV4.content.Blocks;
 import mindustryV4.core.GameState.State;
 import mindustryV4.core.Logic;
 import mindustryV4.core.NetServer;
 import mindustryV4.core.World;
-import mindustryV4.entities.units.BaseUnit;
+import mindustryV4.entities.type.BaseUnit;
 import mindustryV4.game.Content;
 import mindustryV4.game.Team;
 import mindustryV4.io.BundleLoader;
 import mindustryV4.io.SaveIO;
-import mindustryV4.maps.Map;
+import mindustryV4.maps.*;
 import mindustryV4.type.Item;
 import mindustryV4.world.Block;
 import mindustryV4.world.Edges;
 import mindustryV4.world.Tile;
-import ucore.core.Timers;
-import ucore.modules.ModuleCore;
-import ucore.util.EmptyLogger;
-import ucore.util.Log;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.util.Log;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 import static mindustryV4.Vars.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,37 +38,31 @@ public class ApplicationTests{
             Throwable[] exceptionThrown = {null};
             Log.setUseColors(false);
 
-            ModuleCore core = new ModuleCore(){
+            ApplicationCore core = new ApplicationCore(){
                 @Override
-                public void init(){
+                public void setup(){
                     Vars.init();
 
                     headless = true;
 
                     BundleLoader.load();
                     content.load();
-                    content.initialize(Content::init);
 
-                    module(logic = new Logic());
-                    module(world = new World());
-                    module(netServer = new NetServer());
+                    add(logic = new Logic());
+                    add(world = new World());
+                    add(netServer = new NetServer());
+
+                    content.initialize(Content::init);
                 }
 
-                @Override
-                public void postInit(){
-                    super.postInit();
+                public void init(){
+                    super.init();
                     begins[0] = true;
                 }
             };
 
             HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
-            config.preferencesDirectory = "test_files/";
-
-            new File("tests_files/").delete();
-
-            new HeadlessApplication(core, config){{
-                Gdx.app.setApplicationLogger(new EmptyLogger());
-            }};
+            new HeadlessApplication(core, config);
 
             for(Thread thread : Thread.getAllStackTraces().keySet()){
                 if(thread.getName().equals("HeadlessApplication")){
@@ -97,7 +84,7 @@ public class ApplicationTests{
 
     @BeforeEach
     void resetWorld(){
-        Timers.setDeltaProvider(() ->  1f);
+        Time.setDeltaProvider(() ->  2f);
         logic.reset();
         state.set(State.menu);
     }
@@ -112,14 +99,21 @@ public class ApplicationTests{
     @Test
     void loadSector(){
         world.sectors.createSector(0, 0);
-        world.sectors.playSector(world.sectors.get(0, 0));
+
+        Sector first = world.sectors.get(0, 0);
+        Log.info(first);
+
+        world.sectors.playSector(first);
     }
 
     @Test
     void playMap(){
         assertTrue(world.maps.all().size > 0);
 
-        world.loadMap(world.maps.all().first());
+        Map first = world.maps.all().first();
+        Log.info(first);
+
+        world.loadMap(first);
     }
 
     @Test
@@ -150,14 +144,14 @@ public class ApplicationTests{
         createMap();
         int bx = 4;
         int by = 4;
-        world.setBlock(world.tile(bx, by), StorageBlocks.core, Team.blue);
+        world.setBlock(world.tile(bx, by), Blocks.coreShard, Team.blue);
         assertEquals(world.tile(bx, by).getTeam(), Team.blue);
         for(int x = bx-1; x <= bx + 1; x++){
             for(int y = by-1; y <= by + 1; y++){
                 if(x == bx && by == y){
-                    assertEquals(world.tile(x, y).block(), StorageBlocks.core);
+                    assertEquals(world.tile(x, y).block(), Blocks.coreShard);
                 }else{
-                    assertTrue(world.tile(x, y).block() == Blocks.blockpart && world.tile(x, y).getLinked() == world.tile(bx, by));
+                    assertTrue(world.tile(x, y).block() == Blocks.part && world.tile(x, y).getLinked() == world.tile(bx, by));
                 }
             }
         }
@@ -170,7 +164,7 @@ public class ApplicationTests{
         tile.entity.items.add(Items.coal, 5);
         tile.entity.items.add(Items.titanium, 50);
         assertEquals(tile.entity.items.total(), 55);
-        tile.entity.items.remove(Items.phasefabric, 10);
+        tile.entity.items.remove(Items.phaseFabric, 10);
         tile.entity.items.remove(Items.titanium, 10);
         assertEquals(tile.entity.items.total(), 45);
     }
@@ -178,11 +172,11 @@ public class ApplicationTests{
     @Test
     void timers(){
         boolean[] ran = {false};
-        Timers.run(1.9999f, () -> ran[0] = true);
+        Time.run(3.9999f, () -> ran[0] = true);
 
-        Timers.update();
+        Time.update();
         assertFalse(ran[0]);
-        Timers.update();
+        Time.update();
         assertTrue(ran[0]);
     }
 
@@ -212,25 +206,25 @@ public class ApplicationTests{
 
     @Test
     void inventoryDeposit(){
-        depositTest(CraftingBlocks.smelter, Items.copper);
-        depositTest(StorageBlocks.vault, Items.copper);
-        depositTest(PowerBlocks.thoriumReactor, Items.thorium);
+        depositTest(Blocks.smelter, Items.copper);
+        depositTest(Blocks.vault, Items.copper);
+        depositTest(Blocks.thoriumReactor, Items.thorium);
     }
 
     @Test
     void edges(){
-        GridPoint2[] edges = Edges.getEdges(1);
-        assertEquals(edges[0], new GridPoint2(1, 0));
-        assertEquals(edges[1], new GridPoint2(0, 1));
-        assertEquals(edges[2], new GridPoint2(-1, 0));
-        assertEquals(edges[3], new GridPoint2(0, -1));
+        Point2[] edges = Edges.getEdges(1);
+        assertEquals(edges[0], new Point2(1, 0));
+        assertEquals(edges[1], new Point2(0, 1));
+        assertEquals(edges[2], new Point2(-1, 0));
+        assertEquals(edges[3], new Point2(0, -1));
 
-        GridPoint2[] edges2 = Edges.getEdges(2);
+        Point2[] edges2 = Edges.getEdges(2);
         assertEquals(8, edges2.length);
     }
 
     void depositTest(Block block, Item item){
-        BaseUnit unit = UnitTypes.alphaDrone.create(Team.none);
+        BaseUnit unit = UnitTypes.dagger.create(Team.none);
         Tile tile = new Tile(0, 0, Blocks.air.id, block.id);
         int capacity = tile.block().itemCapacity;
 

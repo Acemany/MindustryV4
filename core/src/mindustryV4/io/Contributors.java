@@ -1,10 +1,10 @@
 package mindustryV4.io;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
+import io.anuke.arc.collection.Array;
+import io.anuke.arc.function.Consumer;
+import io.anuke.arc.util.serialization.JsonReader;
+import io.anuke.arc.util.serialization.JsonValue;
 import mindustryV4.net.Net;
-import ucore.function.Consumer;
 
 import static mindustryV4.Vars.contributorsURL;
 

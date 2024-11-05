@@ -1,34 +1,34 @@
 package mindustryV4.world.blocks.units;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.anuke.annotations.Annotations.Loc;
 import io.anuke.annotations.Annotations.Remote;
+import io.anuke.arc.Core;
+import io.anuke.arc.collection.EnumSet;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.Lines;
+import io.anuke.arc.graphics.g2d.TextureRegion;
+import io.anuke.arc.math.Mathf;
 import mindustryV4.Vars;
-import mindustryV4.content.fx.BlockFx;
-import mindustryV4.entities.TileEntity;
-import mindustryV4.entities.units.BaseUnit;
-import mindustryV4.entities.units.UnitType;
+import mindustryV4.content.Fx;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.type.BaseUnit;
+import mindustryV4.entities.type.TileEntity;
+import mindustryV4.entities.type.Unit;
 import mindustryV4.gen.Call;
-import mindustryV4.graphics.Palette;
+import mindustryV4.graphics.Pal;
 import mindustryV4.graphics.Shaders;
 import mindustryV4.net.Net;
 import mindustryV4.type.Item;
 import mindustryV4.type.ItemStack;
-import mindustryV4.world.BarType;
+import mindustryV4.type.UnitType;
+import mindustryV4.ui.Bar;
 import mindustryV4.world.Block;
 import mindustryV4.world.Tile;
 import mindustryV4.world.consumers.ConsumeItems;
-import mindustryV4.world.meta.BlockBar;
 import mindustryV4.world.meta.BlockFlag;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.StatUnit;
 import mindustryV4.world.modules.ItemModule;
-import ucore.core.Effects;
-import ucore.core.Graphics;
-import ucore.graphics.Draw;
-import ucore.graphics.Lines;
-import ucore.util.EnumSet;
-import ucore.util.Mathf;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -43,6 +43,7 @@ public class UnitFactory extends Block{
     protected float produceTime = 1000f;
     protected float launchVelocity = 0f;
     protected TextureRegion topRegion;
+    protected int maxSpawn = 2;
 
     public UnitFactory(String name){
         super(name);
@@ -50,8 +51,7 @@ public class UnitFactory extends Block{
         hasPower = true;
         hasItems = true;
         solid = false;
-        itemCapacity = 10;
-        flags = EnumSet.of(BlockFlag.producer, BlockFlag.target);
+        flags = EnumSet.of(BlockFlag.producer);
 
         consumes.require(ConsumeItems.class);
     }
@@ -64,16 +64,17 @@ public class UnitFactory extends Block{
         UnitFactory factory = (UnitFactory) tile.block();
 
         entity.buildTime = 0f;
+        entity.spawned ++;
 
         Effects.shake(2f, 3f, entity);
-        Effects.effect(BlockFx.producesmoke, tile.drawx(), tile.drawy());
+        Effects.effect(Fx.producesmoke, tile.drawx(), tile.drawy());
 
         if(!Net.client()){
             BaseUnit unit = factory.type.create(tile.getTeam());
             unit.setSpawner(tile);
             unit.set(tile.drawx() + Mathf.range(4), tile.drawy() + Mathf.range(4));
             unit.add();
-            unit.getVelocity().y = factory.launchVelocity;
+            unit.velocity().y = factory.launchVelocity;
         }
     }
 
@@ -81,7 +82,14 @@ public class UnitFactory extends Block{
     public void load(){
         super.load();
 
-        topRegion = Draw.region(name + "-top");
+        topRegion = Core.atlas.find(name + "-top");
+    }
+
+    @Override
+    public void setBars(){
+        super.setBars();
+        bars.add("progress", entity -> new Bar("blocks.progress", Pal.ammo, () -> ((UnitFactoryEntity)entity).buildTime / produceTime));
+        bars.add("spawned", entity -> new Bar(() -> Core.bundle.format("blocks.spawned", ((UnitFactoryEntity)entity).spawned, maxSpawn), () -> Pal.command, () -> (float)((UnitFactoryEntity)entity).spawned / maxSpawn));
     }
 
     @Override
@@ -94,22 +102,18 @@ public class UnitFactory extends Block{
         super.setStats();
 
         stats.add(BlockStat.craftSpeed, produceTime / 60f, StatUnit.seconds);
+        stats.add(BlockStat.maxUnits, maxSpawn, StatUnit.none);
     }
 
     @Override
-    public void setBars(){
-        super.setBars();
-
-        bars.add(new BlockBar(BarType.production, true, tile -> tile.<UnitFactoryEntity>entity().buildTime / produceTime));
-        bars.remove(BarType.inventory);
+    public void unitRemoved(Tile tile, Unit unit){
+        UnitFactoryEntity entity = tile.entity();
+        entity.spawned --;
     }
 
     @Override
-    public TextureRegion[] getIcon(){
-        return new TextureRegion[]{
-            Draw.region(name),
-            Draw.region(name + "-top")
-        };
+    public TextureRegion[] generateIcons(){
+        return new TextureRegion[]{Core.atlas.find(name), Core.atlas.find(name + "-top")};
     }
 
     @Override
@@ -117,20 +121,19 @@ public class UnitFactory extends Block{
         UnitFactoryEntity entity = tile.entity();
         TextureRegion region = type.iconRegion;
 
-        Draw.rect(name(), tile.drawx(), tile.drawy());
+        Draw.rect(name, tile.drawx(), tile.drawy());
 
         Shaders.build.region = region;
         Shaders.build.progress = entity.buildTime / produceTime;
-        Shaders.build.color.set(Palette.accent);
+        Shaders.build.color.set(Pal.accent);
         Shaders.build.color.a = entity.speedScl;
         Shaders.build.time = -entity.time / 10f;
 
-        Graphics.shader(Shaders.build, false);
-        Shaders.build.apply();
+        Draw.shader(Shaders.build);
         Draw.rect(region, tile.drawx(), tile.drawy());
-        Graphics.shader();
+        Draw.shader();
 
-        Draw.color(Palette.accent);
+        Draw.color(Pal.accent);
         Draw.alpha(entity.speedScl);
 
         Lines.lineAngleCenter(
@@ -148,7 +151,9 @@ public class UnitFactory extends Block{
     public void update(Tile tile){
         UnitFactoryEntity entity = tile.entity();
 
-        entity.time += entity.delta() * entity.speedScl;
+        if(entity.spawned >= maxSpawn){
+            return;
+        }
 
         if(tile.isEnemyCheat()){
             entity.warmup += entity.delta();
@@ -156,17 +161,17 @@ public class UnitFactory extends Block{
 
         if(!tile.isEnemyCheat()){
             //player-made spawners have default behavior
-
             if(hasRequirements(entity.items, entity.buildTime / produceTime) && entity.cons.valid()){
-
-                entity.buildTime += entity.delta();
+                entity.time += entity.delta() * entity.speedScl;
+                entity.buildTime += entity.delta() * entity.power.satisfaction;
                 entity.speedScl = Mathf.lerpDelta(entity.speedScl, 1f, 0.05f);
             }else{
                 entity.speedScl = Mathf.lerpDelta(entity.speedScl, 0f, 0.05f);
             }
             //check if grace period had passed
-        }else if(entity.warmup > produceTime*gracePeriodMultiplier * Vars.state.difficulty.spawnerScaling){
-            float speedMultiplier = Math.min(0.1f + (entity.warmup - produceTime * gracePeriodMultiplier * Vars.state.difficulty.spawnerScaling) / speedupTime, maxSpeedup);
+        }else if(entity.warmup > produceTime*gracePeriodMultiplier){
+            float speedMultiplier = Math.min(0.1f + (entity.warmup - produceTime * gracePeriodMultiplier) / speedupTime, maxSpeedup);
+            entity.time += entity.delta() * entity.speedScl;
             //otherwise, it's an enemy, cheat by not requiring resources
             entity.buildTime += entity.delta() * speedMultiplier;
             entity.speedScl = Mathf.lerpDelta(entity.speedScl, 1f, 0.05f);
@@ -211,6 +216,12 @@ public class UnitFactory extends Block{
         return new UnitFactoryEntity();
     }
 
+    @Override
+    public boolean canProduce(Tile tile){
+        UnitFactoryEntity entity = tile.entity();
+        return entity.spawned < maxSpawn;
+    }
+
     protected boolean hasRequirements(ItemModule inv, float fraction){
         for(ItemStack stack : consumes.items()){
             if(!inv.has(stack.item, (int) (fraction * stack.amount))){
@@ -225,17 +236,20 @@ public class UnitFactory extends Block{
         public float time;
         public float speedScl;
         public float warmup; //only for enemy spawners
+        public int spawned;
 
         @Override
         public void write(DataOutput stream) throws IOException{
             stream.writeFloat(buildTime);
             stream.writeFloat(warmup);
+            stream.writeInt(spawned);
         }
 
         @Override
         public void read(DataInput stream) throws IOException{
             buildTime = stream.readFloat();
             warmup = stream.readFloat();
+            spawned = stream.readInt();
         }
     }
 }

@@ -1,13 +1,12 @@
 package mindustryV4.ui;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import mindustryV4.graphics.Palette;
-import ucore.graphics.Draw;
-import ucore.graphics.Lines;
-import ucore.scene.ui.Image;
-import ucore.scene.ui.layout.Unit;
+import io.anuke.arc.graphics.Texture;
+import io.anuke.arc.graphics.g2d.TextureRegion;
+import mindustryV4.graphics.Pal;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.Lines;
+import io.anuke.arc.scene.ui.Image;
+import io.anuke.arc.scene.ui.layout.Unit;
 
 public class BorderImage extends Image{
     private float thickness = 3f;
@@ -31,13 +30,13 @@ public class BorderImage extends Image{
     }
 
     @Override
-    public void draw(Batch batch, float alpha){
-        super.draw(batch, alpha);
+    public void draw(){
+        super.draw();
 
         float scaleX = getScaleX();
         float scaleY = getScaleY();
 
-        Draw.color(Palette.accent);
+        Draw.color(Pal.accent);
         Lines.stroke(Unit.dp.scl(thickness));
         Lines.rect(x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY);
         Draw.reset();

@@ -1,10 +1,10 @@
 package mindustryV4.maps.missions;
 
 import mindustryV4.Vars;
-import mindustryV4.entities.TileEntity;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Item;
 import mindustryV4.world.Tile;
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
 import static mindustryV4.Vars.state;
 
@@ -32,11 +32,11 @@ public class ItemMission extends Mission{
     public String displayString(){
         TileEntity core = Vars.players[0].getClosestCore();
         if(core == null) return "imminent doom";
-        return Bundles.format("text.mission.resource", item.localizedName(), core.items.get(item), amount);
+        return Core.bundle.format("mission.resource", item.localizedName(), core.items.get(item), amount);
     }
 
     @Override
     public String menuDisplayString(){
-        return Bundles.format("text.mission.resource.menu", item.localizedName(), amount);
+        return Core.bundle.format("mission.resource.menu", item.localizedName(), amount);
     }
 }

@@ -6,7 +6,7 @@ import mindustryV4.type.Liquid;
 public class BurnerGenerator extends ItemLiquidGenerator{
 
     public BurnerGenerator(String name){
-        super(name);
+        super(true, false, name);
     }
 
     @Override

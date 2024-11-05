@@ -2,7 +2,7 @@ package mindustryV4.ui;
 
 import mindustryV4.type.Item;
 import mindustryV4.type.ItemStack;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Table;
 
 /**An item image with text.*/
 public class ItemDisplay extends Table{

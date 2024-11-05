@@ -1,51 +1,54 @@
 package mindustryV4.core;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Colors;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.utils.Align;
+import io.anuke.arc.ApplicationListener;
+import io.anuke.arc.Core;
+import io.anuke.arc.Events;
+import io.anuke.arc.Graphics.Cursor;
+import io.anuke.arc.Graphics.Cursor.SystemCursor;
+import io.anuke.arc.freetype.FreeTypeFontGenerator;
+import io.anuke.arc.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import io.anuke.arc.function.Consumer;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.graphics.Colors;
+import io.anuke.arc.graphics.g2d.BitmapFont;
+import io.anuke.arc.input.KeyCode;
+import io.anuke.arc.math.Interpolation;
+import io.anuke.arc.scene.Group;
+import io.anuke.arc.scene.Scene;
+import io.anuke.arc.scene.Skin;
+import io.anuke.arc.scene.actions.Actions;
+import io.anuke.arc.scene.ui.Dialog;
+import io.anuke.arc.scene.ui.TextField;
+import io.anuke.arc.scene.ui.TextField.TextFieldFilter;
+import io.anuke.arc.scene.ui.TooltipManager;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Unit;
+import io.anuke.arc.util.Align;
+import io.anuke.arc.util.Strings;
+import io.anuke.arc.util.Time;
 import mindustryV4.editor.MapEditorDialog;
 import mindustryV4.game.EventType.ResizeEvent;
-import mindustryV4.graphics.Palette;
-import mindustryV4.input.InputHandler;
+import mindustryV4.graphics.Pal;
 import mindustryV4.ui.dialogs.*;
 import mindustryV4.ui.fragments.*;
-import ucore.core.*;
-import ucore.function.Consumer;
-import ucore.graphics.Draw;
-import ucore.modules.SceneModule;
-import ucore.scene.Group;
-import ucore.scene.Skin;
-import ucore.scene.actions.Actions;
-import ucore.scene.ui.Dialog;
-import ucore.scene.ui.TextField;
-import ucore.scene.ui.TextField.TextFieldFilter;
-import ucore.scene.ui.TooltipManager;
-import ucore.scene.ui.layout.Table;
-import ucore.scene.ui.layout.Unit;
-import ucore.util.Strings;
 
-import static mindustryV4.Vars.*;
-import static ucore.scene.actions.Actions.*;
+import static io.anuke.arc.scene.actions.Actions.*;
+import static mindustryV4.Vars.control;
+import static mindustryV4.Vars.disableUI;
 
-public class UI extends SceneModule{
+public class UI implements ApplicationListener{
     private FreeTypeFontGenerator generator;
 
-    public final MenuFragment menufrag = new MenuFragment();
-    public final HudFragment hudfrag = new HudFragment();
-    public final ChatFragment chatfrag = new ChatFragment();
-    public final PlayerListFragment listfrag = new PlayerListFragment();
-    public final BackgroundFragment backfrag = new BackgroundFragment();
-    public final LoadingFragment loadfrag = new LoadingFragment();
+    public MenuFragment menufrag;
+    public HudFragment hudfrag;
+    public ChatFragment chatfrag;
+    public PlayerListFragment listfrag;
+    public BackgroundFragment backfrag;
+    public LoadingFragment loadfrag;
 
     public AboutDialog about;
-    public RestartDialog restart;
-    public CustomGameDialog levels;
+    public GameOverDialog restart;
+    public CustomGameDialog custom;
     public MapsDialog maps;
     public LoadDialog load;
     public TelegramDialog telegram;
@@ -61,16 +64,30 @@ public class UI extends SceneModule{
     public TraceDialog traces;
     public ChangelogDialog changelog;
     public LocalPlayerDialog localplayers;
-    public UnlocksDialog unlocks;
+    public DatabaseDialog database;
     public ContentInfoDialog content;
     public SectorsDialog sectors;
-    public MissionDialog missions;
+    public DeployDialog deploy;
+    public TechTreeDialog tech;
+
+    public Cursor drillCursor, unloadCursor;
 
     public UI(){
+        Skin skin = new Skin(Core.atlas);
+        generateFonts(skin);
+        skin.load(Core.files.internal("sprites/uiskin.json"));
+
+        for(BitmapFont font : skin.getAll(BitmapFont.class).values()){
+            font.setUseIntegerPositions(true);
+        }
+
+        Core.scene = new Scene(skin);
+        Core.input.addProcessor(Core.scene);
+
         Dialog.setShowAction(() -> sequence(
             alpha(0f),
             originCenter(),
-            moveToAligned(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, Align.center),
+            moveToAligned(Core.graphics.getWidth() / 2f, Core.graphics.getHeight() / 2f, Align.center),
             scaleTo(0.0f, 1f),
             parallel(
                 scaleTo(1f, 1f, 0.1f, Interpolation.fade),
@@ -87,16 +104,31 @@ public class UI extends SceneModule{
 
         TooltipManager.getInstance().animations = false;
 
-        Settings.setErrorHandler(() -> Timers.run(1f, () -> showError("[crimson]Failed to access local storage.\nSettings will not be saved.")));
+        Core.settings.setErrorHandler(e -> {
+            e.printStackTrace();
+            Core.app.post(() -> showError("Failed to access local storage.\nSettings will not be saved."));
+        });
 
-        Dialog.closePadR = -1;
-        Dialog.closePadT = 5;
+        Colors.put("accent", Pal.accent);
 
-        Colors.put("accent", Palette.accent);
+        loadCursors();
     }
-    
-    void generateFonts(){
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixel.ttf"));
+
+    void loadCursors(){
+        int cursorScaling = 3;
+        Color outlineColor = Color.valueOf("444444");
+
+        drillCursor = Core.graphics.newCursor("drill", cursorScaling, outlineColor);
+        unloadCursor = Core.graphics.newCursor("unload", cursorScaling, outlineColor);
+        SystemCursor.arrow.set(Core.graphics.newCursor("cursor", cursorScaling, outlineColor));
+        SystemCursor.hand.set(Core.graphics.newCursor("hand", cursorScaling, outlineColor));
+        SystemCursor.ibeam.set(Core.graphics.newCursor("ibeam", cursorScaling, outlineColor));
+
+        Core.graphics.restoreCursor();
+    }
+
+    void generateFonts(Skin skin){
+        generator = new FreeTypeFontGenerator(Core.files.internal("fonts/pixel.ttf"));
         FreeTypeFontParameter param = new FreeTypeFontParameter();
         param.size = (int)(14*2 * Math.max(Unit.dp.scl(1f), 0.5f));
         param.shadowColor = Color.DARK_GRAY;
@@ -110,54 +142,31 @@ public class UI extends SceneModule{
     }
 
     @Override
-    protected void loadSkin(){
-        skin = new Skin(Core.atlas);
-        generateFonts();
-        skin.load(Gdx.files.internal("ui/uiskin.json"));
-
-        for(BitmapFont font : skin.getAll(BitmapFont.class).values()){
-            font.setUseIntegerPositions(true);
-            //font.getData().setScale(Vars.fontScale);
-        }
-    }
-
-    @Override
     public void update(){
         if(disableUI) return;
 
-        if(Graphics.drawing()) Graphics.end();
-
-        act();
-
-        Graphics.begin();
-
-        for(int i = 0; i < players.length; i++){
-            InputHandler input = control.input(i);
-
-            if(input.isCursorVisible()){
-                Draw.color();
-
-                float scl = Unit.dp.scl(3f);
-
-                Draw.rect("controller-cursor", input.getMouseX(), Gdx.graphics.getHeight() - input.getMouseY(), 16 * scl, 16 * scl);
-            }
-        }
-
-        Graphics.end();
-        Draw.color();
+        Core.scene.act();
+        Core.scene.draw();
     }
 
     @Override
     public void init(){
+        menufrag = new MenuFragment();
+        hudfrag = new HudFragment();
+        chatfrag = new ChatFragment();
+        listfrag = new PlayerListFragment();
+        backfrag = new BackgroundFragment();
+        loadfrag = new LoadingFragment();
+
         editor = new MapEditorDialog();
         controls = new ControlsDialog();
-        restart = new RestartDialog();
+        restart = new GameOverDialog();
         join = new JoinDialog();
         telegram = new TelegramDialog();
         load = new LoadDialog();
-        levels = new CustomGameDialog();
+        custom = new CustomGameDialog();
         language = new LanguageDialog();
-        unlocks = new UnlocksDialog();
+        database = new DatabaseDialog();
         settings = new SettingsMenuDialog();
         host = new HostDialog();
         paused = new PausedDialog();
@@ -170,12 +179,13 @@ public class UI extends SceneModule{
         localplayers = new LocalPlayerDialog();
         content = new ContentInfoDialog();
         sectors = new SectorsDialog();
-        missions = new MissionDialog();
+        deploy = new DeployDialog();
+        tech = new TechTreeDialog();
 
-        Group group = Core.scene.getRoot();
+        Group group = Core.scene.root;
 
         backfrag.build(group);
-        control.input(0).getFrag().build(Core.scene.getRoot());
+        control.input(0).getFrag().build(group);
         hudfrag.build(group);
         menufrag.build(group);
         chatfrag.container().build(group);
@@ -185,55 +195,40 @@ public class UI extends SceneModule{
 
     @Override
     public void resize(int width, int height){
-        super.resize(width, height);
-
+        Core.scene.resize(width, height);
         Events.fire(new ResizeEvent());
     }
 
     @Override
     public void dispose(){
-        super.dispose();
         generator.dispose();
     }
 
-    public void loadGraphics(Runnable call){
-        loadGraphics("$text.loading", call);
+    public void loadAnd(Runnable call){
+        loadAnd("$loading", call);
     }
 
-    public void loadGraphics(String text, Runnable call){
+    public void loadAnd(String text, Runnable call){
         loadfrag.show(text);
-        Timers.runTask(7f, () -> {
+        Time.runTask(7f, () -> {
             call.run();
             loadfrag.hide();
         });
     }
 
-    public void loadLogic(Runnable call){
-        loadLogic("$text.loading", call);
-    }
-
-    public void loadLogic(String text, Runnable call){
-        loadfrag.show(text);
-        Timers.runTask(7f, () ->
-            threads.run(() -> {
-                call.run();
-                threads.runGraphics(loadfrag::hide);
-            }));
-    }
-
-    public void showTextInput(String title, String text, String def, TextFieldFilter filter, Consumer<String> confirmed){
-        new Dialog(title, "dialog"){{
-            content().margin(30).add(text).padRight(6f);
-            TextField field = content().addField(def, t -> {
+    public void showTextInput(String titleText, String text, String def, TextFieldFilter filter, Consumer<String> confirmed){
+        new Dialog(titleText, "dialog"){{
+            cont.margin(30).add(text).padRight(6f);
+            TextField field = cont.addField(def, t -> {
             }).size(170f, 50f).get();
             field.setTextFieldFilter((f, c) -> field.getText().length() < 12 && filter.acceptChar(f, c));
             Platform.instance.addDialog(field);
-            buttons().defaults().size(120, 54).pad(4);
-            buttons().addButton("$text.ok", () -> {
+            buttons.defaults().size(120, 54).pad(4);
+            buttons.addButton("$ok", () -> {
                 confirmed.accept(field.getText());
                 hide();
             }).disabled(b -> field.getText().isEmpty());
-            buttons().addButton("$text.cancel", this::hide);
+            buttons.addButton("$cancel", this::hide);
         }}.show();
     }
 
@@ -245,55 +240,51 @@ public class UI extends SceneModule{
         Table table = new Table();
         table.setFillParent(true);
         table.actions(Actions.fadeOut(7f, Interpolation.fade), Actions.removeActor());
-        table.top().add(info).padTop(8);
+        table.top().add(info).padTop(40);
         Core.scene.add(table);
     }
 
     public void showInfo(String info){
         new Dialog("", "dialog"){{
-            getCell(content()).growX();
-            content().margin(15).add(info).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", this::hide).size(90, 50).pad(4);
+            getCell(cont).growX();
+            cont.margin(15).add(info).width(400f).wrap().get().setAlignment(Align.center, Align.center);
+            buttons.addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
-    public void showInfo(String info, Runnable clicked){
-        new Dialog("", "dialog"){{
-            getCell(content()).growX();
-            content().margin(15).add(info).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", () -> {
-                clicked.run();
-                hide();
-            }).size(90, 50).pad(4);
+    public void showInfoText(String titleText, String text){
+        new Dialog(titleText, "dialog"){{
+            cont.margin(15).add(text).width(400f).wrap().left().get().setAlignment(Align.left, Align.left);
+            buttons.addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
     public void showError(String text){
-        new Dialog("$text.error.title", "dialog"){{
-            content().margin(15).add(text).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", this::hide).size(90, 50).pad(4);
+        new Dialog("$error.title", "dialog"){{
+            cont.margin(15).add(text).width(400f).wrap().get().setAlignment(Align.center, Align.center);
+            buttons.addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
-    public void showText(String title, String text){
-        new Dialog(title, "dialog"){{
-            content().margin(15).add(text).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", this::hide).size(90, 50).pad(4);
+    public void showText(String titleText, String text){
+        new Dialog(titleText, "dialog"){{
+            cont.margin(15).add(text).width(400f).wrap().get().setAlignment(Align.center, Align.center);
+            buttons.addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
     public void showConfirm(String title, String text, Runnable confirmed){
         FloatingDialog dialog = new FloatingDialog(title);
-        dialog.content().add(text).width(400f).wrap().pad(4f).get().setAlignment(Align.center, Align.center);
-        dialog.buttons().defaults().size(200f, 54f).pad(2f);
+        dialog.cont.add(text).width(500f).wrap().pad(4f).get().setAlignment(Align.center, Align.center);
+        dialog.buttons.defaults().size(200f, 54f).pad(2f);
         dialog.setFillParent(false);
-        dialog.buttons().addButton("$text.cancel", dialog::hide);
-        dialog.buttons().addButton("$text.ok", () -> {
+        dialog.buttons.addButton("$cancel", dialog::hide);
+        dialog.buttons.addButton("$ok", () -> {
             dialog.hide();
             confirmed.run();
         });
-        dialog.keyDown(Keys.ESCAPE, dialog::hide);
-        dialog.keyDown(Keys.BACK, dialog::hide);
+        dialog.keyDown(KeyCode.ESCAPE, dialog::hide);
+        dialog.keyDown(KeyCode.BACK, dialog::hide);
         dialog.show();
     }
 

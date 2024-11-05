@@ -1,14 +1,12 @@
 package mindustryV4.entities.traits;
 
+import io.anuke.arc.math.geom.Position;
 import mindustryV4.game.Team;
-import ucore.entities.trait.PosTrait;
-import ucore.entities.trait.SolidTrait;
-import ucore.entities.trait.VelocityTrait;
 
 /**
  * Base interface for targetable entities.
  */
-public interface TargetTrait extends PosTrait, VelocityTrait{
+public interface TargetTrait extends Position, VelocityTrait{
 
     boolean isDead();
 
@@ -18,14 +16,14 @@ public interface TargetTrait extends PosTrait, VelocityTrait{
         if(this instanceof SolidTrait){
             return ((SolidTrait) this).getDeltaX();
         }
-        return getVelocity().x;
+        return velocity().x;
     }
 
     default float getTargetVelocityY(){
         if(this instanceof SolidTrait){
             return ((SolidTrait) this).getDeltaY();
         }
-        return getVelocity().y;
+        return velocity().y;
     }
 
     /**

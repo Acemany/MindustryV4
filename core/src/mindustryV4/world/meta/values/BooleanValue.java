@@ -1,7 +1,7 @@
 package mindustryV4.world.meta.values;
 
 import mindustryV4.world.meta.StatValue;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Table;
 
 public class BooleanValue implements StatValue{
     private final boolean value;
@@ -12,6 +12,6 @@ public class BooleanValue implements StatValue{
 
     @Override
     public void display(Table table){
-        table.add(!value ? "$text.no" : "$text.yes");
+        table.add(!value ? "$no" : "$yes");
     }
 }

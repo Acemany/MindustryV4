@@ -1,9 +1,12 @@
 package mindustryV4.ai;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.*;
-import mindustryV4.content.blocks.Blocks;
-import mindustryV4.entities.TileEntity;
+import io.anuke.arc.Events;
+import io.anuke.arc.collection.*;
+import io.anuke.arc.function.Predicate;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Geometry;
+import mindustryV4.content.Blocks;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.game.EventType.TileChangeEvent;
 import mindustryV4.game.EventType.WorldLoadEvent;
 import mindustryV4.game.Team;
@@ -11,12 +14,6 @@ import mindustryV4.game.Teams.TeamData;
 import mindustryV4.type.Item;
 import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockFlag;
-import ucore.core.Events;
-import ucore.function.Predicate;
-import ucore.util.EnumSet;
-import ucore.util.Geometry;
-import ucore.util.Mathf;
-import ucore.util.ThreadArray;
 
 import static mindustryV4.Vars.*;
 
@@ -47,12 +44,12 @@ public class BlockIndexer{
     /**Empty set used for returning.*/
     private ObjectSet<Tile> emptySet = new ObjectSet<>();
     /**Array used for returning and reusing.*/
-    private Array<Tile> returnArray = new ThreadArray<>();
+    private Array<Tile> returnArray = new Array<>();
 
     public BlockIndexer(){
         Events.on(TileChangeEvent.class, event -> {
-            if(typeMap.get(event.tile.packedPosition()) != null){
-                TileIndex index = typeMap.get(event.tile.packedPosition());
+            if(typeMap.get(event.tile.pos()) != null){
+                TileIndex index = typeMap.get(event.tile.pos());
                 for(BlockFlag flag : index.flags){
                     getFlagged(index.team)[flag.ordinal()].remove(event.tile);
                 }
@@ -116,7 +113,7 @@ public class BlockIndexer{
 
         ObjectSet<Tile> set = damagedTiles[team.ordinal()];
         for(Tile tile : set){
-            if(tile.entity == null || tile.entity.getTeam() != team || tile.entity.healthf() >= 0.9999f){
+            if(tile.entity == null || tile.entity.getTeam() != team || !tile.entity.damaged()){
                 returnArray.add(tile);
             }
         }
@@ -176,7 +173,7 @@ public class BlockIndexer{
 
                         TileEntity e = other.entity;
 
-                        float ndst = Vector2.dst(x, y, e.x, e.y);
+                        float ndst = Mathf.dst(x, y, e.x, e.y);
                         if(ndst < range && (closest == null || ndst < dst)){
                             dst = ndst;
                             closest = e;
@@ -208,7 +205,7 @@ public class BlockIndexer{
         for(int x = Math.max(0, tile.x - oreQuadrantSize / 2); x < tile.x + oreQuadrantSize / 2 && x < world.width(); x++){
             for(int y = Math.max(0, tile.y - oreQuadrantSize / 2); y < tile.y + oreQuadrantSize / 2 && y < world.height(); y++){
                 Tile res = world.tile(x, y);
-                if(res.block() == Blocks.air && res.floor().drops != null && res.floor().drops.item == item){
+                if(res.block() == Blocks.air && res.floor().itemDrop == item){
                     return res;
                 }
             }
@@ -230,7 +227,7 @@ public class BlockIndexer{
 
                 map[flag.ordinal()] = arr;
             }
-            typeMap.put(tile.packedPosition(), new TileIndex(tile.block().flags, tile.getTeam()));
+            typeMap.put(tile.pos(), new TileIndex(tile.block().flags, tile.getTeam()));
         }
 
         if(ores == null) return;
@@ -246,9 +243,9 @@ public class BlockIndexer{
         for(int x = quadrantX * structQuadrantSize; x < world.width() && x < (quadrantX + 1) * structQuadrantSize; x++){
             for(int y = quadrantY * structQuadrantSize; y < world.height() && y < (quadrantY + 1) * structQuadrantSize; y++){
                 Tile result = world.tile(x, y);
-                if( result == null || result.block().drops == null || !scanOres.contains(result.block().drops.item)) continue;
+                if( result == null || result.floor().itemDrop == null || !scanOres.contains(result.floor().itemDrop)) continue;
 
-                itemSet.add(result.block().drops.item);
+                itemSet.add(result.floor().itemDrop);
             }
         }
 
@@ -325,8 +322,8 @@ public class BlockIndexer{
                 Tile tile = world.tile(x, y);
 
                 //add position of quadrant to list when an ore is found
-                if(tile.floor().drops != null && scanOres.contains(tile.floor().drops.item) && tile.block() == Blocks.air){
-                    ores.get(tile.floor().drops.item).add(world.tile(
+                if(tile.floor().itemDrop != null && scanOres.contains(tile.floor().itemDrop) && tile.block() == Blocks.air){
+                    ores.get(tile.floor().itemDrop).add(world.tile(
                             //make sure to clamp quadrant middle position, since it might go off bounds
                             Mathf.clamp(qx * oreQuadrantSize + oreQuadrantSize / 2, 0, world.width() - 1),
                             Mathf.clamp(qy * oreQuadrantSize + oreQuadrantSize / 2, 0, world.height() - 1)));

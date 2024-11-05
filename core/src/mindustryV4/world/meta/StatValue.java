@@ -1,6 +1,6 @@
 package mindustryV4.world.meta;
 
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Table;
 
 /**
  * A base interface for a value of a stat that is displayed.

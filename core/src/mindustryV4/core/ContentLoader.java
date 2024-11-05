@@ -1,13 +1,12 @@
 package mindustryV4.core;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
+import io.anuke.arc.collection.Array;
+import io.anuke.arc.collection.ObjectMap;
+import io.anuke.arc.collection.ObjectSet;
+import io.anuke.arc.function.Consumer;
+import io.anuke.arc.util.Log;
 import mindustryV4.content.*;
-import mindustryV4.content.blocks.*;
-import mindustryV4.content.bullets.*;
-import mindustryV4.content.fx.*;
-import mindustryV4.entities.Player;
+import mindustryV4.entities.type.Player;
 import mindustryV4.entities.bullet.Bullet;
 import mindustryV4.entities.bullet.BulletType;
 import mindustryV4.entities.effect.Fire;
@@ -17,16 +16,10 @@ import mindustryV4.entities.traits.TypeTrait;
 import mindustryV4.game.Content;
 import mindustryV4.game.ContentList;
 import mindustryV4.game.MappableContent;
-import mindustryV4.type.ContentType;
-import mindustryV4.type.Item;
-import mindustryV4.type.Liquid;
-import mindustryV4.type.Recipe;
+import mindustryV4.type.*;
 import mindustryV4.world.Block;
 import mindustryV4.world.ColorMapper;
 import mindustryV4.world.LegacyColorMapper;
-import ucore.function.Consumer;
-import ucore.util.Log;
-import ucore.util.ThreadArray;
 
 /**
  * Loads all game content.
@@ -42,66 +35,21 @@ public class ContentLoader{
     private MappableContent[][] temporaryMapper;
     private ObjectSet<Consumer<Content>> initialization = new ObjectSet<>();
     private ContentList[] content = {
-        //effects
-        new BlockFx(),
-        new BulletFx(),
-        new EnvironmentFx(),
-        new ExplosionFx(),
         new Fx(),
-        new ShootFx(),
-        new UnitFx(),
-
-        //items
         new Items(),
-
-        //status effects
         new StatusEffects(),
-
-        //liquids
         new Liquids(),
-
-        //bullets
-        new ArtilleryBullets(),
-        new FlakBullets(),
-        new MissileBullets(),
-        new StandardBullets(),
-        new TurretBullets(),
-        new WeaponBullets(),
-
-
-        //ammotypes
-        new AmmoTypes(),
-
-        //weapons
+        new Bullets(),
         new Weapons(),
-
-        //mechs
         new Mechs(),
-
-        //units
         new UnitTypes(),
-
-        //blocks
         new Blocks(),
-        new DefenseBlocks(),
-        new DistributionBlocks(),
-        new ProductionBlocks(),
-        new TurretBlocks(),
-        new DebugBlocks(),
-        new LiquidBlocks(),
-        new StorageBlocks(),
-        new UnitBlocks(),
-        new PowerBlocks(),
-        new CraftingBlocks(),
-        new UpgradeBlocks(),
-        new OreBlocks(),
+        new TechTree(),
+        //new Zones(),
 
-        //not really a content class, but this makes initialization easier
+        //these are not really content classes, but this makes initialization easier
         new ColorMapper(),
         new LegacyColorMapper(),
-
-        //recipes
-        new Recipes(),
     };
 
     /**Creates all content types.*/
@@ -114,7 +62,7 @@ public class ContentLoader{
         registerTypes();
 
         for(ContentType type : ContentType.values()){
-            contentMap[type.ordinal()] = new ThreadArray<>();
+            contentMap[type.ordinal()] = new Array<>();
             contentNameMap[type.ordinal()] =  new ObjectMap<>();
         }
 
@@ -128,7 +76,7 @@ public class ContentLoader{
 
             for(Content c : contentMap[type.ordinal()]){
                 if(c instanceof MappableContent){
-                    String name = ((MappableContent) c).getContentName();
+                    String name = ((MappableContent) c).name;
                     if(contentNameMap[type.ordinal()].containsKey(name)){
                         throw new IllegalArgumentException("Two content objects cannot have the same name! (issue: '" + name + "')");
                     }
@@ -217,7 +165,7 @@ public class ContentLoader{
         }
 
         if(id >= contentMap[type.ordinal()].size || id < 0){
-            throw new RuntimeException("No " + type.name() + " with ID '" + id + "' found!");
+            return null;
         }
         return (T)contentMap[type.ordinal()].get(id);
     }
@@ -234,14 +182,6 @@ public class ContentLoader{
 
     public Block block(int id){
         return (Block) getByID(ContentType.block, id);
-    }
-
-    public Array<Recipe> recipes(){
-        return getBy(ContentType.recipe);
-    }
-
-    public Recipe recipe(int id){
-        return (Recipe) getByID(ContentType.recipe, id);
     }
 
     public Array<Item> items(){
@@ -268,6 +208,10 @@ public class ContentLoader{
         return (BulletType) getByID(ContentType.bullet, id);
     }
 
+    public Array<Zone> zones(){
+        return getBy(ContentType.zone);
+    }
+
     /**
      * Registers sync IDs for all types of sync entities.
      * Do not register units here!
@@ -280,7 +224,5 @@ public class ContentLoader{
         TypeTrait.registerType(Lightning.class, Lightning::new);
     }
 
-    private class ImpendingDoomException extends RuntimeException{
-        public ImpendingDoomException(String s){ super(s); }
-    }
+    private class ImpendingDoomException extends RuntimeException{ImpendingDoomException(String s){super(s);}}
 }

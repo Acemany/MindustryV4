@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class IOTests{
 
@@ -24,11 +24,18 @@ public class IOTests{
     }
 
     @Test
+    void writeRussian(){
+        ByteBuffer buffer = ByteBuffer.allocate(500);
+        TypeIO.writeString(buffer, "фывафыв аослонор ор оррдтибьёйош  имс тьюбжж");
+        buffer.position(0);
+        assertEquals(TypeIO.readString(buffer), "фывафыв аослонор ор оррдтибьёйош  имс тьюбжж");
+    }
+
+    @Test
     void writeNull(){
         ByteBuffer buffer = ByteBuffer.allocate(500);
         TypeIO.writeString(buffer, null);
         buffer.position(0);
-        assertEquals(TypeIO.readString(buffer), null);
+        assertNull(TypeIO.readString(buffer));
     }
-
 }

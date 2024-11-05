@@ -1,8 +1,8 @@
 package mindustryV4.net;
 
-import com.badlogic.gdx.utils.ObjectIntMap;
+import io.anuke.arc.collection.ObjectIntMap;
+import io.anuke.arc.function.Supplier;
 import mindustryV4.net.Packets.*;
-import ucore.function.Supplier;
 
 public class Registrator{
     private static ClassEntry[] classes = {

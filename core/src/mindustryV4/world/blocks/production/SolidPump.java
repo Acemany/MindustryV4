@@ -1,16 +1,17 @@
 package mindustryV4.world.blocks.production;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.g2d.TextureRegion;
 import mindustryV4.content.Liquids;
-import mindustryV4.content.fx.Fx;
-import mindustryV4.entities.TileEntity;
+import mindustryV4.content.Fx;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Liquid;
 import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockStat;
-import ucore.core.Effects;
-import ucore.core.Effects.Effect;
-import ucore.graphics.Draw;
-import ucore.util.Mathf;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.Effects.Effect;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.math.Mathf;
 
 /**
  * Pump that makes liquid from solids and takes in power. Only works on solid floor blocks.
@@ -30,7 +31,7 @@ public class SolidPump extends Pump{
     public void load(){
         super.load();
 
-        liquidRegion = Draw.region(name + "-liquid");
+        liquidRegion = Core.atlas.find(name + "-liquid");
     }
 
     @Override
@@ -55,8 +56,8 @@ public class SolidPump extends Pump{
     }
 
     @Override
-    public TextureRegion[] getIcon(){
-        return new TextureRegion[]{Draw.region(name), Draw.region(name + "-rotator"), Draw.region(name + "-top")};
+    public TextureRegion[] generateIcons(){
+        return new TextureRegion[]{Core.atlas.find(name), Core.atlas.find(name + "-rotator"), Core.atlas.find(name + "-top")};
     }
 
     @Override
@@ -68,7 +69,7 @@ public class SolidPump extends Pump{
         if(isMultiblock()){
             for(Tile other : tile.getLinkedTiles(tempTiles)){
                 if(isValid(other)){
-                    fraction += 1f / size;
+                    fraction += 1f / (size * size);
                 }
             }
         }else{
@@ -76,7 +77,7 @@ public class SolidPump extends Pump{
         }
 
         if(tile.entity.cons.valid() && typeLiquid(tile) < liquidCapacity - 0.001f){
-            float maxPump = Math.min(liquidCapacity - typeLiquid(tile), pumpAmount * entity.delta() * fraction);
+            float maxPump = Math.min(liquidCapacity - typeLiquid(tile), pumpAmount * entity.delta() * fraction * entity.power.satisfaction);
             tile.entity.liquids.add(result, maxPump);
             entity.warmup = Mathf.lerpDelta(entity.warmup, 1f, 0.02f);
             if(Mathf.chance(entity.delta() * updateEffectChance))

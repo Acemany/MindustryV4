@@ -2,20 +2,20 @@ package mindustryV4.editor;
 
 import mindustryV4.maps.MapTileData;
 import mindustryV4.ui.dialogs.FloatingDialog;
-import ucore.function.BiConsumer;
-import ucore.scene.ui.ButtonGroup;
-import ucore.scene.ui.TextButton;
-import ucore.scene.ui.layout.Table;
-import ucore.util.Mathf;
+import io.anuke.arc.function.BiConsumer;
+import io.anuke.arc.scene.ui.ButtonGroup;
+import io.anuke.arc.scene.ui.TextButton;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.math.Mathf;
 
 public class MapResizeDialog extends FloatingDialog{
     int[] validMapSizes = {200, 300, 400, 500};
     int width, height;
 
     public MapResizeDialog(MapEditor editor, BiConsumer<Integer, Integer> cons){
-        super("$text.editor.resizemap");
+        super("$editor.resizemap");
         shown(() -> {
-            content().clear();
+            cont.clear();
             MapTileData data = editor.getMap();
             width = data.width();
             height = data.height();
@@ -29,7 +29,7 @@ public class MapResizeDialog extends FloatingDialog{
                     if(validMapSizes[i] == curr) idx = i;
                 }
 
-                table.add(w ? "$text.width" : "$text.height").padRight(8f);
+                table.add(w ? "$width" : "$height").padRight(8f);
                 ButtonGroup<TextButton> group = new ButtonGroup<>();
                 for(int i = 0; i < validMapSizes.length; i++){
                     int size = validMapSizes[i];
@@ -47,14 +47,14 @@ public class MapResizeDialog extends FloatingDialog{
 
                 table.row();
             }
-            content().row();
-            content().add(table);
+            cont.row();
+            cont.add(table);
 
         });
 
-        buttons().defaults().size(200f, 50f);
-        buttons().addButton("$text.cancel", this::hide);
-        buttons().addButton("$text.editor.resize", () -> {
+        buttons.defaults().size(200f, 50f);
+        buttons.addButton("$cancel", this::hide);
+        buttons.addButton("$editor.resize", () -> {
             cons.accept(width, height);
             hide();
         });

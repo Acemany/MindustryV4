@@ -1,15 +1,15 @@
 package mindustryV4.editor;
 
-import com.badlogic.gdx.utils.IntArray;
-import mindustryV4.content.blocks.Blocks;
+import io.anuke.arc.collection.IntArray;
+import io.anuke.arc.function.IntPositionConsumer;
+import io.anuke.arc.util.Pack;
+import io.anuke.arc.util.Structs;
+import mindustryV4.content.Blocks;
 import mindustryV4.maps.MapTileData;
 import mindustryV4.maps.MapTileData.DataPosition;
 import mindustryV4.maps.MapTileData.TileDataMarker;
 import mindustryV4.world.Block;
 import mindustryV4.world.blocks.Floor;
-import ucore.function.IntPositionConsumer;
-import ucore.util.Structs;
-import ucore.util.Bits;
 
 import static mindustryV4.Vars.content;
 import static mindustryV4.Vars.ui;
@@ -24,8 +24,8 @@ public enum EditorTool{
             byte link = editor.getMap().read(x, y, DataPosition.link);
 
             if(link != 0){
-                x -= (Bits.getLeftByte(link) - 8);
-                y -= (Bits.getRightByte(link) - 8);
+                x -= (Pack.leftByte(link) - 8);
+                y -= (Pack.rightByte(link) - 8);
                 bf = editor.getMap().read(x, y, DataPosition.floor);
                 bw = editor.getMap().read(x, y, DataPosition.wall);
             }
@@ -101,7 +101,7 @@ public enum EditorTool{
             byte bw = data.read(x, y, DataPosition.wall);
             be = data.read(x, y, DataPosition.elevation);
             boolean synth = editor.getDrawBlock().synthetic();
-            byte brt = Bits.packByte((byte) editor.getDrawRotation(), (byte) editor.getDrawTeam().ordinal());
+            byte brt = Pack.byteByte((byte) editor.getDrawRotation(), (byte) editor.getDrawTeam().ordinal());
 
             dest = floor ? bf : bw;
             byte draw = editor.getDrawBlock().id;

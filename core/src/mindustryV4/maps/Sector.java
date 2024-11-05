@@ -1,16 +1,16 @@
 package mindustryV4.maps;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.graphics.Texture;
+import io.anuke.arc.collection.Array;
 import io.anuke.annotations.Annotations.Serialize;
+import io.anuke.arc.graphics.g2d.*;
 import mindustryV4.game.Saves.SaveSlot;
 import mindustryV4.game.SpawnGroup;
 import mindustryV4.maps.missions.*;
 import mindustryV4.type.ItemStack;
-import ucore.util.Bits;
+import io.anuke.arc.util.Pack;
 
-import static mindustryV4.Vars.control;
-import static mindustryV4.Vars.headless;
+import static mindustryV4.Vars.*;
 
 @Serialize
 public class Sector{
@@ -26,7 +26,7 @@ public class Sector{
     public int completedMissions;
 
     /**Display texture. Needs to be disposed.*/
-    public transient Texture texture;
+    public transient TextureRegion texture;
     /**Missions of this sector-- what needs to be accomplished to unlock it.*/
     public transient Array<Mission> missions = new Array<>();
     /**Enemies spawned at this sector.*/
@@ -56,7 +56,7 @@ public class Sector{
     }
 
     public int getSeed(){
-        return Bits.packInt(x, y);
+        return Pack.shortInt(x, y);
     }
 
     public SaveSlot getSave(){
@@ -68,6 +68,14 @@ public class Sector{
     }
 
     public int packedPosition(){
-        return Bits.packInt(x, y);
+        return Pack.shortInt(x, y);
+    }
+
+    public String toString(){
+        return "Sector{" +
+        "pos=(" + x + ", " + y + ')' +
+        ", complete=" + complete +
+        ", difficulty=" + difficulty +
+        '}';
     }
 }

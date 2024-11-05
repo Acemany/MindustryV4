@@ -1,24 +1,18 @@
 package mindustryV4.world.blocks.distribution;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.g2d.TextureRegion;
 import mindustryV4.type.Liquid;
-import mindustryV4.world.BarType;
 import mindustryV4.world.Tile;
 import mindustryV4.world.blocks.LiquidBlock;
 import mindustryV4.world.meta.BlockStat;
-import ucore.graphics.Draw;
+import io.anuke.arc.graphics.g2d.Draw;
 
 public class LiquidJunction extends LiquidBlock{
 
     public LiquidJunction(String name){
         super(name);
         hasLiquids = true;
-    }
-
-    @Override
-    public void setBars(){
-        super.setBars();
-        bars.remove(BarType.liquid);
     }
 
     @Override
@@ -29,12 +23,12 @@ public class LiquidJunction extends LiquidBlock{
 
     @Override
     public void draw(Tile tile){
-        Draw.rect(name(), tile.worldx(), tile.worldy());
+        Draw.rect(name, tile.worldx(), tile.worldy());
     }
 
     @Override
-    public TextureRegion[] getIcon(){
-        return new TextureRegion[]{Draw.region(name)};
+    public TextureRegion[] generateIcons(){
+        return new TextureRegion[]{Core.atlas.find(name)};
     }
 
     @Override

@@ -1,18 +1,15 @@
 package mindustryV4.world.consumers;
 
-import com.badlogic.gdx.graphics.Color;
-import mindustryV4.entities.TileEntity;
-import mindustryV4.graphics.Palette;
+import io.anuke.arc.scene.ui.layout.Table;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.world.Block;
+import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockStats;
-import ucore.scene.ui.Tooltip;
-import ucore.scene.ui.layout.Table;
 
-import static mindustryV4.Vars.mobile;
-
+/**An abstract class that defines a type of resource that a block can consume.*/
 public abstract class Consume{
     protected boolean optional;
-    protected boolean update = true;
+    protected boolean update = true, boost = false;
 
     public Consume optional(boolean optional){
         this.optional = optional;
@@ -24,6 +21,11 @@ public abstract class Consume{
         return this;
     }
 
+    public Consume boost(boolean boost){
+        this.boost = boost;
+        return this;
+    }
+
     public boolean isOptional(){
         return optional;
     }
@@ -32,7 +34,8 @@ public abstract class Consume{
         return update;
     }
 
-    public void build(Table table){
+    public abstract void build(Tile tile, Table table);/*{
+
         Table t = new Table("flat");
         t.margin(4);
         buildTooltip(t);
@@ -41,12 +44,15 @@ public abstract class Consume{
 
         table.table(out -> {
             out.addImage(getIcon()).size(10 * scale).color(Color.DARK_GRAY).padRight(-10 * scale).padBottom(-scale * 2);
-            out.addImage(getIcon()).size(10 * scale).color(Palette.accent);
-            out.addImage("icon-missing").size(10 * scale).color(Palette.remove).padLeft(-10 * scale);
+            out.addImage(getIcon()).size(10 * scale).color(Pal.accent);
+            out.addImage("icon-missing").size(10 * scale).color(Pal.remove).padLeft(-10 * scale);
         }).size(10 * scale).get().addListener(new Tooltip<>(t));
-    }
+    }*/
 
-    public abstract void buildTooltip(Table table);
+    /**Called when a consumption is triggered manually.*/
+    public void trigger(Block block, TileEntity entity){
+
+    }
 
     public abstract String getIcon();
 

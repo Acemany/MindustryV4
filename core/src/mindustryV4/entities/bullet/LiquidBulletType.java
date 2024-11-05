@@ -1,21 +1,19 @@
 package mindustryV4.entities.bullet;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.GridPoint2;
-import mindustryV4.content.fx.BulletFx;
-import mindustryV4.content.fx.Fx;
+import mindustryV4.entities.Effects;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.Fill;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Geometry;
+import io.anuke.arc.math.geom.Point2;
+import mindustryV4.content.Fx;
 import mindustryV4.entities.effect.Fire;
 import mindustryV4.entities.effect.Puddle;
 import mindustryV4.type.Liquid;
 import mindustryV4.world.Tile;
-import ucore.core.Effects;
-import ucore.graphics.Draw;
-import ucore.graphics.Fill;
-import ucore.util.Geometry;
-import ucore.util.Mathf;
 
-import static mindustryV4.Vars.tilesize;
-import static mindustryV4.Vars.world;
+import static mindustryV4.Vars.*;
 
 public class LiquidBulletType extends BulletType{
     Liquid liquid;
@@ -25,8 +23,10 @@ public class LiquidBulletType extends BulletType{
         this.liquid = liquid;
 
         lifetime = 70f;
-        despawneffect = Fx.none;
-        hiteffect = BulletFx.hitLiquid;
+        status = liquid.effect;
+        statusDuration = 90f;
+        despawnEffect = Fx.none;
+        hitEffect = Fx.hitLiquid;
         drag = 0.01f;
         knockback = 0.5f;
     }
@@ -54,13 +54,13 @@ public class LiquidBulletType extends BulletType{
 
     @Override
     public void hit(Bullet b, float hitx, float hity){
-        Effects.effect(hiteffect, liquid.color, hitx, hity);
+        Effects.effect(hitEffect, liquid.color, hitx, hity);
         Puddle.deposit(world.tileWorld(hitx, hity), liquid, 5f);
 
         if(liquid.temperature <= 0.5f && liquid.flammability < 0.3f){
             float intensity = 400f;
             Fire.extinguish(world.tileWorld(hitx, hity), intensity);
-            for(GridPoint2 p : Geometry.d4){
+            for(Point2 p : Geometry.d4){
                 Fire.extinguish(world.tileWorld(hitx + p.x * tilesize, hity + p.y * tilesize), intensity);
             }
         }

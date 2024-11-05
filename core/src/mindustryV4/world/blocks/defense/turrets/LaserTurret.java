@@ -1,16 +1,15 @@
 package mindustryV4.world.blocks.defense.turrets;
 
-import mindustryV4.entities.TileEntity;
+import mindustryV4.entities.Effects;
+import io.anuke.arc.math.Angles;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.util.Time;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.entities.bullet.Bullet;
 import mindustryV4.entities.bullet.BulletType;
-import mindustryV4.type.AmmoType;
 import mindustryV4.type.Liquid;
 import mindustryV4.world.Tile;
 import mindustryV4.world.consumers.ConsumeLiquidFilter;
-import ucore.core.Effects;
-import ucore.core.Timers;
-import ucore.util.Angles;
-import ucore.util.Mathf;
 
 import static mindustryV4.Vars.tilesize;
 
@@ -33,13 +32,13 @@ public class LaserTurret extends PowerTurret{
         LaserTurretEntity entity = tile.entity();
 
         if(entity.bulletLife > 0 && entity.bullet != null){
-            tr.trns(entity.rotation, size * tilesize / 2, 0f);
-            entity.bullet.setRotation(entity.rotation);
+            tr.trns(entity.rotation, size * tilesize / 2f, 0f);
+            entity.bullet.rot(entity.rotation);
             entity.bullet.set(tile.drawx() + tr.x, tile.drawy() + tr.y);
             entity.bullet.time(0f);
             entity.heat = 1f;
             entity.recoil = recoil;
-            entity.bulletLife -= Timers.delta();
+            entity.bulletLife -= Time.delta();
             if(entity.bulletLife <= 0f){
                 entity.bullet = null;
             }
@@ -55,7 +54,7 @@ public class LaserTurret extends PowerTurret{
         }
 
         if(entity.reload >= reload && entity.cons.valid()){
-            AmmoType type = peekAmmo(tile);
+            BulletType type = peekAmmo(tile);
 
             shoot(tile, type);
 
@@ -63,7 +62,7 @@ public class LaserTurret extends PowerTurret{
         }else{
             Liquid liquid = entity.liquids.current();
 
-            float used = Math.min(Math.min(entity.liquids.get(liquid), maxCoolantUsed * Timers.delta()), Math.max(0, ((reload - entity.reload) / coolantMultiplier) / liquid.heatCapacity));
+            float used = Math.min(Math.min(entity.liquids.get(liquid), maxCoolantUsed * Time.delta()), Math.max(0, ((reload - entity.reload) / coolantMultiplier) / liquid.heatCapacity));
             entity.reload += (used * liquid.heatCapacity) / liquid.heatCapacity;
             entity.liquids.remove(liquid, used);
 

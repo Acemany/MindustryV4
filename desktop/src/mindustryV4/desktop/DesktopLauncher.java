@@ -1,10 +1,10 @@
 package mindustryV4.desktop;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import io.anuke.kryonet.KryoClient;
-import io.anuke.kryonet.KryoServer;
+import io.anuke.arc.ApplicationListener;
+import io.anuke.arc.backends.lwjgl3.Lwjgl3Application;
+import io.anuke.arc.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import net.KryoClient;
+import net.KryoServer;
 import mindustryV4.Mindustry;
 import mindustryV4.core.Platform;
 import mindustryV4.net.Net;

@@ -1,29 +1,29 @@
 package mindustryV4.entities.effect;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.Pool.Poolable;
 import io.anuke.annotations.Annotations.Loc;
 import io.anuke.annotations.Annotations.Remote;
+import io.anuke.arc.collection.IntMap;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.EntityGroup;
+import mindustryV4.entities.impl.TimedEntity;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Geometry;
+import io.anuke.arc.math.geom.Point2;
+import io.anuke.arc.util.Structs;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.util.pooling.Pool.Poolable;
+import io.anuke.arc.util.pooling.Pools;
+import mindustryV4.content.Bullets;
 import mindustryV4.content.StatusEffects;
-import mindustryV4.content.bullets.TurretBullets;
-import mindustryV4.content.fx.EnvironmentFx;
+import mindustryV4.content.Fx;
 import mindustryV4.entities.Damage;
-import mindustryV4.entities.TileEntity;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.entities.traits.SaveTrait;
 import mindustryV4.entities.traits.SyncTrait;
 import mindustryV4.gen.Call;
 import mindustryV4.net.Net;
 import mindustryV4.world.Block;
 import mindustryV4.world.Tile;
-import ucore.core.Effects;
-import ucore.core.Timers;
-import ucore.entities.EntityGroup;
-import ucore.entities.impl.TimedEntity;
-import ucore.util.Structs;
-import ucore.util.Geometry;
-import ucore.util.Mathf;
-import ucore.util.Pooling;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -48,15 +48,15 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
     public static void create(Tile tile){
         if(Net.client() || tile == null) return; //not clientside.
 
-        Fire fire = map.get(tile.packedPosition());
+        Fire fire = map.get(tile.pos());
 
         if(fire == null){
-            fire = Pooling.obtain(Fire.class, Fire::new);
+            fire = Pools.obtain(Fire.class, Fire::new);
             fire.tile = tile;
             fire.lifetime = baseLifetime;
             fire.set(tile.worldx(), tile.worldy());
             fire.add();
-            map.put(tile.packedPosition(), fire);
+            map.put(tile.pos(), fire);
         }else{
             fire.lifetime = baseLifetime;
             fire.time = 0f;
@@ -75,8 +75,8 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
      * Attempts to extinguish a fire by shortening its life. If there is no fire here, does nothing.
      */
     public static void extinguish(Tile tile, float intensity){
-        if(tile != null && map.containsKey(tile.packedPosition())){
-            map.get(tile.packedPosition()).time += intensity * Timers.delta();
+        if(tile != null && map.containsKey(tile.pos())){
+            map.get(tile.pos()).time += intensity * Time.delta();
         }
     }
 
@@ -92,19 +92,19 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
 
     @Override
     public void update(){
-        if(Mathf.chance(0.1 * Timers.delta())){
-            Effects.effect(EnvironmentFx.fire, x + Mathf.range(4f), y + Mathf.range(4f));
+        if(Mathf.chance(0.1 * Time.delta())){
+            Effects.effect(Fx.fire, x + Mathf.range(4f), y + Mathf.range(4f));
         }
 
-        if(Mathf.chance(0.05 * Timers.delta())){
-            Effects.effect(EnvironmentFx.smoke, x + Mathf.range(4f), y + Mathf.range(4f));
+        if(Mathf.chance(0.05 * Time.delta())){
+            Effects.effect(Fx.fireSmoke, x + Mathf.range(4f), y + Mathf.range(4f));
         }
 
         if(Net.client()){
             return;
         }
 
-        time = Mathf.clamp(time + Timers.delta(), 0, lifetime());
+        time = Mathf.clamp(time + Time.delta(), 0, lifetime());
 
         if(time >= lifetime() || tile == null){
             Call.onFireRemoved(getID());
@@ -118,7 +118,7 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
         float flammability = baseFlammability + puddleFlammability;
 
         if(!damage && flammability <= 0){
-            time += Timers.delta() * 8;
+            time += Time.delta() * 8;
         }
 
         if(baseFlammability < 0 || block != tile.block()){
@@ -127,20 +127,20 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
         }
 
         if(damage){
-            lifetime += Mathf.clamp(flammability / 8f, 0f, 0.6f) * Timers.delta();
+            lifetime += Mathf.clamp(flammability / 8f, 0f, 0.6f) * Time.delta();
         }
 
-        if(flammability > 1f && Mathf.chance(spreadChance * Timers.delta() * Mathf.clamp(flammability / 5f, 0.3f, 2f))){
-            GridPoint2 p = Mathf.select(Geometry.d4);
+        if(flammability > 1f && Mathf.chance(spreadChance * Time.delta() * Mathf.clamp(flammability / 5f, 0.3f, 2f))){
+            Point2 p = Geometry.d4[Mathf.random(3)];
             Tile other = world.tile(tile.x + p.x, tile.y + p.y);
             create(other);
 
-            if(Mathf.chance(fireballChance * Timers.delta() * Mathf.clamp(flammability / 10.0))){
-                Call.createBullet(TurretBullets.fireball, x, y, Mathf.random(360f));
+            if(Mathf.chance(fireballChance * Time.delta() * Mathf.clamp(flammability / 10f))){
+                Call.createBullet(Bullets.fireball, x, y, Mathf.random(360f));
             }
         }
 
-        if(Mathf.chance(0.1 * Timers.delta())){
+        if(Mathf.chance(0.1 * Time.delta())){
             Puddle p = Puddle.getPuddle(tile);
             if(p != null){
                 puddleFlammability = p.getFlammability() / 3f;
@@ -151,13 +151,15 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
             if(damage){
                 entity.damage(0.4f);
             }
-            Damage.damageUnits(null, tile.worldx(), tile.worldy(), tilesize, 3f, unit -> !unit.isFlying(), unit -> unit.applyEffect(StatusEffects.burning, 0.8f));
+            Damage.damageUnits(null, tile.worldx(), tile.worldy(), tilesize, 3f,
+                    unit -> !unit.isFlying(),
+                    unit -> unit.applyEffect(StatusEffects.burning, 60 * 5));
         }
     }
 
     @Override
     public void writeSave(DataOutput stream) throws IOException{
-        stream.writeInt(tile.packedPosition());
+        stream.writeInt(tile.pos());
         stream.writeFloat(lifetime);
         stream.writeFloat(time);
     }
@@ -177,7 +179,7 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
     }
 
     @Override
-    public void read(DataInput data, long time) throws IOException{
+    public void read(DataInput data) throws IOException{
         x = data.readFloat();
         y = data.readFloat();
     }
@@ -202,7 +204,7 @@ public class Fire extends TimedEntity implements SaveTrait, SyncTrait, Poolable{
     @Override
     public void removed(){
         if(tile != null){
-            map.remove(tile.packedPosition());
+            map.remove(tile.pos());
         }
         reset();
     }

@@ -1,22 +1,16 @@
 package mindustryV4.server;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import io.anuke.kryonet.KryoClient;
-import io.anuke.kryonet.KryoServer;
+import io.anuke.arc.ApplicationListener;
+import io.anuke.arc.backends.headless.HeadlessApplication;
+import io.anuke.arc.backends.headless.HeadlessApplicationConfiguration;
 import mindustryV4.net.Net;
-import ucore.core.Settings;
-import ucore.util.EmptyLogger;
+import net.KryoClient;
+import net.KryoServer;
 
 public class ServerLauncher extends HeadlessApplication{
 
     public ServerLauncher(ApplicationListener listener, HeadlessApplicationConfiguration config){
         super(listener, config);
-
-        //don't do anything at all for GDX logging: don't want controller info and such
-        Gdx.app.setApplicationLogger(new EmptyLogger());
     }
 
     public static void main(String[] args){
@@ -26,8 +20,6 @@ public class ServerLauncher extends HeadlessApplication{
             Net.setServerProvider(new KryoServer());
 
             HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
-            Settings.setPrefHandler((appName) -> Gdx.files.local("config"));
-
             new ServerLauncher(new MindustryServer(args), config);
         }catch(Throwable t){
             CrashHandler.handle(t);
@@ -37,8 +29,13 @@ public class ServerLauncher extends HeadlessApplication{
         for(Thread thread : Thread.getAllStackTraces().keySet()){
             if(thread.getName().equals("HeadlessApplication")){
                 thread.setUncaughtExceptionHandler((t, throwable) -> {
-                    CrashHandler.handle(throwable);
-                    System.exit(-1);
+                    try{
+                        CrashHandler.handle(throwable);
+                        System.exit(-1);
+                    }catch(Throwable crashCrash){
+                        crashCrash.printStackTrace();
+                        System.exit(-1);
+                    }
                 });
                 break;
             }

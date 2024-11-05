@@ -1,9 +1,10 @@
 package mindustryV4.world.blocks.production;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.g2d.TextureRegion;
 import mindustryV4.world.Tile;
-import ucore.graphics.Draw;
-import ucore.util.Mathf;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.math.Mathf;
 
 public class PlastaniumCompressor extends GenericCrafter{
     protected TextureRegion topRegion;
@@ -16,7 +17,7 @@ public class PlastaniumCompressor extends GenericCrafter{
     public void load(){
         super.load();
 
-        topRegion = Draw.region(name + "-top");
+        topRegion = Core.atlas.find(name + "-top");
     }
 
     @Override

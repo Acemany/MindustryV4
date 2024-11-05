@@ -1,18 +1,16 @@
 package mindustryV4.entities;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import io.anuke.arc.collection.EnumSet;
+import io.anuke.arc.function.Consumer;
+import io.anuke.arc.function.Predicate;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Geometry;
+import io.anuke.arc.math.geom.Rectangle;
 import mindustryV4.entities.traits.TargetTrait;
-import mindustryV4.entities.units.BaseUnit;
+import mindustryV4.entities.type.*;
 import mindustryV4.game.Team;
 import mindustryV4.world.Block;
 import mindustryV4.world.Tile;
-import ucore.entities.EntityGroup;
-import ucore.entities.EntityQuery;
-import ucore.function.Consumer;
-import ucore.function.Predicate;
-import ucore.util.EnumSet;
-import ucore.util.Geometry;
 
 import static mindustryV4.Vars.*;
 
@@ -38,7 +36,7 @@ public class Units{
      * @return whether the target is invalid
      */
     public static boolean invalidateTarget(TargetTrait target, Team team, float x, float y, float range){
-        return target == null || (range != Float.MAX_VALUE && target.distanceTo(x, y) > range) || target.getTeam() == team || !target.isValid();
+        return target == null || (range != Float.MAX_VALUE && target.dst(x, y) > range) || target.getTeam() == team || !target.isValid();
     }
 
     /**See {@link #invalidateTarget(TargetTrait, Team, float, float, float)}*/
@@ -48,7 +46,7 @@ public class Units{
 
     /**See {@link #invalidateTarget(TargetTrait, Team, float, float, float)}*/
     public static boolean invalidateTarget(TargetTrait target, Unit targeter){
-        return invalidateTarget(target, targeter.team, targeter.x, targeter.y, targeter.getWeapon().getAmmo().getRange());
+        return invalidateTarget(target, targeter.getTeam(), targeter.x, targeter.y, targeter.getWeapon().bullet.range());
     }
 
     /**Returns whether there are any entities on this tile.*/
@@ -67,7 +65,7 @@ public class Units{
         Units.getNearby(rect, unit -> {
             if(boolResult) return;
             if(!unit.isFlying()){
-                unit.getHitbox(hitrect);
+                unit.hitbox(hitrect);
 
                 if(hitrect.overlaps(rect)){
                     boolResult = true;
@@ -89,7 +87,7 @@ public class Units{
         Units.getNearby(rect, unit -> {
             if(value[0] || !pred.test(unit) || unit.isDead()) return;
             if(!unit.isFlying()){
-                unit.getHitbox(hitrect);
+                unit.hitbox(hitrect);
 
                 if(hitrect.overlaps(rect)){
                     value[0] = true;
@@ -165,7 +163,7 @@ public class Units{
             if(e.isDead() || !predicate.test(e))
                 return;
 
-            float dist = Vector2.dst(e.x, e.y, x, y);
+            float dist = Mathf.dst(e.x, e.y, x, y);
             if(dist < range){
                 if(result == null || dist < cdist){
                     result = e;
@@ -188,7 +186,7 @@ public class Units{
             if(!predicate.test(e))
                 return;
 
-            float dist = Vector2.dst(e.x, e.y, x, y);
+            float dist = Mathf.dst(e.x, e.y, x, y);
             if(dist < range){
                 if(result == null || dist < cdist){
                     result = e;
@@ -210,7 +208,7 @@ public class Units{
 
         //now check all players
         EntityQuery.getNearby(playerGroup, rect, player -> {
-            if(((Unit) player).team == team) cons.accept((Unit) player);
+            if(((Unit)player).getTeam() == team) cons.accept((Unit)player);
         });
     }
 
@@ -221,7 +219,7 @@ public class Units{
         EntityGroup<BaseUnit> group = unitGroups[team.ordinal()];
         if(!group.isEmpty()){
             EntityQuery.getNearby(group, rect, entity -> {
-                if(entity.distanceTo(x, y) <= radius){
+                if(entity.dst(x, y) <= radius){
                     cons.accept((Unit) entity);
                 }
             });
@@ -229,7 +227,7 @@ public class Units{
 
         //now check all players
         EntityQuery.getNearby(playerGroup, rect, player -> {
-            if(((Unit) player).team == team && player.distanceTo(x, y) <= radius){
+            if(((Unit) player).getTeam() == team && player.dst(x, y) <= radius){
                 cons.accept((Unit) player);
             }
         });
@@ -262,7 +260,7 @@ public class Units{
 
         //now check all enemy players
         EntityQuery.getNearby(playerGroup, rect, player -> {
-            if(targets.contains(((Player) player).team)){
+            if(targets.contains(((Player) player).getTeam())){
                 cons.accept((Unit) player);
             }
         });

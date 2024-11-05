@@ -1,7 +1,7 @@
 package mindustryV4.maps.missions;
 
 import mindustryV4.game.UnlockableContent;
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
 public class ContentMission extends Mission {
     private final UnlockableContent content;
@@ -30,6 +30,6 @@ public class ContentMission extends Mission {
 
     @Override
     public String displayString() {
-        return Bundles.format("text.mission.create", content.localizedName());
+        return Core.bundle.format("mission.create", content.localizedName());
     }
 }

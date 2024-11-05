@@ -1,6 +1,6 @@
 package mindustryV4.ui;
 
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
 /**
  * A low-garbage way to format bundle strings.
@@ -17,7 +17,7 @@ public class IntFormat{
     public CharSequence get(int value){
         if(lastValue != value){
             builder.setLength(0);
-            builder.append(Bundles.format(text, value));
+            builder.append(Core.bundle.format(text, value));
         }
         lastValue = value;
         return builder;

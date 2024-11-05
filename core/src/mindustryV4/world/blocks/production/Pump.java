@@ -1,7 +1,8 @@
 package mindustryV4.world.blocks.production;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.g2d.TextureRegion;
+import io.anuke.arc.collection.Array;
 import mindustryV4.graphics.Layer;
 import mindustryV4.type.Liquid;
 import mindustryV4.world.Tile;
@@ -10,7 +11,7 @@ import mindustryV4.world.consumers.ConsumeLiquid;
 import mindustryV4.world.meta.BlockGroup;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.StatUnit;
-import ucore.graphics.Draw;
+import io.anuke.arc.graphics.g2d.Draw;
 
 public class Pump extends LiquidBlock{
     protected final Array<Tile> drawTiles = new Array<>();
@@ -18,10 +19,8 @@ public class Pump extends LiquidBlock{
 
     protected final int timerContentCheck = timers++;
 
-    /**Pump amount per tile this block is on.*/
+    /**Pump amount, total.*/
     protected float pumpAmount = 1f;
-    /**Maximum liquid tier this pump can use.*/
-    protected int tier = 0;
 
     public Pump(String name){
         super(name);
@@ -35,7 +34,7 @@ public class Pump extends LiquidBlock{
     public void load(){
         super.load();
 
-        liquidRegion = Draw.region("pump-liquid");
+        liquidRegion = Core.atlas.find("pump-liquid");
     }
 
     @Override
@@ -46,7 +45,7 @@ public class Pump extends LiquidBlock{
 
     @Override
     public void draw(Tile tile){
-        Draw.rect(name(), tile.drawx(), tile.drawy());
+        Draw.rect(name, tile.drawx(), tile.drawy());
 
         Draw.color(tile.entity.liquids.current().color);
         Draw.alpha(tile.entity.liquids.total() / liquidCapacity);
@@ -55,8 +54,8 @@ public class Pump extends LiquidBlock{
     }
 
     @Override
-    public TextureRegion[] getIcon(){
-        return new TextureRegion[]{Draw.region(name)};
+    public TextureRegion[] generateIcons(){
+        return new TextureRegion[]{Core.atlas.find(name)};
     }
 
     @Override
@@ -94,7 +93,10 @@ public class Pump extends LiquidBlock{
         }
 
         if(tile.entity.cons.valid() && liquidDrop != null){
-            float maxPump = Math.min(liquidCapacity - tile.entity.liquids.total(), tiles * pumpAmount * tile.entity.delta());
+            float maxPump = Math.min(liquidCapacity - tile.entity.liquids.total(), tiles * pumpAmount * tile.entity.delta() / size / size);
+            if(hasPower){
+                maxPump *= tile.entity.power.satisfaction; // Produce slower if not at full power
+            }
             tile.entity.liquids.add(liquidDrop, maxPump);
         }
 
@@ -111,7 +113,7 @@ public class Pump extends LiquidBlock{
     }
 
     protected boolean isValid(Tile tile){
-        return tile != null && tile.floor().liquidDrop != null && tier >= tile.floor().liquidDrop.tier;
+        return tile != null && tile.floor().liquidDrop != null;
     }
 
 }

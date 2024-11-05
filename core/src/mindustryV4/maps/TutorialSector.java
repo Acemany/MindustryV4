@@ -1,11 +1,8 @@
 package mindustryV4.maps;
 
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.collection.Array;
 import mindustryV4.content.Items;
-import mindustryV4.content.blocks.CraftingBlocks;
-import mindustryV4.content.blocks.ProductionBlocks;
-import mindustryV4.content.blocks.StorageBlocks;
-import mindustryV4.content.blocks.UnitBlocks;
+import mindustryV4.content.Blocks;
 import mindustryV4.maps.missions.BlockMission;
 import mindustryV4.maps.missions.ItemMission;
 import mindustryV4.maps.missions.Mission;
@@ -46,7 +43,7 @@ public class TutorialSector{
             new BlockMission(ProductionBlocks.mechanicalDrill),
             new BlockMission(ProductionBlocks.mechanicalDrill),
 
-            new ItemMission(Items.densealloy, 20).setMessage("$tutorial.densealloy"),
+            new ItemMission(Items.denseAlloy, 20).setMessage("$tutorial.densealloy"),
 
             new MarkerBlockMission(CraftingBlocks.siliconsmelter).setMessage("$tutorial.siliconsmelter"),
 
@@ -62,7 +59,7 @@ public class TutorialSector{
             new BlockMission(ProductionBlocks.mechanicalDrill).setMessage("$tutorial.generatordrill"),
             new BlockMission(PowerBlocks.powerNode).setMessage("$tutorial.node"),
             //TODO fix positions
-            new ConditionMission(Bundles.get("text.mission.linknode"), () -> world.tile(54, 52).entity != null && world.tile(54, 52).entity.power != null && world.tile(54, 52).entity.power.amount >= 0.01f)
+            new ConditionMission(Bundles.get("mission.linknode"), () -> world.tile(54, 52).entity != null && world.tile(54, 52).entity.power != null && world.tile(54, 52).entity.power.amount >= 0.01f)
                 .setMessage("$tutorial.nodelink"),
 
             new ItemMission(Items.silicon, 70).setMessage("$tutorial.silicon"),
@@ -92,34 +89,15 @@ public class TutorialSector{
             //intentionally unlocalized
             new ItemMission(Items.copper, 50).setMessage("An updated tutorial will return next build.\nFor now, you'll have to deal with... this."),
 
-            new BlockMission(ProductionBlocks.mechanicalDrill),
+            new BlockMission(Blocks.mechanicalDrill),
 
             new ItemMission(Items.copper, 100),
             new ItemMission(Items.lead, 50),
 
-            new BlockMission(CraftingBlocks.smelter),
-            new ItemMission(Items.densealloy, 10),
+            new BlockMission(Blocks.smelter),
+            new ItemMission(Items.denseAlloy, 10),
             new WaveMission(5)
         );
     }
 
-    public static boolean supressDrone(){
-        return world.getSector() != null && world.getSector().x == 0 && world.getSector().y == 0 && world.getSector().completedMissions < droneIndex;
-    }
-
-    private static void generateBase(){
-        int x = sectorSize - 50, y = sectorSize - 50;
-        world.setBlock(world.tile(x, y), StorageBlocks.core, waveTeam);
-        world.setBlock(world.tile(x - 1, y + 2), UnitBlocks.daggerFactory, waveTeam);
-        world.setBlock(world.tile(x - 1, y - 3), UnitBlocks.daggerFactory, waveTeam);
-
-        //since placed() is not called here, add core manually
-        state.teams.get(waveTeam).cores.add(world.tile(x, y));
-    }
-
-    private static class MarkerBlockMission extends BlockMission{
-        public MarkerBlockMission(Block block){
-            super(block);
-        }
-    }
 }

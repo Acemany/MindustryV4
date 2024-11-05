@@ -1,6 +1,6 @@
 package mindustryV4.world.meta;
 
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
 import java.util.Locale;
 
@@ -12,7 +12,7 @@ public enum BlockStat{
     itemCapacity(StatCategory.items),
     inputItemCapacity(StatCategory.items),
     outputItemCapacity(StatCategory.items),
-    itemSpeed(StatCategory.items),
+    itemsMoved(StatCategory.items),
 
     liquidCapacity(StatCategory.liquids),
     liquidOutput(StatCategory.liquids),
@@ -39,6 +39,7 @@ public enum BlockStat{
     outputItem(StatCategory.crafting),
     drillTier(StatCategory.crafting),
     drillSpeed(StatCategory.crafting),
+    maxUnits(StatCategory.crafting),
 
     shootRange(StatCategory.shooting),
     inaccuracy(StatCategory.shooting),
@@ -57,6 +58,6 @@ public enum BlockStat{
     }
 
     public String localized(){
-        return Bundles.get("text.blocks." + name().toLowerCase(Locale.ROOT));
+        return Core.bundle.get("blocks." + name().toLowerCase(Locale.ROOT));
     }
 }

@@ -79,7 +79,7 @@ public class RemoteWriteGenerator{
                 return;
             }
 
-            if(!elem.getParameters().get(0).asType().toString().equals("mindustryV4.entities.Player")){
+            if(!elem.getParameters().get(0).asType().toString().equals("mindustryV4.entities.type.Player")){
                 Utils.messager.printMessage(Kind.ERROR, "Client invoke methods should have a first parameter of type Player.", elem);
                 return;
             }
@@ -129,7 +129,7 @@ public class RemoteWriteGenerator{
         method.beginControlFlow("if(" + getCheckString(methodEntry.where) + ")");
 
         //add statement to create packet from pool
-        method.addStatement("$1N packet = $2N.obtain($1N.class, $1N::new)", "mindustryV4.net.Packets.InvokePacket", "ucore.util.Pooling");
+        method.addStatement("$1N packet = $2N.obtain($1N.class, $1N::new)", "mindustryV4.net.Packets.InvokePacket", "io.anuke.arc.util.pooling.Pools");
         //assign buffer
         method.addStatement("packet.writeBuffer = TEMP_BUFFER");
         //assign priority

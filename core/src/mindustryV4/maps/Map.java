@@ -1,8 +1,8 @@
 package mindustryV4.maps;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.ObjectMap;
-import ucore.function.Supplier;
+import io.anuke.arc.graphics.Texture;
+import io.anuke.arc.collection.ObjectMap;
+import io.anuke.arc.function.Supplier;
 
 import java.io.InputStream;
 

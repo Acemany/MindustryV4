@@ -1,24 +1,19 @@
 package mindustryV4.editor;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntSet;
-import com.badlogic.gdx.utils.IntSet.IntSetIterator;
+import io.anuke.arc.Core;
+import io.anuke.arc.collection.IntSet;
+import io.anuke.arc.collection.IntSet.IntSetIterator;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.TextureRegion;
+import io.anuke.arc.util.*;
 import mindustryV4.game.Team;
+import mindustryV4.graphics.IndexedRenderer;
 import mindustryV4.maps.MapTileData.DataPosition;
 import mindustryV4.world.Block;
-import ucore.core.Core;
-import ucore.core.Graphics;
-import ucore.graphics.Draw;
-import ucore.graphics.IndexedRenderer;
-import ucore.util.Structs;
-import ucore.util.Bits;
-import ucore.util.Geometry;
+import mindustryV4.world.Block.Icon;
 
-import static mindustryV4.Vars.content;
-import static mindustryV4.Vars.tilesize;
+import static mindustryV4.Vars.*;
 
 public class MapRenderer implements Disposable{
     private static final int chunksize = 64;
@@ -56,7 +51,7 @@ public class MapRenderer implements Disposable{
 
 
     public void draw(float tx, float ty, float tw, float th){
-        Graphics.end();
+        Draw.flush();
 
         IntSetIterator it = updates.iterator();
         while(it.hasNext){
@@ -79,15 +74,12 @@ public class MapRenderer implements Disposable{
                     mesh = chunks[x][y];
                 }
 
-                mesh.getTransformMatrix().setToTranslation(tx, ty, 0).scl(tw / (width * tilesize),
-                        th / (height * tilesize), 1f);
-                mesh.setProjectionMatrix(Core.batch.getProjectionMatrix());
+                mesh.getTransformMatrix().setToTranslation(tx, ty).scale(tw / (width * tilesize), th / (height * tilesize));
+                mesh.setProjectionMatrix(Draw.proj());
 
                 mesh.render(Core.atlas.getTextures().first());
             }
         }
-
-        Graphics.begin();
     }
 
     public void updatePoint(int x, int y){
@@ -106,13 +98,11 @@ public class MapRenderer implements Disposable{
     private void render(int wx, int wy){
         int x = wx / chunksize, y = wy / chunksize;
         IndexedRenderer mesh = chunks[x][y];
-        //TileDataMarker data = editor.getMap().readAt(wx, wy);
         byte bf = editor.getMap().read(wx, wy, DataPosition.floor);
         byte bw = editor.getMap().read(wx, wy, DataPosition.wall);
         byte btr = editor.getMap().read(wx, wy, DataPosition.rotationTeam);
-        byte elev = editor.getMap().read(wx, wy, DataPosition.elevation);
-        byte rotation = Bits.getLeftByte(btr);
-        Team team = Team.all[Bits.getRightByte(btr)];
+        byte rotation = Pack.leftByte(btr);
+        Team team = Team.all[Pack.rightByte(btr)];
 
         Block floor = content.block(bf);
         Block wall = content.block(bw);
@@ -120,59 +110,35 @@ public class MapRenderer implements Disposable{
         TextureRegion region;
 
         if(bw != 0){
-            region = wall.getEditorIcon();
+            region = wall.icon(Icon.full);
 
             if(wall.rotate){
                 mesh.draw((wx % chunksize) + (wy % chunksize) * chunksize, region,
-                        wx * tilesize + wall.offset(), wy * tilesize + wall.offset(),
-                        region.getRegionWidth(), region.getRegionHeight(), rotation * 90 - 90);
+                wx * tilesize + wall.offset(), wy * tilesize + wall.offset(),
+                region.getWidth() * Draw.scl, region.getHeight() * Draw.scl, rotation * 90 - 90);
             }else{
                 mesh.draw((wx % chunksize) + (wy % chunksize) * chunksize, region,
-                        wx * tilesize + wall.offset() + (tilesize - region.getRegionWidth())/2f,
-                        wy * tilesize + wall.offset() + (tilesize - region.getRegionHeight())/2f,
-                        region.getRegionWidth(), region.getRegionHeight());
+                wx * tilesize + wall.offset() + (tilesize - region.getWidth() * Draw.scl)/2f,
+                wy * tilesize + wall.offset() + (tilesize - region.getHeight() * Draw.scl)/2f,
+                region.getWidth() * Draw.scl, region.getHeight() * Draw.scl);
             }
         }else{
-            region = floor.getEditorIcon();
+            region = floor.icon(Icon.full);
 
             mesh.draw((wx % chunksize) + (wy % chunksize) * chunksize, region, wx * tilesize, wy * tilesize, 8, 8);
         }
 
-        boolean check = checkElevation(elev, wx, wy);
-
         if(wall.update || wall.destructible){
             mesh.setColor(team.color);
-            region = Draw.region("block-border");
-        }else if(elev > 0 && check){
-            mesh.setColor(tmpColor.fromHsv((360f * elev / 127f * 4f) % 360f, 0.5f + (elev / 4f) % 0.5f, 1f));
-            region = Draw.region("block-elevation");
-        }else if(elev == -1){
-            region = Draw.region("block-slope");
+            region = Core.atlas.find("block-border");
         }else{
-            region = Draw.region("clear");
+            region = Core.atlas.find("clear");
         }
 
         mesh.draw((wx % chunksize) + (wy % chunksize) * chunksize + chunksize * chunksize, region,
-                wx * tilesize - (wall.size/3) * tilesize, wy * tilesize - (wall.size/3) * tilesize,
-                region.getRegionWidth(), region.getRegionHeight());
+        wx * tilesize - (wall.size/3) * tilesize, wy * tilesize - (wall.size/3) * tilesize,
+        region.getWidth() * Draw.scl, region.getHeight() * Draw.scl);
         mesh.setColor(Color.WHITE);
-    }
-
-    private boolean checkElevation(byte elev, int x, int y){
-        for(GridPoint2 p : Geometry.d4){
-            int wx = x + p.x, wy = y + p.y;
-            if(!Structs.inBounds(wx, wy, editor.getMap().width(), editor.getMap().height())){
-                return true;
-            }
-            byte value = editor.getMap().read(wx, wy, DataPosition.elevation);
-
-            if(value < elev){
-                return true;
-            }else if(value > elev){
-                delayedUpdates.add(wx + wy * width);
-            }
-        }
-        return false;
     }
 
     @Override

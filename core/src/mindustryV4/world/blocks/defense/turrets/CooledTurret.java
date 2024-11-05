@@ -1,13 +1,13 @@
 package mindustryV4.world.blocks.defense.turrets;
 
-import mindustryV4.content.fx.BlockFx;
+import mindustryV4.content.Fx;
 import mindustryV4.type.Liquid;
 import mindustryV4.world.Tile;
 import mindustryV4.world.consumers.ConsumeLiquidFilter;
-import ucore.core.Effects;
-import ucore.core.Effects.Effect;
-import ucore.core.Timers;
-import ucore.util.Mathf;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.Effects.Effect;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.math.Mathf;
 
 import static mindustryV4.Vars.tilesize;
 
@@ -16,7 +16,7 @@ public class CooledTurret extends Turret{
     protected float coolantMultiplier = 1f;
     /**Max coolant used per tick.*/
     protected float maxCoolantUsed = 1f;
-    protected Effect coolEffect = BlockFx.fuelburn;
+    protected Effect coolEffect = Fx.fuelburn;
 
     public CooledTurret(String name){
         super(name);
@@ -33,7 +33,7 @@ public class CooledTurret extends Turret{
         TurretEntity entity = tile.entity();
         Liquid liquid = entity.liquids.current();
 
-        float used = Math.min(Math.min(entity.liquids.get(liquid), maxCoolantUsed * Timers.delta()), Math.max(0, ((reload - entity.reload) / coolantMultiplier) / liquid.heatCapacity));
+        float used = Math.min(Math.min(entity.liquids.get(liquid), maxCoolantUsed * Time.delta()), Math.max(0, ((reload - entity.reload) / coolantMultiplier) / liquid.heatCapacity));
         entity.reload += (used * liquid.heatCapacity) / liquid.heatCapacity;
         entity.liquids.remove(liquid, used);
 

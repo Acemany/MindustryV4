@@ -1,13 +1,13 @@
 package mindustryV4.graphics;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.FloatArray;
-import ucore.core.Timers;
-import ucore.graphics.Draw;
-import ucore.graphics.Fill;
-import ucore.graphics.Lines;
-import ucore.util.Mathf;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.math.geom.Vector2;
+import io.anuke.arc.collection.FloatArray;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.Fill;
+import io.anuke.arc.graphics.g2d.Lines;
+import io.anuke.arc.math.Mathf;
 
 /**
  * Class that renders a colored trail.
@@ -23,13 +23,13 @@ public class Trail{
     }
 
     public void update(float curx, float cury){
-        if(Vector2.dst(curx, cury, lastX, lastY) >= maxJump){
+        if(Mathf.dst(curx, cury, lastX, lastY) >= maxJump){
             points.clear();
         }
 
         points.add(curx, cury);
 
-        while(points.size > (int)(length * 2 / Math.min(Timers.delta(), 1f))){
+        while(points.size > (int)(length * 2 / Math.min(Time.delta(), 1f))){
             float[] items = points.items;
             System.arraycopy(items, 2, items, 0, points.size - 2);
             points.size -= 2;

@@ -1,7 +1,7 @@
 package mindustryV4.entities;
 
-import mindustryV4.content.Items;
 import mindustryV4.entities.traits.Saveable;
+import mindustryV4.entities.type.*;
 import mindustryV4.type.Item;
 import mindustryV4.type.ItemStack;
 
@@ -13,7 +13,7 @@ import static mindustryV4.Vars.content;
 
 public class UnitInventory implements Saveable{
     private final Unit unit;
-    private ItemStack item = new ItemStack(Items.stone, 0);
+    private ItemStack item = new ItemStack(content.item(0), 0);
 
     public UnitInventory(Unit unit){
         this.unit = unit;

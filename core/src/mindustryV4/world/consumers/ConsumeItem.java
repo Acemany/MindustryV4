@@ -1,13 +1,15 @@
 package mindustryV4.world.consumers;
 
-import mindustryV4.entities.TileEntity;
+import io.anuke.arc.scene.ui.layout.Table;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Item;
-import mindustryV4.type.ItemStack;
+import mindustryV4.type.Item.Icon;
 import mindustryV4.ui.ItemImage;
+import mindustryV4.ui.ReqImage;
 import mindustryV4.world.Block;
+import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.BlockStats;
-import ucore.scene.ui.layout.Table;
 
 public class ConsumeItem extends Consume{
     private final Item item;
@@ -32,8 +34,13 @@ public class ConsumeItem extends Consume{
     }
 
     @Override
-    public void buildTooltip(Table table){
-        table.add(new ItemImage(new ItemStack(item, amount))).size(8 * 4);
+    public void trigger(Block block, TileEntity entity){
+        entity.items.remove(item, amount);
+    }
+
+    @Override
+    public void build(Tile tile, Table table){
+        table.add(new ReqImage(new ItemImage(item.icon(Icon.large), amount), () -> valid(tile.block(), tile.entity))).size(8*4);
     }
 
     @Override
@@ -53,6 +60,6 @@ public class ConsumeItem extends Consume{
 
     @Override
     public void display(BlockStats stats){
-        stats.add(optional ? BlockStat.boostItem : BlockStat.inputItem, item);
+        stats.add(boost ? BlockStat.boostItem : BlockStat.inputItem, item);
     }
 }

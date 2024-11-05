@@ -1,13 +1,13 @@
 package mindustryV4.world.blocks.defense.turrets;
 
-import mindustryV4.content.fx.Fx;
-import mindustryV4.entities.TileEntity;
-import mindustryV4.type.AmmoType;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.Effects.Effect;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.util.Time;
+import mindustryV4.content.Fx;
+import mindustryV4.entities.type.TileEntity;
+import mindustryV4.entities.bullet.BulletType;
 import mindustryV4.world.Tile;
-import ucore.core.Effects;
-import ucore.core.Effects.Effect;
-import ucore.core.Timers;
-import ucore.util.Mathf;
 
 import static mindustryV4.Vars.tilesize;
 
@@ -24,7 +24,7 @@ public class ChargeTurret extends PowerTurret{
     }
 
     @Override
-    public void shoot(Tile tile, AmmoType ammo){
+    public void shoot(Tile tile, BulletType ammo){
         LaserTurretEntity entity = tile.entity();
 
         useAmmo(tile);
@@ -33,7 +33,7 @@ public class ChargeTurret extends PowerTurret{
         Effects.effect(chargeBeginEffect, tile.drawx() + tr.x, tile.drawy() + tr.y, entity.rotation);
 
         for(int i = 0; i < chargeEffects; i++){
-            Timers.run(Mathf.random(chargeMaxDelay), () -> {
+            Time.run(Mathf.random(chargeMaxDelay), () -> {
                 if(!isTurret(tile)) return;
                 tr.trns(entity.rotation, size * tilesize / 2);
                 Effects.effect(chargeEffect, tile.drawx() + tr.x, tile.drawy() + tr.y, entity.rotation);
@@ -42,12 +42,12 @@ public class ChargeTurret extends PowerTurret{
 
         entity.shooting = true;
 
-        Timers.run(chargeTime, () -> {
+        Time.run(chargeTime, () -> {
             if(!isTurret(tile)) return;
             tr.trns(entity.rotation, size * tilesize / 2);
             entity.recoil = recoil;
             entity.heat = 1f;
-            bullet(tile, ammo.bullet, entity.rotation + Mathf.range(inaccuracy));
+            bullet(tile, ammo, entity.rotation + Mathf.range(inaccuracy));
             effects(tile);
             entity.shooting = false;
         });

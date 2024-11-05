@@ -1,6 +1,6 @@
 package mindustryV4.maps.missions;
 
-import ucore.function.BooleanProvider;
+import io.anuke.arc.function.BooleanProvider;
 
 public class ConditionMission extends Mission{
     private final BooleanProvider complete;

@@ -1,9 +1,9 @@
 package mindustryV4.maps.missions;
 
 import mindustryV4.Vars;
-import mindustryV4.entities.Player;
+import mindustryV4.entities.type.Player;
 import mindustryV4.type.Mech;
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
 public class MechMission extends Mission{
     private final Mech mech;
@@ -24,6 +24,6 @@ public class MechMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.format("text.mission.mech", mech.localizedName());
+        return Core.bundle.format("mission.mech", mech.localizedName());
     }
 }

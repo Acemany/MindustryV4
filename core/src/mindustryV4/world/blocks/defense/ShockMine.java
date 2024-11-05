@@ -1,14 +1,14 @@
 package mindustryV4.world.blocks.defense;
 
-import mindustryV4.entities.Unit;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.graphics.g2d.Fill;
+import io.anuke.arc.math.Mathf;
+import mindustryV4.entities.type.Unit;
 import mindustryV4.entities.effect.Lightning;
 import mindustryV4.graphics.Layer;
-import mindustryV4.graphics.Palette;
+import mindustryV4.graphics.Pal;
 import mindustryV4.world.Block;
 import mindustryV4.world.Tile;
-import ucore.graphics.Draw;
-import ucore.graphics.Fill;
-import ucore.util.Mathf;
 
 public class ShockMine extends Block{
     protected int timerDamage = timers ++;
@@ -24,7 +24,6 @@ public class ShockMine extends Block{
         update = false;
         destructible = true;
         solid = false;
-        shadow = "shadow-shock-mine";
         targetable = false;
         layer = Layer.overlay;
     }
@@ -39,6 +38,11 @@ public class ShockMine extends Block{
     }
 
     @Override
+    public void drawTeam(Tile tile){
+        //no
+    }
+
+    @Override
     public void draw(Tile tile){
         //nope
     }
@@ -47,7 +51,7 @@ public class ShockMine extends Block{
     public void unitOn(Tile tile, Unit unit){
         if(unit.getTeam() != tile.getTeam() && tile.entity.timer.get(timerDamage, cooldown)){
             for(int i = 0; i < tendrils; i++){
-                Lightning.create(tile.getTeam(), Palette.lancerLaser, damage, tile.drawx(), tile.drawy(), Mathf.random(360f), length);
+                Lightning.create(tile.getTeam(), Pal.lancerLaser, damage, tile.drawx(), tile.drawy(), Mathf.random(360f), length);
             }
             tile.entity.damage(tileDamage);
         }

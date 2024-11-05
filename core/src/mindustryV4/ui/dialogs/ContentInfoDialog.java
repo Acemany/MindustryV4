@@ -1,19 +1,19 @@
 package mindustryV4.ui.dialogs;
 
 import mindustryV4.game.UnlockableContent;
-import ucore.scene.ui.ScrollPane;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.ScrollPane;
+import io.anuke.arc.scene.ui.layout.Table;
 
 public class ContentInfoDialog extends FloatingDialog{
 
     public ContentInfoDialog(){
-        super("$text.info.title");
+        super("$info.title");
 
         addCloseButton();
     }
 
     public void show(UnlockableContent content){
-        content().clear();
+        cont.clear();
 
         Table table = new Table();
         table.margin(10);
@@ -21,7 +21,7 @@ public class ContentInfoDialog extends FloatingDialog{
         content.displayInfo(table);
 
         ScrollPane pane = new ScrollPane(table);
-        content().add(pane);
+        cont.add(pane);
 
         show();
     }

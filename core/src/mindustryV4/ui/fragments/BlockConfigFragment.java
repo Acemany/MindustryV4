@@ -1,23 +1,20 @@
 package mindustryV4.ui.fragments;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
-import mindustryV4.content.blocks.Blocks;
+import io.anuke.arc.Core;
+import io.anuke.arc.math.Interpolation;
+import io.anuke.arc.math.geom.Vector2;
+import io.anuke.arc.scene.Element;
+import io.anuke.arc.scene.Group;
+import io.anuke.arc.scene.actions.Actions;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.util.Align;
+import mindustryV4.content.Blocks;
 import mindustryV4.core.GameState.State;
 import mindustryV4.input.InputHandler;
 import mindustryV4.world.Block;
 import mindustryV4.world.Tile;
-import ucore.core.Core;
-import ucore.core.Graphics;
-import ucore.scene.Element;
-import ucore.scene.Group;
-import ucore.scene.actions.Actions;
-import ucore.scene.ui.layout.Table;
 
-import static mindustryV4.Vars.state;
-import static mindustryV4.Vars.tilesize;
+import static mindustryV4.Vars.*;
 
 public class BlockConfigFragment extends Fragment{
     private Table table = new Table();
@@ -46,13 +43,13 @@ public class BlockConfigFragment extends Fragment{
         configTile = tile;
         configBlock = tile.block();
 
-        table.setVisible(true);
+        table.visible(true);
         table.clear();
         tile.block().buildTable(tile, table);
         table.pack();
         table.setTransform(true);
         table.actions(Actions.scaleTo(0f, 1f), Actions.visible(true),
-                Actions.scaleTo(1f, 1f, 0.07f, Interpolation.pow3Out));
+        Actions.scaleTo(1f, 1f, 0.07f, Interpolation.pow3Out));
 
         table.update(() -> {
             if(state.is(State.menu)){
@@ -66,7 +63,7 @@ public class BlockConfigFragment extends Fragment{
             }
 
             table.setOrigin(Align.center);
-            Vector2 pos = Graphics.screen(tile.drawx(), tile.drawy() - tile.block().size * tilesize / 2f - 1);
+            Vector2 pos = Core.input.mouseScreen(tile.drawx(), tile.drawy() - tile.block().size * tilesize / 2f - 1);
             table.setPosition(pos.x, pos.y, Align.top);
             if(configTile == null || configTile.block() == Blocks.air || configTile.block() != configBlock){
                 hideConfig();
@@ -75,7 +72,7 @@ public class BlockConfigFragment extends Fragment{
     }
 
     public boolean hasConfigMouse(){
-        Element e = Core.scene.hit(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), true);
+        Element e = Core.scene.hit(Core.input.mouseX(), Core.graphics.getHeight() - Core.input.mouseY(), true);
         return e != null && (e == table || e.isDescendantOf(table));
     }
 

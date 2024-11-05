@@ -1,8 +1,8 @@
 package mindustryV4.world.meta.values;
 
 import mindustryV4.world.meta.StatValue;
-import ucore.scene.ui.layout.Table;
-import ucore.util.Strings;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.util.Strings;
 
 public class StringValue implements StatValue{
     private final String value;

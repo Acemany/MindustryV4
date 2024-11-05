@@ -1,13 +1,13 @@
 package mindustryV4.entities.effect;
 
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.Effects.Effect;
+import mindustryV4.entities.Effects.EffectRenderer;
+import mindustryV4.entities.impl.EffectEntity;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.util.Time;
 import mindustryV4.Vars;
 import mindustryV4.world.Tile;
-import ucore.core.Effects;
-import ucore.core.Effects.Effect;
-import ucore.core.Timers;
-import ucore.entities.impl.EffectEntity;
-import ucore.function.EffectRenderer;
-import ucore.util.Mathf;
 
 /**
  * A ground effect contains an effect that is rendered on the ground layer as opposed to the top layer.
@@ -20,7 +20,7 @@ public class GroundEffectEntity extends EffectEntity{
         GroundEffect effect = (GroundEffect) this.effect;
 
         if(effect.isStatic){
-            time += Timers.delta();
+            time += Time.delta();
 
             time = Mathf.clamp(time, 0, effect.staticLife);
 

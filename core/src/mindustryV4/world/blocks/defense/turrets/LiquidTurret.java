@@ -1,34 +1,36 @@
 package mindustryV4.world.blocks.defense.turrets;
 
-import com.badlogic.gdx.utils.ObjectMap;
+import io.anuke.arc.collection.ObjectMap;
+import mindustryV4.entities.Effects;
+import mindustryV4.entities.bullet.BulletType;
 import mindustryV4.entities.effect.Fire;
-import mindustryV4.type.AmmoType;
 import mindustryV4.type.Item;
 import mindustryV4.type.Liquid;
-import mindustryV4.world.BarType;
 import mindustryV4.world.Tile;
-import mindustryV4.world.meta.BlockBar;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.values.LiquidFilterValue;
-import ucore.core.Effects;
 
 import static mindustryV4.Vars.tilesize;
 import static mindustryV4.Vars.world;
 
 public abstract class LiquidTurret extends Turret{
-    protected AmmoType[] ammoTypes;
-    protected ObjectMap<Liquid, AmmoType> liquidAmmoMap = new ObjectMap<>();
+    protected ObjectMap<Liquid, BulletType> ammo = new ObjectMap<>();
 
     public LiquidTurret(String name){
         super(name);
         hasLiquids = true;
     }
 
+    /**Initializes accepted ammo map. Format: [liquid1, bullet1, liquid2, bullet2...]*/
+    protected void ammo(Object... objects){
+        ammo = ObjectMap.of(objects);
+    }
+
     @Override
     public void setStats(){
         super.setStats();
 
-        stats.add(BlockStat.inputLiquid, new LiquidFilterValue(item -> liquidAmmoMap.containsKey(item)));
+        stats.add(BlockStat.inputLiquid, new LiquidFilterValue(item -> ammo.containsKey(item)));
     }
 
     @Override
@@ -59,20 +61,13 @@ public abstract class LiquidTurret extends Turret{
     }
 
     @Override
-    public void setBars(){
-        super.setBars();
-        bars.remove(BarType.inventory);
-        bars.replace(new BlockBar(BarType.liquid, true, tile -> tile.entity.liquids.total() / liquidCapacity));
-    }
-
-    @Override
     protected void effects(Tile tile){
-        AmmoType type = peekAmmo(tile);
+        BulletType type = peekAmmo(tile);
 
         TurretEntity entity = tile.entity();
 
-        Effects.effect(type.shootEffect, type.liquid.color, tile.drawx() + tr.x, tile.drawy() + tr.y, entity.rotation);
-        Effects.effect(type.smokeEffect, type.liquid.color, tile.drawx() + tr.x, tile.drawy() + tr.y, entity.rotation);
+        Effects.effect(type.shootEffect, entity.liquids.current().color, tile.drawx() + tr.x, tile.drawy() + tr.y, entity.rotation);
+        Effects.effect(type.smokeEffect, entity.liquids.current().color, tile.drawx() + tr.x, tile.drawy() + tr.y, entity.rotation);
 
         if(shootShake > 0){
             Effects.shake(shootShake, shootShake, tile.entity);
@@ -82,36 +77,23 @@ public abstract class LiquidTurret extends Turret{
     }
 
     @Override
-    public AmmoType useAmmo(Tile tile){
+    public BulletType useAmmo(Tile tile){
         TurretEntity entity = tile.entity();
-        if(tile.isEnemyCheat()) return liquidAmmoMap.get(entity.liquids.current());
-        AmmoType type = liquidAmmoMap.get(entity.liquids.current());
-        entity.liquids.remove(type.liquid, type.quantityMultiplier);
+        if(tile.isEnemyCheat()) return ammo.get(entity.liquids.current());
+        BulletType type = ammo.get(entity.liquids.current());
+        entity.liquids.remove(entity.liquids.current(), type.ammoMultiplier);
         return type;
     }
 
     @Override
-    public AmmoType peekAmmo(Tile tile){
-        return liquidAmmoMap.get(tile.entity.liquids.current());
+    public BulletType peekAmmo(Tile tile){
+        return ammo.get(tile.entity.liquids.current());
     }
 
     @Override
     public boolean hasAmmo(Tile tile){
         TurretEntity entity = tile.entity();
-        return liquidAmmoMap.get(entity.liquids.current()) != null && entity.liquids.total() >= liquidAmmoMap.get(entity.liquids.current()).quantityMultiplier;
-    }
-
-    @Override
-    public void init(){
-        super.init();
-
-        for(AmmoType type : ammoTypes){
-            if(liquidAmmoMap.containsKey(type.liquid)){
-                throw new RuntimeException("Turret \"" + name + "\" has two conflicting ammo entries on liquid type " + type.liquid + "!");
-            }else{
-                liquidAmmoMap.put(type.liquid, type);
-            }
-        }
+        return ammo.get(entity.liquids.current()) != null && entity.liquids.total() >= ammo.get(entity.liquids.current()).ammoMultiplier;
     }
 
     @Override
@@ -121,8 +103,8 @@ public abstract class LiquidTurret extends Turret{
 
     @Override
     public boolean acceptLiquid(Tile tile, Tile source, Liquid liquid, float amount){
-        return super.acceptLiquid(tile, source, liquid, amount) && liquidAmmoMap.get(liquid) != null
-                && (tile.entity.liquids.current() == liquid || (liquidAmmoMap.containsKey(tile.entity.liquids.current()) && tile.entity.liquids.get(tile.entity.liquids.current()) <= liquidAmmoMap.get(tile.entity.liquids.current()).quantityMultiplier + 0.001f));
+        return super.acceptLiquid(tile, source, liquid, amount) && ammo.get(liquid) != null
+                && (tile.entity.liquids.current() == liquid || (ammo.containsKey(tile.entity.liquids.current()) && tile.entity.liquids.get(tile.entity.liquids.current()) <= ammo.get(tile.entity.liquids.current()).ammoMultiplier + 0.001f));
     }
 
 }

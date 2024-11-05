@@ -1,8 +1,8 @@
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.collection.Array;
 import mindustryV4.Vars;
 import mindustryV4.core.ContentLoader;
 import mindustryV4.maps.SectorPresets;
-import mindustryV4.maps.generation.Generation;
+import mindustryV4.maps.generators.Generation;
 import mindustryV4.maps.missions.Mission;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

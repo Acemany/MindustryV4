@@ -1,8 +1,8 @@
 package mindustryV4.maps.missions;
 
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
-import static mindustryV4.Vars.threads;
+import static mindustryV4.Vars.*;
 
 /**A mission which simply runs a single action and is completed instantly.*/
 public class ActionMission extends Mission{
@@ -17,7 +17,7 @@ public class ActionMission extends Mission{
 
     @Override
     public void onComplete(){
-        threads.run(runner);
+        Core.app.post(runner);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class ActionMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.get("text.loading");
+        return Core.bundle.get("loading");
     }
 }

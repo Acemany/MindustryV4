@@ -5,7 +5,7 @@ import mindustryV4.type.Item;
 import mindustryV4.type.ItemStack;
 import mindustryV4.ui.ItemDisplay;
 import mindustryV4.world.meta.ContentStatValue;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Table;
 
 public class ItemValue implements ContentStatValue{
     private final ItemStack item;

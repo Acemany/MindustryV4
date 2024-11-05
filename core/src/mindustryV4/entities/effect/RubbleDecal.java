@@ -1,7 +1,8 @@
 package mindustryV4.entities.effect;
 
-import ucore.graphics.Draw;
-import ucore.util.Mathf;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.g2d.Draw;
+import io.anuke.arc.math.Mathf;
 
 public class RubbleDecal extends Decal{
     private int size;
@@ -20,7 +21,7 @@ public class RubbleDecal extends Decal{
     public void drawDecal(){
         String region = "rubble-" + size + "-" + Mathf.randomSeed(id, 0, 1);
 
-        if(!Draw.hasRegion(region)){
+        if(!Core.atlas.has(region)){
             remove();
             return;
         }

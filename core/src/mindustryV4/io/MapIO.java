@@ -1,13 +1,14 @@
 package mindustryV4.io;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.utils.IntIntMap;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectMap.Entry;
-import mindustryV4.content.blocks.Blocks;
-import mindustryV4.content.blocks.StorageBlocks;
+import io.anuke.arc.collection.IntIntMap;
+import io.anuke.arc.collection.ObjectMap;
+import io.anuke.arc.collection.ObjectMap.Entry;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.graphics.Pixmap;
+import io.anuke.arc.graphics.Pixmap.Format;
+import io.anuke.arc.util.Pack;
+import io.anuke.arc.util.Structs;
+import mindustryV4.content.Blocks;
 import mindustryV4.game.Team;
 import mindustryV4.maps.Map;
 import mindustryV4.maps.MapMeta;
@@ -16,11 +17,8 @@ import mindustryV4.maps.MapTileData.DataPosition;
 import mindustryV4.maps.MapTileData.TileDataMarker;
 import mindustryV4.type.ContentType;
 import mindustryV4.world.Block;
-import mindustryV4.world.ColorMapper;
 import mindustryV4.world.LegacyColorMapper;
 import mindustryV4.world.LegacyColorMapper.LegacyBlock;
-import ucore.util.Bits;
-import ucore.util.Structs;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -51,10 +49,10 @@ public class MapIO{
         for(int y = 0; y < data.height(); y++){
             for(int x = 0; x < data.width(); x++){
                 data.read(marker);
-                byte elev = y >= data.height() - 1 ? 0 : data.read(x, y + 1, DataPosition.elevation);
                 Block floor = content.block(marker.floor);
                 Block wall = content.block(marker.wall);
-                int color = ColorMapper.colorFor(floor, wall, Team.all[marker.team], marker.elevation + 1, elev > marker.elevation ? (byte)(1 << 6) : (byte)0);
+
+                int color = colorFor(floor, wall, Team.all[marker.team]);
                 pixmap.drawPixel(x, pixmap.getHeight() - 1 - y, color);
             }
         }
@@ -74,12 +72,7 @@ public class MapIO{
                 LegacyBlock block = LegacyColorMapper.get(color);
 
                 data.write(x, y, DataPosition.floor, block.floor.id);
-                data.write(x, y, DataPosition.elevation, (byte)block.elevation);
-
-                //place spawn
-                if(color == Color.rgba8888(Color.RED)){
-                    data.write(x, y, DataPosition.wall, Blocks.spawn.id);
-                }
+                data.write(x, y, DataPosition.wall, block.wall.id);
 
                 //place core
                 if(color == Color.rgba8888(Color.GREEN)){
@@ -89,15 +82,15 @@ public class MapIO{
                             int worldy = dy - 1 + y;
 
                             if(Structs.inBounds(worldx, worldy, pixmap.getWidth(), pixmap.getHeight())){
-                                data.write(worldx, worldy, DataPosition.wall, Blocks.blockpart.id);
-                                data.write(worldx, worldy, DataPosition.rotationTeam, Bits.packByte((byte)0, (byte)Team.blue.ordinal()));
-                                data.write(worldx, worldy, DataPosition.link, Bits.packByte((byte) (dx - 1 + 8), (byte) (dy - 1 + 8)));
+                                data.write(worldx, worldy, DataPosition.wall, Blocks.part.id);
+                                data.write(worldx, worldy, DataPosition.rotationTeam, Pack.byteByte((byte)0, (byte)Team.blue.ordinal()));
+                                data.write(worldx, worldy, DataPosition.link, Pack.byteByte((byte) (dx - 1 + 8), (byte) (dy - 1 + 8)));
                             }
                         }
                     }
 
-                    data.write(x, y, DataPosition.wall, StorageBlocks.core.id);
-                    data.write(x, y, DataPosition.rotationTeam, Bits.packByte((byte)0, (byte)Team.blue.ordinal()));
+                    data.write(x, y, DataPosition.wall, Blocks.coreShard.id);
+                    data.write(x, y, DataPosition.rotationTeam, Pack.byteByte((byte)0, (byte)Team.blue.ordinal()));
                 }
             }
         }
@@ -169,7 +162,6 @@ public class MapIO{
             String name = stream.readUTF();
             Block block = content.getByName(ContentType.block, name);
             if(block == null){
-                //Log.info("Map load info: No block with name {0} found.", name);
                 block = Blocks.air;
             }
             map.put(id, block.id);
@@ -198,5 +190,12 @@ public class MapIO{
 
         stream.writeShort(meta.width);
         stream.writeShort(meta.height);
+    }
+
+    public static int colorFor(Block floor, Block wall, Team team){
+        if(wall.synthetic()){
+            return team.intColor;
+        }
+        return Color.rgba8888(wall.solid ? wall.color : floor.color);
     }
 }

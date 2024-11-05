@@ -1,137 +1,116 @@
 package mindustryV4.input;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import mindustryV4.game.EventType.*;
 import io.anuke.annotations.Annotations.Loc;
 import io.anuke.annotations.Annotations.Remote;
-import mindustryV4.content.blocks.Blocks;
-import mindustryV4.content.fx.EnvironmentFx;
-import mindustryV4.entities.Player;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.input.InputProcessor;
+import io.anuke.arc.math.Angles;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Vector2;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.util.Time;
+import mindustryV4.content.Blocks;
+import mindustryV4.content.Fx;
+import mindustryV4.entities.Effects;
 import mindustryV4.entities.effect.ItemTransfer;
 import mindustryV4.entities.traits.BuilderTrait.BuildRequest;
+import mindustryV4.entities.type.Player;
 import mindustryV4.gen.Call;
 import mindustryV4.net.Net;
 import mindustryV4.net.ValidateException;
 import mindustryV4.type.Item;
 import mindustryV4.type.ItemStack;
-import mindustryV4.type.Recipe;
 import mindustryV4.ui.fragments.OverlayFragment;
 import mindustryV4.world.Block;
 import mindustryV4.world.Build;
 import mindustryV4.world.Tile;
-import ucore.core.*;
-import ucore.scene.ui.layout.Table;
-import ucore.util.Angles;
-import ucore.util.Mathf;
-import ucore.util.Translator;
 
 import static mindustryV4.Vars.*;
 
-public abstract class InputHandler extends InputAdapter{
+public abstract class InputHandler implements InputProcessor{
     /**Used for dropping items.*/
     final static float playerSelectRange = mobile ? 17f : 11f;
     /**Maximum line length.*/
     final static int maxLength = 100;
-    final static Translator stackTrns = new Translator();
+    final static Vector2 stackTrns = new Vector2();
     /**Distance on the back from where items originate.*/
     final static float backTrns = 3f;
 
     public final Player player;
-    public final String section;
     public final OverlayFragment frag = new OverlayFragment(this);
 
-    public Recipe recipe;
+    public Block block;
     public int rotation;
     public boolean droppingItem;
 
     public InputHandler(Player player){
         this.player = player;
-        this.section = "player_" + (player.playerIndex + 1);
     }
 
     //methods to override
 
     @Remote(targets = Loc.client, called = Loc.server)
     public static void dropItem(Player player, float angle){
-        if(Net.server() && !player.inventory.hasItem()){
+        if(Net.server() && player.item().amount <= 0){
             throw new ValidateException(player, "Player cannot drop an item.");
         }
 
-        Effects.effect(EnvironmentFx.dropItem, Color.WHITE, player.x, player.y, angle, player.inventory.getItem().item);
-        player.inventory.clearItem();
+        Effects.effect(Fx.dropItem, Color.WHITE, player.x, player.y, angle, player.item().item);
+        player.clearItem();
     }
 
     @Remote(targets = Loc.both, forward = true, called = Loc.server)
     public static void transferInventory(Player player, Tile tile){
-        if(Net.server() && (!player.inventory.hasItem() || player.isTransferring)){
+        if(Net.server() && (player.item().amount <= 0 || player.isTransferring)){
             throw new ValidateException(player, "Player cannot transfer an item.");
         }
 
-        threads.run(() -> {
-            if(player == null || tile.entity == null) return;
+        if(player == null || tile.entity == null) return;
 
-            player.isTransferring = true;
+        player.isTransferring = true;
 
-            Item item = player.inventory.getItem().item;
-            int amount = player.inventory.getItem().amount;
-            int accepted = tile.block().acceptStack(item, amount, tile, player);
-            player.inventory.getItem().amount -= accepted;
+        Item item = player.item().item;
+        int amount = player.item().amount;
+        int accepted = tile.block().acceptStack(item, amount, tile, player);
+        player.item().amount -= accepted;
 
-            int sent = Mathf.clamp(accepted / 4, 1, 8);
-            int removed = accepted / sent;
-            int[] remaining = {accepted, accepted};
-            Block block = tile.block();
+        int sent = Mathf.clamp(accepted / 4, 1, 8);
+        int removed = accepted / sent;
+        int[] remaining = {accepted, accepted};
+        Block block = tile.block();
 
-            for(int i = 0; i < sent; i++){
-                boolean end = i == sent - 1;
-                Timers.run(i * 3, () -> {
-                    tile.block().getStackOffset(item, tile, stackTrns);
+        for(int i = 0; i < sent; i++){
+            boolean end = i == sent - 1;
+            Time.run(i * 3, () -> {
+                tile.block().getStackOffset(item, tile, stackTrns);
 
-                    ItemTransfer.create(item,
-                            player.x + Angles.trnsx(player.rotation + 180f, backTrns), player.y + Angles.trnsy(player.rotation + 180f, backTrns),
-                            new Translator(tile.drawx() + stackTrns.x, tile.drawy() + stackTrns.y), () -> {
-                                if(tile.block() != block || tile.entity == null) return;
+                ItemTransfer.create(item,
+                player.x + Angles.trnsx(player.rotation + 180f, backTrns), player.y + Angles.trnsy(player.rotation + 180f, backTrns),
+                new Vector2(tile.drawx() + stackTrns.x, tile.drawy() + stackTrns.y), () -> {
+                    if(tile.block() != block || tile.entity == null || tile.entity.items == null) return;
 
-                                tile.block().handleStack(item, removed, tile, player);
-                                remaining[1] -= removed;
+                    tile.block().handleStack(item, removed, tile, player);
+                    remaining[1] -= removed;
 
-                                if(end && remaining[1] > 0){
-                                    tile.block().handleStack(item, remaining[1], tile, player);
-                                }
-                            });
-
-                    remaining[0] -= removed;
-
-                    if(end){
-                        player.isTransferring = false;
+                    if(end && remaining[1] > 0){
+                        tile.block().handleStack(item, remaining[1], tile, player);
                     }
                 });
-            }
-        });
+
+                remaining[0] -= removed;
+
+                if(end){
+                    player.isTransferring = false;
+                }
+            });
+        }
     }
 
     @Remote(targets = Loc.both, called = Loc.server, forward = true)
     public static void onTileTapped(Player player, Tile tile){
         if(tile == null || player == null) return;
         tile.block().tapped(tile, player);
-    }
-
-    @Remote(targets = Loc.both, called = Loc.server, forward = true, unreliable = true)
-    public static void rotateBlock(Player player, Tile tile, boolean direction){
-        int previous = tile.getRotation();
-        tile.setRotation((byte)Mathf.mod(tile.getRotation() + Mathf.sign(direction), 4));
-        tile.block().update(tile);
-        tile.entity.updateProximity();
-        tile.entity.noSleep();
-        Events.fire(new BlockRotateEvent(tile, player, previous));
-    }
-
-    @Remote(targets = Loc.both, forward = true, called = Loc.server)
-    public static void respawnPlayer(Player player){
-        player.setDead(true);
     }
 
     public OverlayFragment getFrag(){
@@ -143,19 +122,11 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     public float getMouseX(){
-        return Gdx.input.getX();
+        return Core.input.mouseX();
     }
 
     public float getMouseY(){
-        return Gdx.input.getY();
-    }
-
-    public void resetCursor(){
-
-    }
-
-    public boolean isCursorVisible(){
-        return false;
+        return Core.input.mouseY();
     }
 
     public void buildUI(Table table){
@@ -182,14 +153,14 @@ public abstract class InputHandler extends InputAdapter{
     boolean tileTapped(Tile tile){
         tile = tile.target();
 
-        boolean consumed = false, showedInventory = false, showedConsume = false;
+        boolean consumed = false, showedInventory = false;
 
         //check if tapped block is configurable
-        if(tile.block().configurable && tile.getTeam() == player.getTeam()){
+        if(tile.block().configurable && tile.interactable(player.getTeam())){
             consumed = true;
             if(((!frag.config.isShown() && tile.block().shouldShowConfigure(tile, player)) //if the config fragment is hidden, show
-                    //alternatively, the current selected block can 'agree' to switch config tiles
-                    || (frag.config.isShown() && frag.config.getSelectedTile().block().onConfigureTileTapped(frag.config.getSelectedTile(), tile)))){
+            //alternatively, the current selected block can 'agree' to switch config tiles
+            || (frag.config.isShown() && frag.config.getSelectedTile().block().onConfigureTileTapped(frag.config.getSelectedTile(), tile)))){
                 frag.config.showConfig(tile);
             }
             //otherwise...
@@ -206,14 +177,14 @@ public abstract class InputHandler extends InputAdapter{
         }
 
         //call tapped event
-        if(!consumed && tile.getTeam() == player.getTeam()){
+        if(!consumed && tile.interactable(player.getTeam())){
             Call.onTileTapped(player, tile);
         }
 
         //consume tap event if necessary
-        if(tile.getTeam() == player.getTeam() && tile.block().consumesTap){
+        if(tile.interactable(player.getTeam()) && tile.block().consumesTap){
             consumed = true;
-        }else if(tile.getTeam() == player.getTeam() && tile.block().synthetic() && !consumed){
+        }else if(tile.interactable(player.getTeam()) && tile.block().synthetic() && !consumed){
             if(tile.block().hasItems && tile.entity.items.total() > 0){
                 frag.inv.showFor(tile);
                 consumed = true;
@@ -227,7 +198,7 @@ public abstract class InputHandler extends InputAdapter{
 
         if(!consumed && player.isBuilding()){
             player.clearBuilding();
-            recipe = null;
+            block = null;
             return true;
         }
 
@@ -244,7 +215,7 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     boolean canTapPlayer(float x, float y){
-        return Vector2.dst(x, y, player.x, player.y) <= playerSelectRange && player.inventory.hasItem();
+        return Mathf.dst(x, y, player.x, player.y) <= playerSelectRange && player.item().amount > 0;
     }
 
     /**Tries to begin mining a tile, returns true if successful.*/
@@ -258,11 +229,11 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     boolean canMine(Tile tile){
-        return !ui.hasMouse()
-                && tile.floor().drops != null && tile.floor().drops.item.hardness <= player.mech.drillPower
-                && !tile.floor().playerUnmineable
-                && player.inventory.canAcceptItem(tile.floor().drops.item)
-                && tile.block() == Blocks.air && player.distanceTo(tile.worldx(), tile.worldy()) <= Player.mineDistance;
+        return !Core.scene.hasMouse()
+        && tile.floor().itemDrop != null && tile.floor().itemDrop.hardness <= player.mech.drillPower
+        && !tile.floor().playerUnmineable
+        && player.acceptsItem(tile.floor().itemDrop)
+        && tile.block() == Blocks.air && player.dst(tile.worldx(), tile.worldy()) <= Player.mineDistance;
     }
 
     /**Returns the tile at the specified MOUSE coordinates.*/
@@ -271,17 +242,17 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     int tileX(float cursorX){
-        Vector2 vec = Graphics.world(cursorX, 0);
+        Vector2 vec = Core.input.mouseWorld(cursorX, 0);
         if(selectedBlock()){
-            vec.sub(recipe.result.offset(), recipe.result.offset());
+            vec.sub(block.offset(), block.offset());
         }
         return world.toTile(vec.x);
     }
 
     int tileY(float cursorY){
-        Vector2 vec = Graphics.world(0, cursorY);
+        Vector2 vec = Core.input.mouseWorld(0, cursorY);
         if(selectedBlock()){
-            vec.sub(recipe.result.offset(), recipe.result.offset());
+            vec.sub(block.offset(), block.offset());
         }
         return world.toTile(vec.y);
     }
@@ -291,20 +262,20 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     public boolean isPlacing(){
-        return recipe != null;
+        return block != null;
     }
 
     public float mouseAngle(float x, float y){
-        return Graphics.world(getMouseX(), getMouseY()).sub(x, y).angle();
+        return Core.input.mouseWorld(getMouseX(), getMouseY()).sub(x, y).angle();
     }
 
     public void remove(){
-        Inputs.removeProcessor(this);
+        Core.input.removeProcessor(this);
         frag.remove();
     }
 
     public boolean canShoot(){
-        return recipe == null && !ui.hasMouse() && !onConfigurable() && !isDroppingItem();
+        return block == null && !Core.scene.hasMouse() && !onConfigurable() && !isDroppingItem();
     }
 
     public boolean onConfigurable(){
@@ -316,16 +287,16 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     public void tryDropItems(Tile tile, float x, float y){
-        if(!droppingItem || !player.inventory.hasItem() || canTapPlayer(x, y)){
+        if(!droppingItem || player.item().amount <= 0 || canTapPlayer(x, y) || state.isPaused()){
             droppingItem = false;
             return;
         }
 
         droppingItem = false;
 
-        ItemStack stack = player.inventory.getItem();
+        ItemStack stack = player.item();
 
-        if(tile.block().acceptStack(stack.item, stack.amount, tile, player) > 0 && tile.getTeam() == player.getTeam() && tile.block().hasItems){
+        if(tile.block().acceptStack(stack.item, stack.amount, tile, player) > 0 && tile.interactable(player.getTeam()) && tile.block().hasItems){
             Call.transferInventory(player, tile);
         }else{
             Call.dropItem(player.angleTo(x, y));
@@ -337,8 +308,8 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     public void tryPlaceBlock(int x, int y){
-        if(recipe != null && validPlace(x, y, recipe.result, rotation) && cursorNear()){
-            placeBlock(x, y, recipe, rotation);
+        if(block != null && validPlace(x, y, block, rotation) && cursorNear()){
+            placeBlock(x, y, block, rotation);
         }
     }
 
@@ -349,22 +320,16 @@ public abstract class InputHandler extends InputAdapter{
     }
 
     public boolean validPlace(int x, int y, Block type, int rotation){
-        for(Tile tile : state.teams.get(player.getTeam()).cores){
-            if(tile.distanceTo(x * tilesize, y * tilesize) < coreBuildRange){
-                return Build.validPlace(player.getTeam(), x, y, type, rotation) &&
-                Vector2.dst(player.x, player.y, x * tilesize, y * tilesize) < Player.placeDistance;
-            }
-        }
-
-        return false;
+        return Build.validPlace(player.getTeam(), x, y, type, rotation) &&
+        Mathf.dst(player.x, player.y, x * tilesize, y * tilesize) < Player.placeDistance;
     }
 
     public boolean validBreak(int x, int y){
-        return Build.validBreak(player.getTeam(), x, y) && Vector2.dst(player.x, player.y, x * tilesize, y * tilesize) < Player.placeDistance;
+        return Build.validBreak(player.getTeam(), x, y) && Mathf.dst(player.x, player.y, x * tilesize, y * tilesize) < Player.placeDistance;
     }
 
-    public void placeBlock(int x, int y, Recipe recipe, int rotation){
-        player.addBuildRequest(new BuildRequest(x, y, rotation, recipe));
+    public void placeBlock(int x, int y, Block block, int rotation){
+        player.addBuildRequest(new BuildRequest(x, y, rotation, block));
     }
 
     public void breakBlock(int x, int y){

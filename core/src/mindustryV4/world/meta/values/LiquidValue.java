@@ -4,7 +4,7 @@ import mindustryV4.game.UnlockableContent;
 import mindustryV4.type.Liquid;
 import mindustryV4.ui.LiquidDisplay;
 import mindustryV4.world.meta.ContentStatValue;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Table;
 
 public class LiquidValue implements ContentStatValue{
     private final Liquid liquid;

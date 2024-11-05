@@ -1,17 +1,15 @@
 package mindustryV4.maps.missions;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.utils.Array;
-import mindustryV4.content.blocks.StorageBlocks;
-import mindustryV4.game.GameMode;
+import io.anuke.arc.math.geom.Point2;
+import io.anuke.arc.collection.Array;
+import mindustryV4.content.Blocks;
 import mindustryV4.game.SpawnGroup;
-import mindustryV4.game.Team;
 import mindustryV4.game.UnlockableContent;
 import mindustryV4.maps.Sector;
-import mindustryV4.maps.generation.Generation;
-import ucore.core.Timers;
-import ucore.scene.ui.layout.Table;
-import ucore.util.Bundles;
+import mindustryV4.maps.generators.Generation;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.scene.ui.layout.Table;
+import io.anuke.arc.Core;
 
 import static mindustryV4.Vars.*;
 
@@ -31,10 +29,6 @@ public abstract class Mission{
 
     public String getIcon(){
         return "icon-mission-defense";
-    }
-
-    public GameMode getMode(){
-        return GameMode.noWaves;
     }
 
     /**Sets the message displayed on mission begin. Returns this mission for chaining.*/
@@ -69,6 +63,7 @@ public abstract class Mission{
     /**Shows the unique sector message.*/
     public void showMessage(){
         if(!headless && extraMessage != null){
+
             ui.hudfrag.showTextDialog(extraMessage);
         }
     }
@@ -78,12 +73,12 @@ public abstract class Mission{
     }
 
     public void onBegin(){
-        Timers.runTask(60f, this::showMessage);
+        Time.runTask(60f, this::showMessage);
     }
 
     public void onComplete(){
         if(showComplete && !headless){
-            threads.runGraphics(() -> ui.hudfrag.showToast("[LIGHT_GRAY]"+menuDisplayString() + ":\n" + Bundles.get("text.mission.complete")));
+            ui.hudfrag.showToast("[LIGHT_GRAY]"+menuDisplayString() + ":\n" + Core.bundle.get("mission.complete"));
         }
     }
 
@@ -95,7 +90,7 @@ public abstract class Mission{
         return new Array<>();
     }
 
-    public Array<GridPoint2> getSpawnPoints(Generation gen){
+    public Array<Point2> getSpawnPoints(Generation gen){
         return Array.with();
     }
 

@@ -1,15 +1,15 @@
 package mindustryV4.ui.dialogs;
 
 import mindustryV4.net.Administration.PlayerInfo;
-import ucore.scene.ui.ScrollPane;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.ScrollPane;
+import io.anuke.arc.scene.ui.layout.Table;
 
 import static mindustryV4.Vars.*;
 
 public class AdminsDialog extends FloatingDialog{
 
     public AdminsDialog(){
-        super("$text.server.admins");
+        super("$server.admins");
 
         addCloseButton();
 
@@ -18,7 +18,7 @@ public class AdminsDialog extends FloatingDialog{
     }
 
     private void setup(){
-        content().clear();
+        cont.clear();
 
         float w = 400f, h = 80f;
 
@@ -28,7 +28,7 @@ public class AdminsDialog extends FloatingDialog{
         pane.setFadeScrollBars(false);
 
         if(netServer.admins.getAdmins().size == 0){
-            table.add("$text.server.admins.none");
+            table.add("$server.admins.none");
         }
 
         for(PlayerInfo info : netServer.admins.getAdmins()){
@@ -38,20 +38,13 @@ public class AdminsDialog extends FloatingDialog{
             res.labelWrap("[LIGHT_GRAY]" + info.lastName).width(w - h - 24f);
             res.add().growX();
             res.addImageButton("icon-cancel", 14 * 3, () -> {
-                ui.showConfirm("$text.confirm", "$text.confirmunadmin", () -> {
+                ui.showConfirm("$confirm", "$confirmunadmin", () -> {
                     netServer.admins.unAdminPlayer(info.id);
                     playerGroup.forEach(player -> {
                         if(player.uuid.equals(info.id)){
                             player.isAdmin = false;
                         }
                     });
-                    /*
-                    for(Player player : playerGroup.all()){
-                        if(player.con != null){
-                            player.isAdmin = false;
-                            break;
-                        }
-                    }*/
                     setup();
                 });
             }).size(h).pad(-14f);
@@ -60,6 +53,6 @@ public class AdminsDialog extends FloatingDialog{
             table.row();
         }
 
-        content().add(pane);
+        cont.add(pane);
     }
 }

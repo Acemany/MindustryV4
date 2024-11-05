@@ -1,14 +1,13 @@
 package mindustryV4.maps.missions;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.math.geom.Point2;
+import io.anuke.arc.collection.Array;
 import mindustryV4.Vars;
-import mindustryV4.game.GameMode;
 import mindustryV4.game.Team;
-import mindustryV4.maps.generation.FortressGenerator;
-import mindustryV4.maps.generation.Generation;
+import mindustryV4.maps.generators.FortressGenerator;
+import mindustryV4.maps.generators.Generation;
 import mindustryV4.world.Tile;
-import ucore.util.Bundles;
+import io.anuke.arc.Core;
 
 import static mindustryV4.Vars.*;
 
@@ -37,18 +36,13 @@ public class BattleMission extends MissionWithStartingCore{
     }
 
     @Override
-    public GameMode getMode(){
-        return GameMode.noWaves;
-    }
-
-    @Override
     public String displayString(){
-        return Bundles.get("text.mission.battle");
+        return Core.bundle.get("mission.battle");
     }
 
     @Override
-    public Array<GridPoint2> getSpawnPoints(Generation gen){
-        return Array.with(new GridPoint2(50, 50), new GridPoint2(gen.width - 1 - spacing, gen.height - 1 - spacing));
+    public Array<Point2> getSpawnPoints(Generation gen){
+        return Array.with(new Point2(50, 50), new Point2(gen.width - 1 - spacing, gen.height - 1 - spacing));
     }
 
     @Override

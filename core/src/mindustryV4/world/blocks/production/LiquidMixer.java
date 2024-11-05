@@ -1,16 +1,14 @@
 package mindustryV4.world.blocks.production;
 
-import mindustryV4.entities.TileEntity;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Liquid;
-import mindustryV4.world.BarType;
 import mindustryV4.world.Tile;
 import mindustryV4.world.blocks.LiquidBlock;
 import mindustryV4.world.consumers.ConsumeLiquid;
-import mindustryV4.world.meta.BlockBar;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.StatUnit;
 import mindustryV4.world.modules.LiquidModule;
-import ucore.graphics.Draw;
+import io.anuke.arc.graphics.g2d.Draw;
 
 public class LiquidMixer extends LiquidBlock{
     protected Liquid outputLiquid;
@@ -41,15 +39,6 @@ public class LiquidMixer extends LiquidBlock{
     }
 
     @Override
-    public void setBars(){
-        super.setBars();
-
-        bars.remove(BarType.liquid);
-        bars.add(new BlockBar(BarType.liquid, true, tile -> tile.entity.liquids.get(consumes.liquid()) / liquidCapacity));
-        bars.add(new BlockBar(BarType.liquid, true, tile -> tile.entity.liquids.get(outputLiquid) / liquidCapacity));
-    }
-
-    @Override
     public boolean shouldConsume(Tile tile){
         return tile.entity.liquids.get(outputLiquid) < liquidCapacity;
     }
@@ -60,6 +49,9 @@ public class LiquidMixer extends LiquidBlock{
 
         if(tile.entity.cons.valid()){
             float use = Math.min(consumes.get(ConsumeLiquid.class).used() * entity.delta(), liquidCapacity - entity.liquids.get(outputLiquid));
+            if(hasPower){
+                use *= entity.power.satisfaction; // Produce less liquid if power is not maxed
+            }
             entity.accumulator += use;
             entity.liquids.add(outputLiquid, use);
             for(int i = 0; i < (int) (entity.accumulator / liquidPerItem); i++){

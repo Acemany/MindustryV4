@@ -1,10 +1,10 @@
 package mindustryV4.world.blocks.distribution;
 
-import mindustryV4.entities.TileEntity;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Item;
 import mindustryV4.world.ItemBuffer;
 import mindustryV4.world.Tile;
-import ucore.util.Mathf;
+import io.anuke.arc.math.Mathf;
 
 public class BufferedItemBridge extends ExtendingItemBridge{
     protected int timerAccept = timers++;

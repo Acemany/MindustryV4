@@ -1,19 +1,22 @@
 package mindustryV4.entities.bullet;
 
-import com.badlogic.gdx.graphics.Color;
-import mindustryV4.content.fx.BulletFx;
-import mindustryV4.graphics.Palette;
-import ucore.core.Effects;
-import ucore.core.Timers;
-import ucore.util.Mathf;
+import io.anuke.arc.graphics.Color;
+import mindustryV4.content.Fx;
+import mindustryV4.graphics.Pal;
+import mindustryV4.entities.Effects;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.math.Mathf;
 
 public class MissileBulletType extends BasicBulletType{
-    protected Color trailColor = Palette.missileYellowBack;
+    protected Color trailColor = Pal.missileYellowBack;
+
+    protected float weaveScale = 0f;
+    protected float weaveMag = -1f;
 
     public MissileBulletType(float speed, float damage, String bulletSprite){
         super(speed, damage, bulletSprite);
-        backColor = Palette.missileYellowBack;
-        frontColor = Palette.missileYellow;
+        backColor = Pal.missileYellowBack;
+        frontColor = Pal.missileYellow;
         homingPower = 7f;
     }
 
@@ -21,8 +24,12 @@ public class MissileBulletType extends BasicBulletType{
     public void update(Bullet b){
         super.update(b);
 
-        if(Mathf.chance(Timers.delta() * 0.2)){
-            Effects.effect(BulletFx.missileTrail, trailColor, b.x, b.y, 2f);
+        if(Mathf.chance(Time.delta() * 0.2)){
+            Effects.effect(Fx.missileTrail, trailColor, b.x, b.y, 2f);
+        }
+
+        if(weaveMag > 0){
+            b.velocity().rotate(Mathf.sin(Time.time() + b.id * 4422, weaveScale, weaveMag));
         }
     }
 }

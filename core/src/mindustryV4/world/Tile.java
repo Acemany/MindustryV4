@@ -1,10 +1,15 @@
 package mindustryV4.world;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import mindustryV4.content.blocks.Blocks;
-import mindustryV4.entities.TileEntity;
+import io.anuke.arc.collection.Array;
+import io.anuke.arc.function.Consumer;
+import io.anuke.arc.math.Mathf;
+import io.anuke.arc.math.geom.Geometry;
+import io.anuke.arc.math.geom.Point2;
+import io.anuke.arc.math.geom.Position;
+import io.anuke.arc.math.geom.Vector2;
+import io.anuke.arc.util.Pack;
+import mindustryV4.content.Blocks;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.entities.traits.TargetTrait;
 import mindustryV4.game.Team;
 import mindustryV4.world.blocks.BlockPart;
@@ -13,15 +18,10 @@ import mindustryV4.world.modules.ConsumeModule;
 import mindustryV4.world.modules.ItemModule;
 import mindustryV4.world.modules.LiquidModule;
 import mindustryV4.world.modules.PowerModule;
-import ucore.entities.trait.PosTrait;
-import ucore.function.Consumer;
-import ucore.util.Bits;
-import ucore.util.Geometry;
 
 import static mindustryV4.Vars.*;
 
-
-public class Tile implements PosTrait, TargetTrait{
+public class Tile implements Position, TargetTrait{
     /**
      * The coordinates of the core tile this is linked to, in the form of two bytes packed into one.
      * This is relative to the block it is linked to; negate coords to find the link.
@@ -71,8 +71,9 @@ public class Tile implements PosTrait, TargetTrait{
         return visibility > 0;
     }
 
-    public int packedPosition(){
-        return x + y * world.width();
+    /**Returns this tile's position as a {@link Pos}.*/
+    public int pos(){
+        return Pos.get(x, y);
     }
 
     public byte getBlockID(){
@@ -100,12 +101,9 @@ public class Tile implements PosTrait, TargetTrait{
         return -1;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends TileEntity> T entity(){
         return (T) entity;
-    }
-
-    public int id(){
-        return x + y * world.width();
     }
 
     public float worldx(){
@@ -232,7 +230,7 @@ public class Tile implements PosTrait, TargetTrait{
     public boolean solid(){
         Block block = block();
         Block floor = floor();
-        return block.solid || getCliffs() != 0 || (floor.solid && (block == Blocks.air || block.solidifes)) || block.isSolidFor(this)
+        return block.solid || (floor.solid && (block == Blocks.air || block.solidifes)) || block.isSolidFor(this)
         || (isLinked() && getLinked().block().isSolidFor(getLinked()));
     }
 
@@ -246,17 +244,17 @@ public class Tile implements PosTrait, TargetTrait{
     }
 
     public boolean isEnemyCheat(){
-        return getTeam() == waveTeam && !state.mode.isPvp;
+        return getTeam() == waveTeam && !state.rules.pvp;
     }
 
     public boolean isLinked(){
         return link != 0;
     }
 
-    /** Sets this to a linked tile, which sets the block to a blockpart. dx and dy can only be -8-7. */
+    /** Sets this to a linked tile, which sets the block to a part. dx and dy can only be -8-7. */
     public void setLinked(byte dx, byte dy){
-        setBlock(Blocks.blockpart);
-        link = Bits.packByte((byte) (dx + 8), (byte) (dy + 8));
+        setBlock(Blocks.part);
+        link = Pack.byteByte((byte)(dx + 8), (byte)(dy + 8));
     }
 
     /**
@@ -307,14 +305,14 @@ public class Tile implements PosTrait, TargetTrait{
         if(link == 0){
             return null;
         }else{
-            byte dx = Bits.getLeftByte(link);
-            byte dy = Bits.getRightByte(link);
+            byte dx = Pack.leftByte(link);
+            byte dy = Pack.rightByte(link);
             return world.tile(x - (dx - 8), y - (dy - 8));
         }
     }
 
     public void allNearby(Consumer<Tile> cons){
-        for(GridPoint2 point : Edges.getEdges(block().size)){
+        for(Point2 point : Edges.getEdges(block().size)){
             Tile tile = world.tile(x + point.x, y + point.y);
             if(tile != null){
                 cons.accept(tile.target());
@@ -323,7 +321,7 @@ public class Tile implements PosTrait, TargetTrait{
     }
 
     public void allInside(Consumer<Tile> cons){
-        for(GridPoint2 point : Edges.getInsideEdges(block().size)){
+        for(Point2 point : Edges.getInsideEdges(block().size)){
             Tile tile = world.tile(x + point.x, y + point.y);
             if(tile != null){
                 cons.accept(tile);
@@ -336,7 +334,7 @@ public class Tile implements PosTrait, TargetTrait{
         return link == null ? this : link;
     }
 
-    public Tile getNearby(GridPoint2 relative){
+    public Tile getNearby(Point2 relative){
         return world.tile(x + relative.x, y + relative.y);
     }
 
@@ -352,14 +350,17 @@ public class Tile implements PosTrait, TargetTrait{
         return null;
     }
 
+    public boolean interactable(Team team){
+        return getTeam() == Team.none || team == getTeam();
+    }
+
     public void updateOcclusion(){
         cost = 1;
-        cliffs = 0;
         boolean occluded = false;
 
         //check for occlusion
         for(int i = 0; i < 8; i++){
-            GridPoint2 point = Geometry.d8[i];
+            Point2 point = Geometry.d8[i];
             Tile tile = world.tile(x + point.x, y + point.y);
             if(tile != null && tile.solid()){
                 occluded = true;
@@ -376,13 +377,16 @@ public class Tile implements PosTrait, TargetTrait{
                 cliffs |= (1 << (i * 2));
             }
         }
-
         if(occluded){
-            cost += 1;
+            cost += 2;
+        }
+
+        if(target().synthetic()){
+            cost += Mathf.clamp(target().block().health / 10f, 0, 20);
         }
 
         if(floor.isLiquid){
-            cost += 100f;
+            cost += 10;
         }
     }
 
@@ -404,7 +408,7 @@ public class Tile implements PosTrait, TargetTrait{
 
         if(block.hasEntity()){
             entity = block.newEntity().init(this, block.update);
-            entity.cons = new ConsumeModule();
+            entity.cons = new ConsumeModule(entity);
             if(block.hasItems) entity.items = new ItemModule();
             if(block.hasLiquids) entity.liquids = new LiquidModule();
             if(block.hasPower){
@@ -417,7 +421,7 @@ public class Tile implements PosTrait, TargetTrait{
             }
         }else if(!(block instanceof BlockPart) && !world.isGenerating()){
             //since the entity won't update proximity for us, update proximity for all nearby tiles manually
-            for(GridPoint2 p : Geometry.d4){
+            for(Point2 p : Geometry.d4){
                 Tile tile = world.tile(x + p.x, y + p.y);
                 if(tile != null){
                     tile = tile.target();
@@ -437,8 +441,8 @@ public class Tile implements PosTrait, TargetTrait{
     }
 
     @Override
-    public Vector2 getVelocity(){
-        return Vector2.Zero;
+    public Vector2 velocity(){
+        return Vector2.ZERO;
     }
 
     @Override
@@ -448,6 +452,7 @@ public class Tile implements PosTrait, TargetTrait{
 
     @Override
     public void setX(float x){
+        throw new IllegalArgumentException("Tile position cannot change.");
     }
 
     @Override
@@ -457,6 +462,7 @@ public class Tile implements PosTrait, TargetTrait{
 
     @Override
     public void setY(float y){
+        throw new IllegalArgumentException("Tile position cannot change.");
     }
 
     @Override
@@ -464,7 +470,7 @@ public class Tile implements PosTrait, TargetTrait{
         Block block = block();
         Block floor = floor();
 
-        return floor.name() + ":" + block.name() + "[" + x + "," + y + "] " + "entity=" + (entity == null ? "null" : (entity.getClass())) +
-        (link != 0 ? " link=[" + (Bits.getLeftByte(link) - 8) + ", " + (Bits.getRightByte(link) - 8) + "]" : "");
+        return floor.name + ":" + block.name + "[" + x + "," + y + "] " + "entity=" + (entity == null ? "null" : (entity.getClass())) +
+        (link != 0 ? " link=[" + (Pack.leftByte(link) - 8) + ", " + (Pack.rightByte(link) - 8) + "]" : "");
     }
 }

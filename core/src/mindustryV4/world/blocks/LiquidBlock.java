@@ -1,11 +1,12 @@
 package mindustryV4.world.blocks;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.g2d.TextureRegion;
 import mindustryV4.world.Block;
 import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockGroup;
 import mindustryV4.world.modules.LiquidModule;
-import ucore.graphics.Draw;
+import io.anuke.arc.graphics.g2d.Draw;
 
 public class LiquidBlock extends Block{
     protected TextureRegion liquidRegion, bottomRegion, topRegion;
@@ -23,14 +24,14 @@ public class LiquidBlock extends Block{
     public void load(){
         super.load();
 
-        liquidRegion = Draw.region(name + "-liquid");
-        topRegion = Draw.region(name + "-top");
-        bottomRegion = Draw.region(name + "-bottom");
+        liquidRegion = Core.atlas.find(name + "-liquid");
+        topRegion = Core.atlas.find(name + "-top");
+        bottomRegion = Core.atlas.find(name + "-bottom");
     }
 
     @Override
-    public TextureRegion[] getIcon(){
-        return new TextureRegion[]{Draw.region(name() + "-bottom"), Draw.region(name() + "-top")};
+    public TextureRegion[] generateIcons(){
+        return new TextureRegion[]{Core.atlas.find(name + "-bottom"), Core.atlas.find(name + "-top")};
     }
 
     @Override

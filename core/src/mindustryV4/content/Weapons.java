@@ -1,14 +1,11 @@
 package mindustryV4.content;
 
-import mindustryV4.content.fx.Fx;
-import mindustryV4.content.fx.ShootFx;
 import mindustryV4.game.ContentList;
-import mindustryV4.type.ContentType;
 import mindustryV4.type.Weapon;
 
 public class Weapons implements ContentList{
     public static Weapon blaster, blasterSmall, glaiveBlaster, droneBlaster, healBlaster, healBlasterDrone, chainBlaster, shockgun,
-    sapper, swarmer, bomber, bomberTrident, flakgun, flamethrower, missiles, artillery, laserBurster, healBlasterDrone2;
+    swarmer, bomber, bomberTrident, /*flakgun, */flamethrower, missiles, artillery, laserBurster, healBlasterDrone2;
 
     @Override
     public void load(){
@@ -17,24 +14,24 @@ public class Weapons implements ContentList{
             length = 1.5f;
             reload = 14f;
             roundrobin = true;
-            ejectEffect = ShootFx.shellEjectSmall;
-            ammo = AmmoTypes.bulletMech;
+            ejectEffect = Fx.shellEjectSmall;
+            bullet = Bullets.standardMechSmall;
         }};
 
         blasterSmall = new Weapon("blaster"){{
             length = 1.5f;
-            reload = 15f;
+            reload = 20f;
             roundrobin = true;
-            ejectEffect = ShootFx.shellEjectSmall;
-            ammo = AmmoTypes.bulletCopper;
+            ejectEffect = Fx.shellEjectSmall;
+            bullet = Bullets.standardCopper;
         }};
 
         glaiveBlaster = new Weapon("bomber"){{
             length = 1.5f;
-            reload = 10f;
+            reload = 13f;
             roundrobin = true;
-            ejectEffect = ShootFx.shellEjectSmall;
-            ammo = AmmoTypes.bulletGlaive;
+            ejectEffect = Fx.shellEjectSmall;
+            bullet = Bullets.standardGlaive;
         }};
 
         droneBlaster = new Weapon("blaster"){{
@@ -42,8 +39,8 @@ public class Weapons implements ContentList{
             reload = 25f;
             width = 1f;
             roundrobin = true;
-            ejectEffect = ShootFx.shellEjectSmall;
-            ammo = AmmoTypes.bulletCopper;
+            ejectEffect = Fx.shellEjectSmall;
+            bullet = Bullets.standardCopper;
         }};
 
         healBlaster = new Weapon("heal-blaster"){{
@@ -52,19 +49,19 @@ public class Weapons implements ContentList{
             roundrobin = false;
             ejectEffect = Fx.none;
             recoil = 2f;
-            ammo = AmmoTypes.healBlaster;
+            bullet = Bullets.healBullet;
         }};
 
         missiles = new Weapon("missiles"){{
             length = 1.5f;
-            reload = 60f;
+            reload = 70f;
             shots = 4;
             inaccuracy = 2f;
             roundrobin = true;
             ejectEffect = Fx.none;
             velocityRnd = 0.2f;
             spacing = 1f;
-            ammo = AmmoTypes.weaponMissile;
+            bullet = Bullets.missileExplosive;
         }};
 
         swarmer = new Weapon("swarmer"){{
@@ -77,15 +74,15 @@ public class Weapons implements ContentList{
             roundrobin = true;
             ejectEffect = Fx.none;
             shake = 3f;
-            ammo = AmmoTypes.weaponMissileSwarm;
+            bullet = Bullets.missileSwarm;
         }};
 
         chainBlaster = new Weapon("chain-blaster"){{
             length = 1.5f;
             reload = 28f;
             roundrobin = true;
-            ejectEffect = ShootFx.shellEjectSmall;
-            ammo = AmmoTypes.bulletCopper;
+            ejectEffect = Fx.shellEjectSmall;
+            bullet = Bullets.standardCopper;
         }};
 
         shockgun = new Weapon("shockgun"){{
@@ -96,10 +93,10 @@ public class Weapons implements ContentList{
             inaccuracy = 0f;
             velocityRnd = 0.2f;
             ejectEffect = Fx.none;
-            ammo = AmmoTypes.shock;
+            bullet = Bullets.arc;
         }};
 
-        flakgun = new Weapon("flakgun"){{
+        /*flakgun = new Weapon("flakgun"){{
             length = 1f;
             reload = 70f;
             roundrobin = true;
@@ -107,9 +104,9 @@ public class Weapons implements ContentList{
             inaccuracy = 3f;
             recoil = 3f;
             velocityRnd = 0.1f;
-            ejectEffect = ShootFx.shellEjectMedium;
-            ammo = AmmoTypes.shellCarbide;
-        }};
+            ejectEffect = Fx.shellEjectMedium;
+            bullet = Bullets.shellCarbide;
+        }};*/
 
         flamethrower = new Weapon("flamethrower"){{
             length = 1f;
@@ -117,7 +114,7 @@ public class Weapons implements ContentList{
             roundrobin = true;
             recoil = 1f;
             ejectEffect = Fx.none;
-            ammo = AmmoTypes.flamerThermite;
+            bullet = Bullets.basicFlame;
         }};
 
         artillery = new Weapon("artillery"){{
@@ -126,17 +123,17 @@ public class Weapons implements ContentList{
             roundrobin = true;
             recoil = 5f;
             shake = 2f;
-            ejectEffect = ShootFx.shellEjectMedium;
-            ammo = AmmoTypes.unitArtillery;
+            ejectEffect = Fx.shellEjectMedium;
+            bullet = Bullets.artilleryUnit;
         }};
 
-        sapper = new Weapon("sapper"){{
+        /*sapper = new Weapon("sapper"){{
             length = 1.5f;
             reload = 12f;
             roundrobin = true;
-            ejectEffect = ShootFx.shellEjectSmall;
-            ammo = AmmoTypes.bulletDense;
-        }};
+            ejectEffect = Fx.shellEjectSmall;
+            bullet = Bullets.standardDense;
+        }};*/
 
         bomber = new Weapon("bomber"){{
             length = 0f;
@@ -146,19 +143,19 @@ public class Weapons implements ContentList{
             ejectEffect = Fx.none;
             velocityRnd = 1f;
             inaccuracy = 40f;
-            ammo = AmmoTypes.bombExplosive;
+            bullet = Bullets.bombExplosive;
         }};
 
         bomberTrident = new Weapon("bomber"){{
             length = 0f;
             width = 2f;
-            reload = 9f;
+            reload = 8f;
             shots = 2;
             roundrobin = true;
             ejectEffect = Fx.none;
             velocityRnd = 1f;
             inaccuracy = 40f;
-            ammo = AmmoTypes.bombExplosive;
+            bullet = Bullets.bombExplosive;
         }};
 
         laserBurster = new Weapon("bomber"){{
@@ -167,7 +164,7 @@ public class Weapons implements ContentList{
             width = 0f;
             roundrobin = true;
             ejectEffect = Fx.none;
-            ammo = AmmoTypes.lancerLaser;
+            bullet = Bullets.lancerLaser;
         }};
 
         healBlasterDrone = new Weapon("heal-blaster"){{
@@ -177,7 +174,7 @@ public class Weapons implements ContentList{
             roundrobin = true;
             ejectEffect = Fx.none;
             recoil = 2f;
-            ammo = AmmoTypes.healBlaster;
+            bullet = Bullets.healBullet;
         }};
 
         healBlasterDrone2 = new Weapon("heal-blaster"){{
@@ -187,12 +184,7 @@ public class Weapons implements ContentList{
             roundrobin = true;
             ejectEffect = Fx.none;
             recoil = 2f;
-            ammo = AmmoTypes.healBlaster;
+            bullet = Bullets.healBullet;
         }};
-    }
-
-    @Override
-    public ContentType type(){
-        return ContentType.weapon;
     }
 }

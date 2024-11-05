@@ -1,12 +1,11 @@
 package mindustryV4.entities.traits;
 
+import io.anuke.arc.util.Interval;
 import mindustryV4.type.Weapon;
-import ucore.entities.trait.VelocityTrait;
-import ucore.util.Timer;
 
-public interface ShooterTrait extends VelocityTrait, TeamTrait, InventoryTrait{
+public interface ShooterTrait extends VelocityTrait, TeamTrait{
 
-    Timer getTimer();
+    Interval getTimer();
 
     int getShootTimer(boolean left);
 

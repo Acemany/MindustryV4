@@ -1,12 +1,14 @@
 package mindustryV4.world.consumers;
 
-import mindustryV4.entities.TileEntity;
+import io.anuke.arc.scene.ui.layout.Table;
+import mindustryV4.entities.type.TileEntity;
 import mindustryV4.type.Liquid;
+import mindustryV4.ui.ReqImage;
 import mindustryV4.world.Block;
+import mindustryV4.world.Tile;
 import mindustryV4.world.meta.BlockStat;
 import mindustryV4.world.meta.BlockStats;
 import mindustryV4.world.meta.StatUnit;
-import ucore.scene.ui.layout.Table;
 
 public class ConsumeLiquid extends Consume{
     protected final float use;
@@ -26,8 +28,8 @@ public class ConsumeLiquid extends Consume{
     }
 
     @Override
-    public void buildTooltip(Table table){
-        table.addImage(liquid.getContentIcon()).size(8 * 3);
+    public void build(Tile tile, Table table){
+        table.add(new ReqImage(liquid.getContentIcon(), () -> valid(tile.block(), tile.entity))).size(8*4);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ConsumeLiquid extends Consume{
 
     @Override
     public void display(BlockStats stats){
-        if(!optional){
+        if(!boost){
             stats.add(BlockStat.liquidUse, use * 60f, StatUnit.liquidSecond);
             stats.add(BlockStat.inputLiquid, liquid);
         }else{

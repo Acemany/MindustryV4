@@ -1,11 +1,11 @@
 package mindustryV4.world.meta.values;
 
-import com.badlogic.gdx.utils.Array;
+import io.anuke.arc.collection.Array;
+import io.anuke.arc.function.Predicate;
+import io.anuke.arc.scene.ui.layout.Table;
 import mindustryV4.type.Item;
 import mindustryV4.ui.ItemDisplay;
 import mindustryV4.world.meta.StatValue;
-import ucore.function.Predicate;
-import ucore.scene.ui.layout.Table;
 
 import static mindustryV4.Vars.content;
 
@@ -18,11 +18,7 @@ public class ItemFilterValue implements StatValue{
 
     @Override
     public void display(Table table){
-        Array<Item> list = new Array<>();
-
-        for(Item item : content.items()){
-            if(filter.test(item)) list.add(item);
-        }
+        Array<Item> list = content.items().select(filter);
 
         for(int i = 0; i < list.size; i++){
             Item item = list.get(i);

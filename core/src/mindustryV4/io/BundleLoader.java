@@ -1,13 +1,12 @@
 package mindustryV4.io;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.I18NBundle;
+import io.anuke.arc.Core;
+import io.anuke.arc.files.FileHandle;
+import io.anuke.arc.util.I18NBundle;
 import mindustryV4.Vars;
-import ucore.core.Core;
-import ucore.core.Settings;
-import ucore.core.Timers;
-import ucore.util.Log;
+import io.anuke.arc.util.Time;
+import io.anuke.arc.util.Log;
+import mindustryV4.input.*;
 
 import java.util.Locale;
 
@@ -16,13 +15,14 @@ import static mindustryV4.Vars.headless;
 public class BundleLoader{
 
     public static void load(){
-        Settings.defaults("locale", "default");
-        Settings.load(Vars.appName, headless ? "mindustryV4.server" : "mindustryV4");
+        Core.settings.defaults("locale", "default");
+        Core.keybinds.setDefaults(Binding.values());
+        Core.settings.load();
         loadBundle();
     }
 
     private static Locale getLocale(){
-        String loc = Settings.getString("locale");
+        String loc = Core.settings.getString("locale");
         if(loc.equals("default")){
             return Locale.getDefault();
         }else{
@@ -39,28 +39,26 @@ public class BundleLoader{
     }
 
     private static void loadBundle(){
-        I18NBundle.setExceptionOnMissingKey(false);
         try{
             //try loading external bundle
-            FileHandle handle = Gdx.files.local("bundle");
+            FileHandle handle = Core.files.local("bundle");
 
             Locale locale = Locale.ENGLISH;
             Core.bundle = I18NBundle.createBundle(handle, locale);
 
             Log.info("NOTE: external translation bundle has been loaded.");
             if(!headless){
-                Timers.run(10f, () -> Vars.ui.showInfo("Note: You have successfully loaded an external translation bundle."));
+                Time.run(10f, () -> Vars.ui.showInfo("Note: You have successfully loaded an external translation bundle."));
             }
         }catch(Throwable e){
             //no external bundle found
 
-            FileHandle handle = Gdx.files.internal("bundles/bundle");
+            FileHandle handle = Core.files.internal("bundles/bundle");
 
             Locale locale = getLocale();
             Locale.setDefault(locale);
             if(!headless) Log.info("Got locale: {0}", locale);
             Core.bundle = I18NBundle.createBundle(handle, locale);
         }
-
     }
 }

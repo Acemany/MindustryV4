@@ -1,7 +1,6 @@
 package mindustryV4.maps.missions;
 
-import mindustryV4.game.GameMode;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.scene.ui.layout.Table;
 
 public class VictoryMission extends Mission{
     @Override
@@ -12,11 +11,6 @@ public class VictoryMission extends Mission{
     @Override
     public String displayString(){
         return "none";
-    }
-
-    @Override
-    public GameMode getMode(){
-        return GameMode.victory;
     }
 
     @Override

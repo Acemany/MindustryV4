@@ -1,33 +1,25 @@
 package mindustryV4.ui;
 
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import mindustryV4.graphics.Shaders;
-import ucore.core.Core;
-import ucore.core.Graphics;
-import ucore.graphics.Draw;
-import ucore.scene.Element;
-import ucore.scene.event.InputEvent;
-import ucore.scene.event.InputListener;
-import ucore.scene.ui.layout.Table;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.Texture.*;
+import io.anuke.arc.graphics.g2d.*;
+import io.anuke.arc.scene.Element;
+import io.anuke.arc.scene.event.InputEvent;
+import io.anuke.arc.scene.event.InputListener;
+import io.anuke.arc.scene.ui.layout.Container;
+import mindustryV4.graphics.*;
 
 import static mindustryV4.Vars.*;
 
-public class Minimap extends Table{
+public class Minimap extends Container<Element>{
 
     public Minimap(){
-        super("pane");
-
-        margin(5);
-
-        TextureRegion r = new TextureRegion();
-
-        Element elem = new Element(){
+        super(new Element(){
             @Override
             public void draw(){
                 if(renderer.minimap.getRegion() == null) return;
 
-                Draw.crect(renderer.minimap.getRegion(), x, y, width, height);
+                Draw.rect(renderer.minimap.getRegion(), x + width/2f, y + height/2f, width, height);
 
                 if(renderer.minimap.getTexture() != null){
                     renderer.minimap.drawEntities(x, y, width, height);
@@ -36,7 +28,7 @@ public class Minimap extends Table{
                 if(showFog){
                     renderer.fog.getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-                    r.setRegion(renderer.minimap.getRegion());
+                    TextureRegion r = renderer.minimap.getRegion();
                     float pad = renderer.fog.getPadding();
 
                     float px = r.getU() * world.width() + pad;
@@ -50,32 +42,35 @@ public class Minimap extends Table{
                     r.setU2(px2 / (world.width() + pad*2f));
                     r.setV2(1f - py2 / (world.height() + pad*2f));
 
-                    Graphics.shader(Shaders.fog);
-                    Draw.crect(r, x, y, width, height);
-                    Graphics.shader();
+                    Draw.shader(Shaders.fog);
+                    Draw.rect(r, x, y, width, height);
+                    Draw.shader();
 
                     renderer.fog.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
                 }
             }
-        };
+        });
 
-        addListener(new InputListener(){
-            public boolean scrolled(InputEvent event, float x, float y, int amount){
-                renderer.minimap.zoomBy(amount);
+        background("pane");
+        size(140f);
+        margin(5f);
+
+        addListener( new InputListener(){
+            @Override
+            public boolean scrolled(InputEvent event, float x, float y, float amountx, float amounty){
+                renderer.minimap.zoomBy(amounty);
                 return true;
             }
         });
 
-        elem.update(() -> {
+        update(() -> {
 
-            Element e = Core.scene.hit(Graphics.mouse().x, Graphics.mouse().y, true);
+            Element e = Core.scene.hit(Core.input.mouseX(), Core.input.mouseY(), true);
             if(e != null && e.isDescendantOf(this)){
                 Core.scene.setScrollFocus(this);
             }else if(Core.scene.getScrollFocus() == this){
                 Core.scene.setScrollFocus(null);
             }
         });
-
-        add(elem).size(140f, 140f);
     }
 }

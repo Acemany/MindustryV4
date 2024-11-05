@@ -1,18 +1,15 @@
 package mindustryV4.type;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.anuke.arc.Core;
+import io.anuke.arc.graphics.Color;
+import io.anuke.arc.graphics.g2d.TextureRegion;
+import io.anuke.arc.scene.ui.layout.Table;
 import mindustryV4.content.StatusEffects;
 import mindustryV4.game.UnlockableContent;
 import mindustryV4.ui.ContentDisplay;
-import ucore.graphics.Draw;
-import ucore.scene.ui.layout.Table;
-import ucore.util.Bundles;
 
 public class Liquid extends UnlockableContent{
     public final Color color;
-    public final String name;
-    public final String description;
 
     /**0-1, 0 is completely inflammable, anything above that may catch fire when exposed to heat, 0.5+ is very flammable.*/
     public float flammability;
@@ -28,15 +25,13 @@ public class Liquid extends UnlockableContent{
     public Color flameColor = Color.valueOf("ffb763");
     /**The associated status effect.*/
     public StatusEffect effect = StatusEffects.none;
-    /**Pump tier. Controls which pumps can use this liquid.*/
-    public int tier;
-    /**Displayed icon.*/
+    /**Displayed icon. TODO fix it by removing autogen, draw icons manually*/
     public TextureRegion iconRegion;
 
     public Liquid(String name, Color color){
-        this.name = name;
+        super(name);
         this.color = new Color(color);
-        this.description = Bundles.getOrNull("liquid." + name + ".description");
+        this.description = Core.bundle.getOrNull("liquid." + name + ".description");
     }
 
     public boolean canExtinguish(){
@@ -45,7 +40,7 @@ public class Liquid extends UnlockableContent{
 
     @Override
     public void load(){
-        iconRegion = Draw.region("liquid-icon-" + name);
+        iconRegion = Core.atlas.find("liquid-icon-" + name);
     }
 
     @Override
@@ -55,7 +50,7 @@ public class Liquid extends UnlockableContent{
 
     @Override
     public String localizedName(){
-        return Bundles.get("liquid." + this.name + ".name");
+        return Core.bundle.get("liquid." + this.name + ".name");
     }
 
     @Override
@@ -66,11 +61,6 @@ public class Liquid extends UnlockableContent{
     @Override
     public String toString(){
         return localizedName();
-    }
-
-    @Override
-    public String getContentName(){
-        return name;
     }
 
     @Override
