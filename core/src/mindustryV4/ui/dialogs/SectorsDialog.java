@@ -6,9 +6,13 @@ import io.anuke.arc.graphics.g2d.*;
 import io.anuke.arc.input.*;
 import io.anuke.arc.math.geom.Point2;
 import io.anuke.arc.math.geom.Vector2;
+import io.anuke.arc.scene.ui.*;
 import io.anuke.arc.util.Align;
 import mindustryV4.Vars;
+import mindustryV4.core.GameState.*;
+import mindustryV4.game.Saves.*;
 import mindustryV4.graphics.Pal;
+import mindustryV4.io.SaveIO.*;
 import mindustryV4.maps.Sector;
 import io.anuke.arc.scene.Element;
 import io.anuke.arc.scene.Group;
@@ -20,8 +24,9 @@ import io.anuke.arc.scene.ui.layout.Table;
 import io.anuke.arc.scene.ui.layout.Unit;
 import io.anuke.arc.math.geom.Geometry;
 import io.anuke.arc.math.geom.Rectangle;
+import mindustryV4.ui.*;
 
-import static mindustryV4.Vars.world;
+import static mindustryV4.Vars.*;
 
 public class SectorsDialog extends FloatingDialog{
     private static final float sectorSize = Unit.dp.scl(32*5);
@@ -63,15 +68,12 @@ public class SectorsDialog extends FloatingDialog{
         shown(this::setup);
     }
 
-    void setup(){
+    public void setup(){
         selected = null;
 
-        table.clear();
-        cont.clear();
-        buttons.clear();
-        buttons.bottom().margin(15);
+        titleTable.remove();
+        margin(0f).marginBottom(8);
 
-        addCloseButton();
         cont.add(view = new SectorView()).grow();
     }
 

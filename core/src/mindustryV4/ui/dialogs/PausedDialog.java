@@ -39,18 +39,14 @@ public class PausedDialog extends FloatingDialog{
 
             cont.addButton("$back", this::hide).colspan(2).width(dw*2 + 20f);
             cont.row();
-            if(world.isZone()){
-                cont.addButton("$techtree", ui.tech::show);
-            }else{
-                cont.addButton("$database", ui.database::show);
-            }
+            cont.addButton("$techtree", ui.tech::show);
+            //cont.addButton("$database", ui.database::show);
             cont.addButton("$settings", ui.settings::show);
 
-            if(!world.isZone()){
-                cont.row();
-                cont.addButton("$savegame", save::show);
-                cont.addButton("$loadgame", load::show).disabled(b -> Net.active());
-            }
+            cont.row();
+            cont.addButton("$savegame", save::show);
+            cont.addButton("$loadgame", load::show).disabled(b -> Net.active());
+
             cont.row();
 
             cont.addButton("$hostserver", ui.host::show).disabled(b -> Net.active()).colspan(2).width(dw*2 + 20f);
@@ -72,15 +68,11 @@ public class PausedDialog extends FloatingDialog{
             cont.addRowImageTextButton("$back", "icon-play-2", isize, this::hide);
             cont.addRowImageTextButton("$settings", "icon-tools", isize, ui.settings::show);
 
-            if(!world.isZone()){
-                cont.addRowImageTextButton("$save", "icon-save", isize, save::show);
+            cont.addRowImageTextButton("$save", "icon-save", isize, save::show);
 
-                cont.row();
+            cont.row();
 
-                cont.addRowImageTextButton("$load", "icon-load", isize, load::show).disabled(b -> Net.active());
-            }else{
-                cont.row();
-            }
+            cont.addRowImageTextButton("$load", "icon-load", isize, load::show).disabled(b -> Net.active());
 
             cont.addRowImageTextButton("$hostserver.mobile", "icon-host", isize, ui.host::show).disabled(b -> Net.active());
             cont.addRowImageTextButton("$quit", "icon-quit", isize, () -> {

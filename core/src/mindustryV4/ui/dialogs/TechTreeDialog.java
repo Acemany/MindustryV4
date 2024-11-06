@@ -45,7 +45,7 @@ public class TechTreeDialog extends FloatingDialog{
         cont.stack(new View(), items = new ItemsDisplay()).grow();
 
         shown(() -> checkNodes(root));
-        hidden(ui.deploy::setup);
+        hidden(ui.sectors::setup);
         addCloseButton();
 
         buttons.addImageTextButton("$database", "icon-database", 14*2, () -> {

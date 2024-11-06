@@ -26,7 +26,7 @@ public interface SelectionTrait{
         int i = 0;
 
         for(Item item : items){
-            if(!data.isUnlocked(item) && world.isZone()) continue;
+            if(!data.isUnlocked(item) && !world.getMap().custom) continue;
 
             ImageButton button = cont.addImageButton("white", "clear-toggle", 24, () -> control.input(0).frag.config.hideConfig()).group(group).get();
             button.changed(() -> consumer.accept(button.isChecked() ? item : null));

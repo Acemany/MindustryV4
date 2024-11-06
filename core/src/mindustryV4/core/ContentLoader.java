@@ -45,7 +45,6 @@ public class ContentLoader{
         new UnitTypes(),
         new Blocks(),
         new TechTree(),
-        //new Zones(),
 
         //these are not really content classes, but this makes initialization easier
         new ColorMapper(),
@@ -206,10 +205,6 @@ public class ContentLoader{
 
     public BulletType bullet(int id){
         return (BulletType) getByID(ContentType.bullet, id);
-    }
-
-    public Array<Zone> zones(){
-        return getBy(ContentType.zone);
     }
 
     /**

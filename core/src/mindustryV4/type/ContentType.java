@@ -11,6 +11,5 @@ public enum ContentType {
     unit,
     weather,
     effect,
-    zone,
     loadout
 }

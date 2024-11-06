@@ -6,7 +6,6 @@ import io.anuke.arc.collection.ObjectIntMap;
 import io.anuke.arc.math.Mathf;
 import mindustryV4.type.Item;
 import mindustryV4.type.ItemType;
-import mindustryV4.type.Zone;
 
 @Serialize
 public class Stats{
@@ -25,7 +24,7 @@ public class Stats{
     /**Friendly buildings destroyed.*/
     public int buildingsDestroyed;
 
-    public RankResult calculateRank(Zone zone, boolean launched){
+    /*public RankResult calculateRank(Zone zone, boolean launched){
         float score = 0;
 
         //each new launch period adds onto the rank 1.5 'points'
@@ -53,7 +52,7 @@ public class Stats{
         String sign = Math.abs((rankIndex + 0.5f) - score) < 0.2f || rank.name().contains("S") ? "" : (rankIndex + 0.5f) < score ? "-" : "+";
 
         return new RankResult(rank, sign);
-    }
+    }*/
 
     public static class RankResult{
         public final Rank rank;

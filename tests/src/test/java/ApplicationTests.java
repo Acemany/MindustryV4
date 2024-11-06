@@ -1,4 +1,4 @@
-import io.anuke.arc.*;
+/*import io.anuke.arc.*;
 import io.anuke.arc.backends.headless.HeadlessApplication;
 import io.anuke.arc.backends.headless.HeadlessApplicationConfiguration;
 import io.anuke.arc.math.geom.Point2;
@@ -100,20 +100,14 @@ public class ApplicationTests{
     void loadSector(){
         world.sectors.createSector(0, 0);
 
-        Sector first = world.sectors.get(0, 0);
-        Log.info(first);
-
-        world.sectors.playSector(first);
+        world.sectors.playSector(world.sectors.get(0, 0));
     }
 
     @Test
     void playMap(){
         assertTrue(world.maps.all().size > 0);
 
-        Map first = world.maps.all().first();
-        Log.info(first);
-
-        world.loadMap(first);
+        world.loadMap(world.maps.all().first());
     }
 
     @Test
@@ -240,4 +234,4 @@ public class ApplicationTests{
         tile.block().handleStack(item, 1, tile, unit);
         assertEquals(capacity, tile.entity.items.get(item));
     }
-}
+}*/

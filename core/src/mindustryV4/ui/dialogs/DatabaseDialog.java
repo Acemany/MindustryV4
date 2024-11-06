@@ -78,6 +78,6 @@ public class DatabaseDialog extends FloatingDialog{
     }
 
     boolean unlocked(UnlockableContent content){
-        return (!Vars.world.isZone() && !Vars.state.is(State.menu)) || content.unlocked();
+        return (Vars.world.getMap().custom && !Vars.state.is(State.menu)) || content.unlocked();
     }
 }

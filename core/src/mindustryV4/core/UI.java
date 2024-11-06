@@ -67,7 +67,6 @@ public class UI implements ApplicationListener{
     public DatabaseDialog database;
     public ContentInfoDialog content;
     public SectorsDialog sectors;
-    public DeployDialog deploy;
     public TechTreeDialog tech;
 
     public Cursor drillCursor, unloadCursor;
@@ -179,7 +178,6 @@ public class UI implements ApplicationListener{
         localplayers = new LocalPlayerDialog();
         content = new ContentInfoDialog();
         sectors = new SectorsDialog();
-        deploy = new DeployDialog();
         tech = new TechTreeDialog();
 
         Group group = Core.scene.root;

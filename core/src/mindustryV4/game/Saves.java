@@ -15,7 +15,6 @@ import mindustryV4.io.SaveIO.SaveException;
 import mindustryV4.io.SaveMeta;
 import mindustryV4.maps.Map;
 import mindustryV4.type.ContentType;
-import mindustryV4.type.Zone;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,6 +32,7 @@ public class Saves{
     private float time;
     private long totalPlaytime;
     private long lastTimestamp;
+
     public Saves(){
         Events.on(StateChangeEvent.class, event -> {
             if(event.to == State.menu){
@@ -67,14 +67,11 @@ public class Saves{
         SaveSlot current = this.current;
 
         if(current != null && !state.is(State.menu)
-            && !(state.isPaused() && scene.hasDialog())){
-            if(current != null && !state.is(State.menu)
-            && !(state.isPaused() && scene.hasDialog())){
-                if(lastTimestamp != 0){
-                    totalPlaytime += Time.timeSinceMillis(lastTimestamp);
-                }
-                lastTimestamp = Time.millis();
+        && !(state.isPaused() && scene.hasDialog())){
+            if(lastTimestamp != 0){
+                totalPlaytime += Time.timeSinceMillis(lastTimestamp);
             }
+            lastTimestamp = Time.millis();
         }
 
         if(!state.is(State.menu) && !state.gameOver && current != null && current.isAutosave()){
@@ -110,16 +107,6 @@ public class Saves{
         return saving;
     }
 
-    public void zoneSave(){
-        SaveSlot slot = new SaveSlot(-1);
-        slot.setName("zone");
-        saves.remove(s -> s.index == -1);
-        saves.add(slot);
-        saveMap.put(slot.index, slot);
-        slot.save();
-        saveSlots();
-    }
-
     public SaveSlot addSave(String name){
         SaveSlot slot = new SaveSlot(nextSlot);
         nextSlot++;
@@ -144,13 +131,8 @@ public class Saves{
         return slot;
     }
 
-        public SaveSlot getZoneSlot(){
-            SaveSlot slot = getByID(-1);
-            return slot == null || slot.getZone() == null ? null : slot;
-        }
-
-        public SaveSlot getByID(int id){
-        return saveMap.get(id);
+    public SaveSlot getByID(int id){
+    return saveMap.get(id);
     }
 
     public Array<SaveSlot> getSaveSlots(){
@@ -186,20 +168,22 @@ public class Saves{
 
         public void save(){
             long time = totalPlaytime;
-                long prev = totalPlaytime;
-                totalPlaytime = time;
+            long prev = totalPlaytime;
+            totalPlaytime = time;
 
-                SaveIO.saveToSlot(index);
-                meta = SaveIO.getData(index);
-                if(!state.is(State.menu)){
-                    current = this;
-                }
+            renderer.fog.writeFog();
 
-                totalPlaytime = prev;
+            SaveIO.saveToSlot(index);
+            meta = SaveIO.getData(index);
+            if(!state.is(State.menu)){
+                current = this;
+            }
+
+            totalPlaytime = prev;
         }
 
         public boolean isHidden(){
-            return getZone() != null;
+            return getMap() != null;
         }
 
         public String getPlayTime(){
@@ -224,10 +208,6 @@ public class Saves{
 
         public void setName(String name){            Core.settings.put("save-" + index + "-name", name);
             Core.settings.save();
-        }
-
-        public Zone getZone(){
-            return content.getByID(ContentType.zone, meta.rules.zone);
         }
 
         public int getBuild(){

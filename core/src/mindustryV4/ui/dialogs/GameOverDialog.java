@@ -55,7 +55,7 @@ public class GameOverDialog extends FloatingDialog{
                 cont.row();
                 cont.add(Core.bundle.format("stat.deconstructed", state.stats.buildingsDeconstructed));
                 cont.row();
-                if(world.isZone() && !state.stats.itemsDelivered.isEmpty()){
+                /*if(world.isZone() && !state.stats.itemsDelivered.isEmpty()){
                     cont.add("$stat.delivered");
                     cont.row();
                     for(Item item : content.items()){
@@ -73,23 +73,23 @@ public class GameOverDialog extends FloatingDialog{
                     RankResult result = state.stats.calculateRank(world.getZone(), state.launched);
                     cont.add(Core.bundle.format("stat.rank", result.rank + result.modifier));
                     cont.row();
-                }
+                }*/
             }).pad(12);
 
-            if(world.isZone()){
+            /*if(world.isZone()){
                 buttons.addButton("$continue", () -> {
                     hide();
                     state.set(State.menu);
                     logic.reset();
-                    ui.deploy.show();
+                    ui.sectors.show();
                 }).size(130f, 60f);
-            }else{
+            }else{*/
                 buttons.addButton("$menu", () -> {
                     hide();
                     state.set(State.menu);
                     logic.reset();
                 }).size(130f, 60f);
-            }
+            //}
         }
     }
 }

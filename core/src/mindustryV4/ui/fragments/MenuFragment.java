@@ -57,7 +57,7 @@ public class MenuFragment extends Fragment{
         container.defaults().size(size).pad(5).padTop(4f);
 
         MobileButton
-        play = new MobileButton("icon-play-2", isize, "$play", ui.deploy::show),
+        play = new MobileButton("icon-play-2", isize, "$play", ui.sectors::show),
         maps = new MobileButton("icon-map", isize, "$maps", ui.maps::show),
         custom = new MobileButton("icon-play-custom", isize, "$customgame", this::showCustomSelect),
         join = new MobileButton("icon-add", isize, "$joingame", ui.join::show),
@@ -107,7 +107,7 @@ public class MenuFragment extends Fragment{
             out.margin(16);
             out.defaults().size(w, 66f).padTop(5).padRight(5);
 
-            out.add(new MenuButton("icon-play-2", "$play", ui.deploy::show)).width(bw).colspan(2);
+            out.add(new MenuButton("icon-play-2", "$play", ui.sectors::show)).width(bw).colspan(2);
 
             out.row();
 

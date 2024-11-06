@@ -32,7 +32,7 @@ public class LaunchPad extends StorageBlock{
     public void update(Tile tile){
         TileEntity entity = tile.entity;
 
-        if(entity.cons.valid() && world.isZone()){
+        if(entity.cons.valid() && !world.getMap().custom){
             for(Item item : Vars.content.items()){
                 if(entity.items.get(item) >= itemCapacity && entity.timer.get(timerLaunch, launchTime)){
                     //TODO play animation of some sort

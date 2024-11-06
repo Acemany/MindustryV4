@@ -4,28 +4,9 @@ import io.anuke.arc.Events.Event;
 import mindustryV4.core.GameState.State;
 import mindustryV4.entities.type.*;
 import mindustryV4.entities.traits.BuilderTrait;
-import mindustryV4.type.Zone;
 import mindustryV4.world.Tile;
 
 public class EventType{
-
-    /**Called when a zone's requirements are met.*/
-    public static class ZoneCompleteEvent implements Event{
-        public final Zone zone;
-
-        public ZoneCompleteEvent(Zone zone){
-            this.zone = zone;
-        }
-    }
-
-    /**Called when a zone's requirements are met.*/
-    public static class ZoneConfigureCompleteEvent implements Event{
-        public final Zone zone;
-
-        public ZoneConfigureCompleteEvent(Zone zone){
-            this.zone = zone;
-        }
-    }
 
     /**Called when the game is first loaded.*/
     public static class GameLoadEvent implements Event{

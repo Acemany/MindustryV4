@@ -25,13 +25,7 @@ import static mindustryV4.Vars.*;
  */
 public class Logic implements ApplicationListener{
 
-    public Logic(){
-        Events.on(WaveEvent.class, event -> {
-            if(world.isZone()){
-                world.getZone().updateWave(state.wave);
-            }
-        });
-    }
+    public Logic(){}
 
     @Override
     public void init(){

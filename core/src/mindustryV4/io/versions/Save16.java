@@ -7,7 +7,6 @@ import mindustryV4.gen.Serialization;
 import mindustryV4.io.SaveFileVersion;
 import mindustryV4.maps.Map;
 import mindustryV4.type.ContentType;
-import mindustryV4.type.Zone;
 
 import java.io.*;
 
@@ -27,10 +26,6 @@ public class Save16 extends SaveFileVersion{
 
         //general state
         state.rules = Serialization.readRules(stream);
-        //load zone spawn patterns if applicable
-        if(content.getByID(ContentType.zone, state.rules.zone) != null){
-            state.rules.spawns = content.<Zone>getByID(ContentType.zone, state.rules.zone).rules.get().spawns;
-        }
         String mapname = stream.readUTF();
         Map map = world.maps.getByName(mapname);
         if(map == null) map = new Map(Strings.capitalize(mapname), 1, 1);

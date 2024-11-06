@@ -27,7 +27,6 @@ import mindustryV4.maps.generators.*;
 import mindustryV4.type.ContentType;
 import mindustryV4.type.Item;
 import mindustryV4.type.ItemStack;
-import mindustryV4.type.Zone;
 import mindustryV4.world.*;
 
 import static mindustryV4.Vars.*;
@@ -206,31 +205,6 @@ public class World implements ApplicationListener{
 
     public boolean isGenerating(){
         return generating;
-    }
-
-    public boolean isZone(){
-        return getZone() != null;
-    }
-
-    public Zone getZone(){
-        return content.getByID(ContentType.zone, state.rules.zone);
-    }
-
-    public void playZone(Zone zone){
-        ui.loadAnd(() -> {
-            logic.reset();
-            state.rules = zone.rules.get();
-            state.rules.zone = zone.id;
-            loadGenerator(zone.generator);
-            for(Tile core : state.teams.get(defaultTeam).cores){
-                for(ItemStack stack : zone.getStartingItems()){
-                    core.entity.items.add(stack.item, stack.amount);
-                }
-            }
-            state.set(State.playing);
-            control.saves.zoneSave();
-            logic.play();
-        });
     }
 
     public void loadGenerator(Generator generator){
