@@ -24,7 +24,6 @@ public class Sector{
     public int saveID = -1;
     /**Num of missions in this sector that have been completed so far.*/
     public int completedMissions;
-
     /**Display texture. Needs to be disposed.*/
     public transient TextureRegion texture;
     /**Missions of this sector-- what needs to be accomplished to unlock it.*/

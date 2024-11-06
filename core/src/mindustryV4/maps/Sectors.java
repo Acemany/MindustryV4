@@ -296,11 +296,7 @@ public class Sectors{
             }
 
             Core.app.post(() -> {
-                Log.info(pixmap);
-                Texture texture = new Texture(pixmap);
-                Log.info(texture);
-                sector.texture = new TextureRegion(texture);
-                Log.info(sector.texture);
+                sector.texture = new TextureRegion(new Texture(pixmap));
                 pixmap.dispose();
             });
 

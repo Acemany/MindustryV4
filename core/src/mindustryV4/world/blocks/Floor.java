@@ -129,6 +129,7 @@ public class Floor extends Block{
             if(eq(i)){
                 Point2 point = Geometry.d8[i];
                 Tile other = tile.getNearby(point);
+                if(other.floor().edges().length == 0 || edges().length == 0) continue;
 
                 TextureRegion region = edge(other.floor(), type(i), 2-(point.x + 1), 2-(point.y + 1));
                 Draw.rect(region, tile.worldx(), tile.worldy());
@@ -171,5 +172,4 @@ public class Floor extends Block{
     TextureRegion edge(Floor block, int type, int x, int y){
         return block.edges()[x + type*3][2-y];
     }
-
 }

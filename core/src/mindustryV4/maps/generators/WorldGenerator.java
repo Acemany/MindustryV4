@@ -13,8 +13,7 @@ import mindustryV4.maps.MapTileData.TileDataMarker;
 import mindustryV4.maps.Sector;
 import mindustryV4.maps.missions.Mission;
 import mindustryV4.type.Item;
-import mindustryV4.world.Block;
-import mindustryV4.world.Tile;
+import mindustryV4.world.*;
 import mindustryV4.world.blocks.Floor;
 import mindustryV4.world.blocks.OreBlock;
 import io.anuke.arc.util.noise.RidgedPerlin;
@@ -78,10 +77,8 @@ public class WorldGenerator{
         //find multiblocks
         IntArray multiblocks = new IntArray();
 
-        for(int x = 0; x < tiles.length; x++){
-            for(int y = 0; y < tiles[0].length; y++){
-                Tile tile = tiles[x][y];
-
+        for(Tile[] item : tiles){
+            for(Tile tile : item){
                 if(tile.block().isMultiblock()){
                     multiblocks.add(tile.pos());
                 }
@@ -92,8 +89,8 @@ public class WorldGenerator{
         for(int i = 0; i < multiblocks.size; i++){
             int pos = multiblocks.get(i);
 
-            int x = pos % tiles.length;
-            int y = pos / tiles.length;
+            int x = Pos.x(pos);
+            int y = Pos.y(pos);
 
             Block result = tiles[x][y].block();
             Team team = tiles[x][y].getTeam();
@@ -117,10 +114,8 @@ public class WorldGenerator{
         }
 
         //update cliffs, occlusion data
-        for(int x = 0; x < tiles.length; x++){
-            for(int y = 0; y < tiles[0].length; y++){
-                Tile tile = tiles[x][y];
-
+        for(Tile[] value : tiles){
+            for(Tile tile : value){
                 tile.updateOcclusion();
 
                 //fix things on cliffs that shouldn't be
@@ -277,10 +272,8 @@ public class WorldGenerator{
             }
         }
 
-        for(int x = 0; x < tiles.length; x++){
-            for(int y = 0; y < tiles[0].length; y++){
-                Tile tile = tiles[x][y];
-
+        for(Tile[] value : tiles){
+            for(Tile tile : value){
                 tile.updateOcclusion();
             }
         }
