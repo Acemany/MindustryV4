@@ -33,7 +33,7 @@ public class Blocks implements ContentList{
 
     //environment
     air, part, space, spawn, deepwater, water, tar, stone, craters, charr, sand, ice, snow,
-    holoStone, rocks, iceRocks, cliffs, pine, sporeCluster,
+    holoStone, rocks, iceRocks, cliffs, pine,
     iceSnow, sandWater, duneRocks, stainedRocks, stainedStone, stainedRocksRed, stainedStoneRed, stainedRocksYellow, stainedStoneYellow, stainedBoulder,
     metalFloor, metalFloorDamaged, metalFloor2, metalFloor3, metalFloor5, ignaRock, magmaRock, hotRock, snowrocks,
     lava, blackStone, dirt, grass, shrub, rock, iceRock, blackrock,
@@ -107,6 +107,13 @@ public class Blocks implements ContentList{
             new BuildBlock("build" + i);
         }
 
+        space = new Floor("space"){{
+            placeableOn = false;
+            variants = 0;
+            cacheLayer = CacheLayer.space;
+            solid = true;
+        }};
+
         deepwater = new Floor("deepwater"){{
             liquidColor = Color.valueOf("4d5ca4");
             speedMultiplier = 0.2f;
@@ -162,6 +169,9 @@ public class Blocks implements ContentList{
             cacheLayer = CacheLayer.water;
         }};
 
+        dirt = new Floor("dirt"){{
+        }};
+
         sand = new Floor("sand"){{
             itemDrop = Items.sand;
             hasOres = true;
@@ -210,10 +220,6 @@ public class Blocks implements ContentList{
         pine = new StaticWall("pine"){{
             //fillsTile = false;
             variants = 0;
-        }};
-
-        sporeCluster = new Rock("spore-cluster"){{
-            variants = 3;
         }};
 
         stainedRocks = new StaticWall("stained-rocks"){{
@@ -299,7 +305,6 @@ public class Blocks implements ContentList{
         stone = new Floor("stone"){{
             hasOres = true;
             itemDrop = Items.stone;
-            blendGroup = stone;
             playerUnmineable = true;
         }};
 
@@ -318,6 +323,14 @@ public class Blocks implements ContentList{
 
         rock = new Rock("rock"){{
             variants = 2;
+        }};
+
+        iceRock = new Rock("icerock"){{
+            variants = 2;
+        }};
+
+        blackrock = new Rock("blackrock"){{
+            variants = 1;
         }};
 
         //endregion
