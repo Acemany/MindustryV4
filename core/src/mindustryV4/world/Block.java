@@ -234,7 +234,6 @@ public class Block extends BlockStorage{
 
     /** Called when a unit that spawned at this tile is removed.*/
     public void unitRemoved(Tile tile, Unit unit){
-
     }
 
     /** Returns whether ot not this block can be place on the specified tile. */

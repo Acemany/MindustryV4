@@ -16,13 +16,9 @@ import mindustryV4.world.blocks.distribution.*;
 import mindustryV4.world.blocks.power.*;
 import mindustryV4.world.blocks.production.*;
 import mindustryV4.world.blocks.sandbox.*;
-import mindustryV4.world.blocks.storage.CoreBlock;
-import mindustryV4.world.blocks.storage.LaunchPad;
-import mindustryV4.world.blocks.storage.Unloader;
+import mindustryV4.world.blocks.storage.*;
 import mindustryV4.world.blocks.storage.Vault;
-import mindustryV4.world.blocks.units.MechPad;
-import mindustryV4.world.blocks.units.RepairPoint;
-import mindustryV4.world.blocks.units.UnitFactory;
+import mindustryV4.world.blocks.units.*;
 import mindustryV4.world.consumers.ConsumeItemFilter;
 import mindustryV4.world.consumers.ConsumeLiquidFilter;
 
@@ -32,14 +28,14 @@ public class Blocks implements ContentList{
     public static Block
 
     //environment
-    air, part, space, spawn, deepwater, water, tar, stone, craters, charr, sand, ice, snow,
+    air, part, space, spawn, deepwater, water, lava, tar, stone, craters, charr, sand, ice, snow,
     holoStone, rocks, iceRocks, cliffs, pine,
     iceSnow, sandWater, duneRocks, stainedRocks, stainedStone, stainedRocksRed, stainedStoneRed, stainedRocksYellow, stainedStoneYellow, stainedBoulder,
     metalFloor, metalFloorDamaged, metalFloor2, metalFloor3, metalFloor5, ignaRock, magmaRock, hotRock, snowrocks,
-    lava, blackStone, dirt, grass, shrub, rock, iceRock, blackrock,
+    blackStone, dirt, grass, shrub, rock, iceRock, blackrock,
 
     //crafting
-    smelter, siliconSmelter, plastaniumCompressor, phaseWeaver, surgeSmelter, pyratiteMixer, blastMixer, cryofluidMixer,
+    siliconSmelter, smelter, plastaniumCompressor, phaseWeaver, surgeSmelter, pyratiteMixer, blastMixer, cryofluidMixer,
     melter, separator, biomatterCompressor, pulverizer, incinerator,
 
     //sandbox
@@ -147,6 +143,18 @@ public class Blocks implements ContentList{
             liquidDrop = Liquids.oil;
             isLiquid = true;
             cacheLayer = CacheLayer.oil;
+        }};
+
+        stone = new Floor("stone"){{
+            hasOres = true;
+            itemDrop = Items.stone;
+            playerUnmineable = true;
+        }};
+
+        blackStone = new Floor("blackstone"){{
+            itemDrop = Items.stone;
+            playerUnmineable = true;
+            hasOres = true;
         }};
 
         craters = new Floor("craters"){{
@@ -300,18 +308,6 @@ public class Blocks implements ContentList{
             liquidDrop = Liquids.lava;
             isLiquid = true;
             cacheLayer = CacheLayer.lava;
-        }};
-
-        stone = new Floor("stone"){{
-            hasOres = true;
-            itemDrop = Items.stone;
-            playerUnmineable = true;
-        }};
-
-        blackStone = new Floor("blackstone"){{
-            itemDrop = Items.stone;
-            playerUnmineable = true;
-            hasOres = true;
         }};
 
         grass = new Floor("grass"){{

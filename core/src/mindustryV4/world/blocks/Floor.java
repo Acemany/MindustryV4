@@ -5,8 +5,8 @@ import io.anuke.arc.graphics.Color;
 import io.anuke.arc.graphics.g2d.Draw;
 import io.anuke.arc.graphics.g2d.TextureRegion;
 import io.anuke.arc.math.Mathf;
-import io.anuke.arc.math.geom.Geometry;
-import io.anuke.arc.math.geom.Point2;
+import io.anuke.arc.math.geom.*;
+import io.anuke.arc.function.*;
 import mindustryV4.content.Fx;
 import mindustryV4.content.StatusEffects;
 import mindustryV4.entities.Effects.Effect;
@@ -51,7 +51,7 @@ public class Floor extends Block{
     public boolean isLiquid;
     /** Heat of this block, 0 at baseline. Used for calculating output of thermal generators.*/
     public float heat = 0f;
-    /** if true, this block cannot be mined by players. useful for annoying things like sand. */
+    /** if true, this block cannot be mined by players. useful for annoying things like sand or stone. */
     public boolean playerUnmineable = false;
     /**Style of the edge stencil. Loaded by looking up "edge-stencil-{name}".*/
     public String edgeStyle = "smooth";
