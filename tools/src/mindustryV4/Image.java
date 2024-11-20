@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-class Image {
+class Image{
     private static ArrayList<Image> toDispose = new ArrayList<>();
 
     private BufferedImage image;
@@ -78,9 +78,9 @@ class Image {
         draw(region, (width() - region.getWidth())/2, (height() - region.getHeight())/2, flipx, flipy);
     }
 
-    void drawScaled(Image image){
+    /*void drawScaled(Image image){
         graphics.drawImage(image.image.getScaledInstance(width(), height(), java.awt.Image.SCALE_AREA_AVERAGING), 0, 0, width(), height(), null);
-    }
+    }*/
 
     /**Draws an image at the top left corner.*/
     void draw(Image image){
@@ -114,17 +114,10 @@ class Image {
 
     /** @param name Name of texture file name to create, without any extensions.*/
     void save(String name){
-        try {
+        try{
             ImageIO.write(image, "png", new File(name + ".png"));
         }catch (IOException e){
             throw new RuntimeException(e);
-        }
-    }
-
-    void save(String name, boolean antialias){
-        save(name);
-        if(!antialias){
-            new File(name + ".png").setLastModified(0);
         }
     }
 

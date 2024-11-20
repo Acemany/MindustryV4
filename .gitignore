@@ -11,7 +11,6 @@ logs/
 /desktop/gifexport/
 /core/lib/
 /core/assets-raw/sprites/generated/
-/core/assets-raw/sprites_out/
 /annotations/build/
 /annotations/out/
 /net/build/
@@ -150,5 +149,4 @@ gradle-app.setting
 .DS_Store
 Thumbs.db
 android/libs/
-/core/assets-raw/sprites_out
 config/

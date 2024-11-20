@@ -5,10 +5,7 @@ import io.anuke.arc.graphics.g2d.TextureRegion;
 import io.anuke.arc.math.Mathf;
 import io.anuke.arc.util.Log;
 import mindustryV4.ImagePacker.GenRegion;
-import mindustryV4.type.ContentType;
-import mindustryV4.type.Item;
-import mindustryV4.type.Mech;
-import mindustryV4.type.UnitType;
+import mindustryV4.type.*;
 import mindustryV4.world.Block;
 import mindustryV4.world.Block.Icon;
 import mindustryV4.world.blocks.Floor;
@@ -19,7 +16,7 @@ import java.nio.file.Files;
 
 import static mindustryV4.Vars.*;
 
-public class Generators {
+public class Generators{
 
     public static void generate(){
 
@@ -93,7 +90,7 @@ public class Generators {
                     for(Icon icon : Icon.values()){
                         if(icon.size == 0 || (icon.size == image.width() && icon.size == image.height())) continue;
                         Image scaled = new Image(icon.size, icon.size);
-                        scaled.drawScaled(image);
+                        scaled.draw(image);
                         scaled.save(block.name + "-icon-" + icon.name());
                     }
 
@@ -121,12 +118,13 @@ public class Generators {
 
         ImagePacker.generate("item-icons", () -> {
             for(Item item : content.items()){
+
                 Image base = ImagePacker.get("item-" + item.name);
                 for(Item.Icon icon : Item.Icon.values()){
                     if(icon.size == base.width()) continue;
                     Image image = new Image(icon.size, icon.size);
-                    image.drawScaled(base);
-                    image.save("item-" + item.name + "-" + icon.name(), false);
+                    image.draw(base);
+                    image.save("item-" + item.name + "-" + icon.name());
                 }
             }
         });
@@ -218,7 +216,7 @@ public class Generators {
                     for(Icon icon : Icon.values()){
                         if(icon.size == 0) continue;
                         Image scaled = new Image(icon.size, icon.size);
-                        scaled.drawScaled(image);
+                        scaled.draw(image);
                         scaled.save(block.name + "-icon-" + icon.name());
                     }
                 }
@@ -252,5 +250,4 @@ public class Generators {
             }
         });
     }
-
 }
