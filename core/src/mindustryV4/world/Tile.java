@@ -21,6 +21,7 @@ import mindustryV4.world.modules.PowerModule;
 
 import static mindustryV4.Vars.*;
 
+
 public class Tile implements Position, TargetTrait{
     /**
      * The coordinates of the core tile this is linked to, in the form of two bytes packed into one.
@@ -377,6 +378,7 @@ public class Tile implements Position, TargetTrait{
                 cliffs |= (1 << (i * 2));
             }
         }
+
         if(occluded){
             cost += 2;
         }

@@ -22,7 +22,7 @@ import java.util.Collections;
 import static mindustryV4.Vars.*;
 import static org.robovm.apple.foundation.NSPathUtilities.getDocumentsDirectory;
 
-public class IOSLauncher extends IOSApplication.Delegate {
+public class IOSLauncher extends IOSApplication.Delegate{
     private boolean forced;
 
     @Override

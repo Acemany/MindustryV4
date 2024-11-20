@@ -30,7 +30,7 @@ import java.util.*;
 public class Vars{
     /**main application name, capitalized*/
     public static final String appName = "Mindustry V4";
-    /**URL for telegram invite.*/
+    /**URL for telegram channel.*/
     public static final String telegramURL = "https://t.me/mindustryV4";
     /**URL for Github API for releases*/
     public static final String releasesURL = "https://api.github.com/repos/Acemany/MindustryV4Builds/releases";

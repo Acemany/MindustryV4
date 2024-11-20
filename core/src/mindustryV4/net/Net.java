@@ -49,7 +49,6 @@ public class Net{
     public static void showError(Throwable e){
 
         if(!headless){
-
             Throwable t = e;
             while(t.getCause() != null){
                 t = t.getCause();

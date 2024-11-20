@@ -302,7 +302,7 @@ public class Block extends BlockStorage{
 
     }
 
-    /** Returns whether or not a hand cursor should be shown over this block. */
+    /** Returns whether a hand cursor should be shown over this block. */
     public Cursor getCursor(Tile tile){
         return configurable ? SystemCursor.hand : SystemCursor.arrow;
     }
@@ -316,7 +316,7 @@ public class Block extends BlockStorage{
 
     /**
      * Called when another tile is tapped while this block is selected.
-     * Returns whether or not this block should be deselected.
+     * Returns whether this block should be deselected.
      */
     public boolean onConfigureTileTapped(Tile tile, Tile other){
         return tile != other;

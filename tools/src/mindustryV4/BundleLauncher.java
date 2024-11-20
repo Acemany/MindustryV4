@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class BundleLauncher {
+public class BundleLauncher{
 
     public static void main(String[] args) throws Exception{
         File file = new File("bundle.properties");
@@ -24,7 +24,7 @@ public class BundleLauncher {
         Array<String> removals = new Array<>();
 
         Files.walk(Paths.get("")).forEach(child -> {
-            try {
+            try{
                 if (child.getFileName().toString().equals("bundle.properties") || Files.isDirectory(child) || child.toString().contains("output")) return;
 
                 Log.info("Parsing bundle: {0}", child);

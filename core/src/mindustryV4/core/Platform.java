@@ -11,7 +11,7 @@ import java.util.Random;
 
 import static mindustryV4.Vars.mobile;
 
-public abstract class Platform {
+public abstract class Platform{
     /**Each separate game platform should set this instance to their own implementation.*/
     public static Platform instance = new Platform() {};
 

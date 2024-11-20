@@ -97,7 +97,7 @@ public class SaveIO{
         write(new DeflaterOutputStream(file.write(false)){
             byte[] tmp = {0};
 
-            public void write(int var1) throws IOException {
+            public void write(int var1) throws IOException{
                 tmp[0] = (byte)(var1 & 255);
                 this.write(tmp, 0, 1);
             }

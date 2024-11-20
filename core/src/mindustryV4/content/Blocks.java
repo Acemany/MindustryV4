@@ -80,8 +80,8 @@ public class Blocks implements ContentList{
         //region environment
 
         air = new Floor("air"){{
-            alwaysReplace = true;
-        }
+                alwaysReplace = true;
+            }
 
             public void draw(Tile tile){}
             public void load(){}

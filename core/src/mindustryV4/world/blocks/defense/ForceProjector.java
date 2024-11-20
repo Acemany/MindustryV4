@@ -29,7 +29,7 @@ import java.io.IOException;
 
 import static mindustryV4.Vars.*;
 
-public class ForceProjector extends Block {
+public class ForceProjector extends Block{
     protected int timerUse = timers ++;
     protected float phaseUseTime = 350f;
 

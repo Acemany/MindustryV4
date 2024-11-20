@@ -1,7 +1,7 @@
 package mindustryV4.type;
 
 /**Do not rearrange, ever!*/
-public enum ContentType {
+public enum ContentType{
     item,
     block,
     mech,

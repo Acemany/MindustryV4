@@ -9,10 +9,8 @@ public enum CacheLayer{
     walls;
 
     public void begin(){
-
     }
 
     public void end(){
-
     }
 }

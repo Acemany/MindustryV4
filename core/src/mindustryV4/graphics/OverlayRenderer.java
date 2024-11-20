@@ -38,7 +38,6 @@ public class OverlayRenderer{
     }
 
     public void drawTop(){
-
         for(Player player : playerGroup.all()){
             if(Core.settings.getBool("indicators") && player != players[0] && player.getTeam() == players[0].getTeam()){
                 if(!rect.setSize(Core.camera.width * 0.9f, Core.camera.height * 0.9f)

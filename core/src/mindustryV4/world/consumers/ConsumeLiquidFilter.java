@@ -62,7 +62,7 @@ public class ConsumeLiquidFilter extends Consume{
         }else if(isFuel){
             stats.add(BlockStat.inputLiquidFuel, new LiquidFilterValue(filter));
             stats.add(BlockStat.liquidFuelUse, 60f * use, StatUnit.liquidSecond);
-        }else {
+        }else{
             stats.add(BlockStat.inputLiquid, new LiquidFilterValue(filter));
             stats.add(BlockStat.liquidUse, 60f * use, StatUnit.liquidSecond);
         }
