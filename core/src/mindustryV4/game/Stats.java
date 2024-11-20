@@ -52,11 +52,11 @@ public class Stats{
         String sign = Math.abs((rankIndex + 0.5f) - score) < 0.2f || rank.name().contains("S") ? "" : (rankIndex + 0.5f) < score ? "-" : "+";
 
         return new RankResult(rank, sign);
-    }*/
+    }
 
     public static class RankResult{
         public final Rank rank;
-        /**+ or -*/
+        /**+ or -* /
         public final String modifier;
 
         public RankResult(Rank rank, String modifier){
@@ -67,5 +67,5 @@ public class Stats{
 
     public enum Rank{
         F, D, C, B, A, S, SS
-    }
+    }*/
 }

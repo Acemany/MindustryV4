@@ -2,7 +2,7 @@ package mindustryV4.ui.dialogs;
 
 import io.anuke.arc.Core;
 import mindustryV4.core.GameState.State;
-import mindustryV4.game.Stats.RankResult;
+//import mindustryV4.game.Stats.RankResult;
 import mindustryV4.game.Team;
 import mindustryV4.type.Item;
 import mindustryV4.type.Item.Icon;
@@ -55,7 +55,8 @@ public class GameOverDialog extends FloatingDialog{
                 cont.row();
                 cont.add(Core.bundle.format("stat.deconstructed", state.stats.buildingsDeconstructed));
                 cont.row();
-                /*if(world.isZone() && !state.stats.itemsDelivered.isEmpty()){
+
+                if(world.isSector() && !state.stats.itemsDelivered.isEmpty()){
                     cont.add("$stat.delivered");
                     cont.row();
                     for(Item item : content.items()){
@@ -69,11 +70,11 @@ public class GameOverDialog extends FloatingDialog{
                     }
                 }
 
-                if(world.isZone()){
-                    RankResult result = state.stats.calculateRank(world.getZone(), state.launched);
-                    cont.add(Core.bundle.format("stat.rank", result.rank + result.modifier));
-                    cont.row();
-                }*/
+                //if(world.isSector()){
+                    //    RankResult result = state.stats.calculateRank(world.getZone(), state.launched);
+                    //    cont.add(Core.bundle.format("stat.rank", result.rank + result.modifier));
+                    //    cont.row();
+                // }
             }).pad(12);
 
             if(world.isSector()){
