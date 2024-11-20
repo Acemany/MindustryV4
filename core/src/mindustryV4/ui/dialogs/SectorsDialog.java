@@ -68,12 +68,15 @@ public class SectorsDialog extends FloatingDialog{
         shown(this::setup);
     }
 
-    public void setup(){
+    void setup(){
         selected = null;
 
-        titleTable.remove();
-        margin(0f).marginBottom(8);
+        table.clear();
+        cont.clear();
+        buttons.clear();
+        buttons.bottom().margin(15);
 
+        addCloseButton();
         cont.add(view = new SectorView()).grow();
     }
 
