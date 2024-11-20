@@ -35,7 +35,7 @@ public class UnitType extends UnlockableContent{
     public ObjectSet<Item> toMine = ObjectSet.with(Items.lead, Items.copper);
     public float buildPower = 0.3f, minePower = 0.7f;
     public Weapon weapon;
-    public float weaponOffsetY, engineOffset = 6f, engineSize = 2f;
+    public float weaponOffsetX, weaponOffsetY, engineOffset = 6f, engineSize = 2f;
     public ObjectSet<StatusEffect> immunities = new ObjectSet<>();
 
     public TextureRegion iconRegion, legRegion, baseRegion, region;

@@ -76,20 +76,20 @@ public class GameOverDialog extends FloatingDialog{
                 }*/
             }).pad(12);
 
-            /*if(world.isZone()){
+            if(world.isSector()){
                 buttons.addButton("$continue", () -> {
                     hide();
                     state.set(State.menu);
                     logic.reset();
                     ui.sectors.show();
                 }).size(130f, 60f);
-            }else{*/
+            }else{
                 buttons.addButton("$menu", () -> {
                     hide();
                     state.set(State.menu);
                     logic.reset();
                 }).size(130f, 60f);
-            //}
+            }
         }
     }
 }

@@ -64,6 +64,11 @@ public class World implements ApplicationListener{
         return invalidMap;
     }
 
+    /**Whether player playing on sector*/
+    public boolean isSector(){
+        return currentSector != null;
+    }
+
     public boolean solid(int x, int y){
         Tile tile = tile(x, y);
 

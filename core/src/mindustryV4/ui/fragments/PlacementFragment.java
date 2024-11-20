@@ -45,15 +45,15 @@ public class PlacementFragment extends Fragment{
 
     //TODO make this configurable
     final KeyCode[] inputGrid = {
-    KeyCode.NUM_1, KeyCode.NUM_2, KeyCode.NUM_3, KeyCode.NUM_4,
-    KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R,
-    KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F,
-    KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V
+        KeyCode.NUM_1, KeyCode.NUM_2, KeyCode.NUM_3, KeyCode.NUM_4,
+        KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R,
+        KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F,
+        KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V
     }, inputCatGrid = {
-    KeyCode.NUM_1, KeyCode.NUM_2,
-    KeyCode.Q, KeyCode.W,
-    KeyCode.A, KeyCode.S,
-    KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V
+        KeyCode.NUM_1, KeyCode.NUM_2,
+        KeyCode.Q, KeyCode.W,
+        KeyCode.A, KeyCode.S,
+        KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V
     };
 
     public PlacementFragment(){
@@ -304,7 +304,7 @@ public class PlacementFragment extends Fragment{
     }
 
     boolean unlocked(Block block){
-        return world.getMap().custom || data.isUnlocked(block);
+        return !world.isSector() || data.isUnlocked(block);
     }
 
     /** Returns the currently displayed block in the top box. */

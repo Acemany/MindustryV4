@@ -27,7 +27,7 @@ public class OverlayRenderer{
         for(Player player : players){
             InputHandler input = control.input(player.playerIndex);
 
-            if(world.getSector() != null){
+            if(world.isSector()){
                 world.getSector().currentMission().drawOverlay();
             }
 
