@@ -90,7 +90,7 @@ public class Generators{
                     for(Icon icon : Icon.values()){
                         if(icon.size == 0 || (icon.size == image.width() && icon.size == image.height())) continue;
                         Image scaled = new Image(icon.size, icon.size);
-                        scaled.draw(image);
+                        scaled.drawScaled(image);
                         scaled.save(block.name + "-icon-" + icon.name());
                     }
 
@@ -123,7 +123,7 @@ public class Generators{
                 for(Item.Icon icon : Item.Icon.values()){
                     if(icon.size == base.width()) continue;
                     Image image = new Image(icon.size, icon.size);
-                    image.draw(base);
+                    image.drawScaled(base);
                     image.save("item-" + item.name + "-" + icon.name());
                 }
             }
@@ -216,7 +216,7 @@ public class Generators{
                     for(Icon icon : Icon.values()){
                         if(icon.size == 0) continue;
                         Image scaled = new Image(icon.size, icon.size);
-                        scaled.draw(image);
+                        scaled.drawScaled(image);
                         scaled.save(block.name + "-icon-" + icon.name());
                     }
                 }
