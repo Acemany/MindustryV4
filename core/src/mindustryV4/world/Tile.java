@@ -357,6 +357,7 @@ public class Tile implements Position, TargetTrait{
 
     public void updateOcclusion(){
         cost = 1;
+        cliffs = 0;
         boolean occluded = false;
 
         //check for occlusion

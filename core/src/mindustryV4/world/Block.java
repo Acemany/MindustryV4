@@ -33,10 +33,7 @@ import mindustryV4.ui.ContentDisplay;
 import mindustryV4.world.consumers.Consume;
 import mindustryV4.world.consumers.ConsumeLiquid;
 import mindustryV4.world.consumers.ConsumePower;
-import mindustryV4.world.meta.BlockFlag;
-import mindustryV4.world.meta.BlockGroup;
-import mindustryV4.world.meta.BlockStat;
-import mindustryV4.world.meta.StatUnit;
+import mindustryV4.world.meta.*;
 
 import java.util.Arrays;
 
@@ -83,8 +80,14 @@ public class Block extends BlockStorage{
     public boolean instantTransfer = false;
     /** The block group. Unless {@link #canReplace} is overriden, blocks in the same group can replace each other. */
     public BlockGroup group = BlockGroup.none;
+    /** list of displayed block status bars. Defaults to health bar. */
+    public BlockBars bars = new BlockBars();
+    /** List of block stats. */
+    public BlockStats stats = new BlockStats();
     /** List of block flags. Used for AI indexing. */
     public EnumSet<BlockFlag> flags = EnumSet.of();
+    /** Name of shadow region to load. Null to indicate normal shadow. */
+    public String shadow = null;
     /** Whether the block can be tapped and selected to configure. */
     public boolean configurable;
     /** Whether this block consumes touchDown events when tapped. */
@@ -116,6 +119,8 @@ public class Block extends BlockStorage{
     protected TextureRegion[] generatedIcons;
     protected TextureRegion[] variantRegions;
     protected TextureRegion region;
+
+    //public TextureRegion shadowRegion;
 
     public Block(String name){
         super(name);
@@ -208,7 +213,7 @@ public class Block extends BlockStorage{
     }
 
     public void drawShadow(Tile tile){
-        draw(tile);
+        //Draw.rect(shadowRegion, tile.drawx(), tile.drawy());
     }
 
     public void drawTeam(Tile tile){
@@ -293,6 +298,7 @@ public class Block extends BlockStorage{
 
     @Override
     public void load(){
+        //shadowRegion = Core.atlas.find(shadow == null ? "shadow-" + size : shadow);
         region = Core.atlas.find(name);
     }
 
@@ -551,6 +557,21 @@ public class Block extends BlockStorage{
 
     public boolean isVisible(){
         return buildVisibility.get() && !isHidden();
+    }
+
+    public Array<Object> getDebugInfo(Tile tile){
+        return Array.with(
+                "block", tile.block().name,
+                "floor", tile.floor().name,
+                "x", tile.x,
+                "y", tile.y,
+                "entity.name", tile.entity.getClass(),
+                "entity.x", tile.entity.x,
+                "entity.y", tile.entity.y,
+                "entity.id", tile.entity.id,
+                "entity.items.total", hasItems ? tile.entity.items.total() : null,
+                "entity.graph", tile.entity.power != null && tile.entity.power.graph != null ? tile.entity.power.graph.getID() : null
+        );
     }
 
     @Override

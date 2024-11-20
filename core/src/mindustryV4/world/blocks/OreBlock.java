@@ -18,8 +18,9 @@ public class OreBlock extends Floor{
         this.itemDrop = ore;
         this.base = base;
         this.variants = 3;
+        this.blends = block -> (block instanceof OreBlock && ((OreBlock) block).base != base) || (!(block instanceof OreBlock) && block != base);
+        this.tileBlends = (tile, other) -> tile.getElevation() < other.getElevation();
         this.edge = base.name;
-        this.blendGroup = base.blendGroup;
         this.color.set(ore.color);
 
         oreBlockMap.getOr(ore, ObjectMap::new).put(base, this);
@@ -43,13 +44,8 @@ public class OreBlock extends Floor{
     }
 
     @Override
-    public boolean doEdge(Floor floor){
-        return floor != base && super.doEdge(floor);
-    }
-
-    @Override
-    protected boolean edgeOnto(Floor other){
-        return other != base;
+    public boolean blendOverride(Block block){
+        return block == base;
     }
 
     public static Floor get(Block floor, Item item){

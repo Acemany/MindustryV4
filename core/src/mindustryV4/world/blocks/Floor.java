@@ -60,8 +60,14 @@ public class Floor extends Block{
     /**Effect displayed when randomly updated.*/
     public Effect updateEffect = Fx.none;
 
-    protected TextureRegion[][] edges;
-    protected byte eq = 0;
+    protected TextureRegion edgeRegion;
+    protected TextureRegion[] edgeRegions;
+    protected TextureRegion[] cliffRegions;
+    protected TextureRegion[] variantRegions;
+    protected Vector2[] offsets;
+    protected Predicate<Floor> blends = block -> block != this && !block.blendOverride(this);
+    protected BiPredicate<Tile, Tile> tileBlends = (tile, other) -> false;
+    protected boolean blend = true;
 
     public Floor(String name){
         super(name);
@@ -71,6 +77,38 @@ public class Floor extends Block{
     @Override
     public void load(){
         super.load();
+
+        if(blend){
+            edgeRegion = Core.atlas.has(name + "edge") ? Core.atlas.find(name + "edge") : Core.atlas.find(edge + "edge");
+            edgeRegions = new TextureRegion[8];
+            offsets = new Vector2[8];
+
+            for(int i = 0; i < 8; i++){
+                int dx = Geometry.d8[i].x, dy = Geometry.d8[i].y;
+
+                TextureRegion result = new TextureRegion();
+
+                int sx = -dx * 8 + 2, sy = -dy * 8 + 2;
+                int x = Mathf.clamp(sx, 0, 12);
+                int y = Mathf.clamp(sy, 0, 12);
+                int w = Mathf.clamp(sx + 8, 0, 12) - x, h = Mathf.clamp(sy + 8, 0, 12) - y;
+
+                float rx = Mathf.clamp(dx * 8, 0, 8 - w);
+                float ry = Mathf.clamp(dy * 8, 0, 8 - h);
+
+                result.setTexture(edgeRegion.getTexture());
+                result.set(edgeRegion.getX() + x, edgeRegion.getY() + y + h, w, -h);
+
+                edgeRegions[i] = result;
+                offsets[i] = new Vector2(-4 + rx, -4 + ry);
+            }
+
+            cliffRegions = new TextureRegion[4];
+            cliffRegions[0] = Core.atlas.find(name + "-cliff-edge-2");
+            cliffRegions[1] = Core.atlas.find(name + "-cliff-edge");
+            cliffRegions[2] = Core.atlas.find(name + "-cliff-edge-1");
+            cliffRegions[3] = Core.atlas.find(name + "-cliff-side");
+        }
 
         //load variant regions for drawing
         if(variants > 0){
@@ -83,12 +121,6 @@ public class Floor extends Block{
             variantRegions = new TextureRegion[1];
             variantRegions[0] = Core.atlas.find(name);
         }
-
-        int size = (int)(tilesize / Draw.scl);
-        if(Core.atlas.has(name + "-edge")){
-            edges = Core.atlas.find(name + "-edge").split(size, size);
-        }
-        region = variantRegions[0];
     }
 
     @Override
@@ -111,65 +143,51 @@ public class Floor extends Block{
 
         Draw.rect(variantRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1))], tile.worldx(), tile.worldy());
 
+        if(tile.hasCliffs() && cliffRegions != null){
+            for(int i = 0; i < 4; i++){
+                if((tile.getCliffs() & (1 << i * 2)) != 0){
+                    Draw.colorl(i > 1 ? 0.6f : 1f);
+
+                    boolean above = (tile.getCliffs() & (1 << ((i + 1) % 4) * 2)) != 0, below = (tile.getCliffs() & (1 << (Mathf.mod(i - 1, 4)) * 2)) != 0;
+
+                    if(above && below){
+                        Draw.rect(cliffRegions[0], tile.worldx(), tile.worldy(), i * 90);
+                    }else if(above){
+                        Draw.rect(cliffRegions[1], tile.worldx(), tile.worldy(), i * 90);
+                    }else if(below){
+                        Draw.rect(cliffRegions[2], tile.worldx(), tile.worldy(), i * 90);
+                    }else{
+                        Draw.rect(cliffRegions[3], tile.worldx(), tile.worldy(), i * 90);
+                    }
+                }
+            }
+        }
+        Draw.reset();
+
         drawEdges(tile);
     }
 
+    public boolean blendOverride(Block block){
+        return false;
+    }
+
     protected void drawEdges(Tile tile){
-        eq = 0;
+        if(!blend || tile.getCliffs() > 0) return;
 
         for(int i = 0; i < 8; i++){
-            Point2 point = Geometry.d8[i];
-            Tile other = tile.getNearby(point);
-            if(other != null && doEdge(other.floor()) && other.floor().edges() != null){
-                eq |= (1 << i);
-            }
+            int dx = Geometry.d8[i].x, dy = Geometry.d8[i].y;
+
+            Tile other = tile.getNearby(dx, dy);
+
+            if(other == null) continue;
+
+            Floor floor = other.floor();
+
+            if(floor.edgeRegions == null || (floor.id <= this.id && !(tile.getElevation() != -1 && other.getElevation() > tile.getElevation())) || (!blends.test(floor) && !tileBlends.test(tile, other)) || (floor.cacheLayer.ordinal() > this.cacheLayer.ordinal())) continue;
+
+            TextureRegion region = floor.edgeRegions[i];
+
+            Draw.rect(region, tile.worldx() + floor.offsets[i].x, tile.worldy() + floor.offsets[i].y, region.getWidth(), region.getHeight());
         }
-
-        for(int i = 0; i < 8; i++){
-            if(eq(i)){
-                Point2 point = Geometry.d8[i];
-                Tile other = tile.getNearby(point);
-                if(other.floor().edges().length == 0 || edges().length == 0) continue;
-
-                TextureRegion region = edge(other.floor(), type(i), 2-(point.x + 1), 2-(point.y + 1));
-                Draw.rect(region, tile.worldx(), tile.worldy());
-            }
-        }
-    }
-
-    protected TextureRegion[][] edges(){
-        return ((Floor)blendGroup).edges;
-    }
-
-    protected boolean doEdge(Floor other){
-        return (other.blendGroup.id > blendGroup.id || edges() == null) && other.edgeOnto(this);
-    }
-
-    protected boolean edgeOnto(Floor other){
-        return true;
-    }
-
-    int type(int i){
-        if(!eq(i - 1) && !eq(i + 1)){
-            //case 0: touching
-            return 0;
-        }else if(eq(i - 1) && eq(i - 2) && eq(i + 1) && eq(i + 2)){
-            //case 2: surrounded
-            return 2;
-        }else if(eq(i - 1) && eq(i + 1)){
-            //case 1: flat
-            return 1;
-        }else{
-            //case 0 is rounded, so it's the safest choice, should work for most possibilities
-            return 0;
-        }
-    }
-
-    boolean eq(int i){
-        return (eq & (1 << Mathf.mod(i, 8))) != 0;
-    }
-
-    TextureRegion edge(Floor block, int type, int x, int y){
-        return block.edges()[x + type*3][2-y];
     }
 }
