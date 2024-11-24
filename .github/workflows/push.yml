@@ -1,4 +1,4 @@
-name: Tests
+name: Tests, BE
 
 on: [push, workflow_dispatch]
 
@@ -41,7 +41,7 @@ jobs:
     - name: Trigger BE build
       if: ${{ github.repository == 'acemany/MindustryV4' }}
       run: |
-        git clone --depth=1 --branch=master https://github.com/acemany/MindustryV4Builds ../MindustryV4Builds
+        git clone --depth=1 --branch=duo https://github.com/acemany/MindustryV4Builds ../MindustryV4Builds
         cd ../MindustryV4Builds
         BNUM=$(($GITHUB_RUN_NUMBER - 14))
         git tag ${BNUM}
