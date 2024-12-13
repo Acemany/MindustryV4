@@ -22,11 +22,11 @@ varying vec2 v_texCoord;
 void main() {
     ivec2 coords = ivec2((gl_FragCoord.xy - u_resolution/2.0)/u_scl);
 
-	//int roundx = 8;
-	//int roundy = roundx;
+	int roundx = 8;
+	int roundy = roundx;
 
-	//coords.x = (coords.x / roundx) * roundx;
-	//coords.y = (coords.y / roundy) * roundy;
+	coords.x = (coords.x / roundx) * roundx;
+	coords.y = (coords.y / roundy) * roundy;
 
 	float d = (abs(float(coords.x)) - abs(float(coords.y)));
 
