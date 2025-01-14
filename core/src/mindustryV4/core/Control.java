@@ -169,7 +169,7 @@ public class Control extends Module{
                     Net.host(port);
                     players[0].isAdmin = true;
                 }catch(IOException e){
-                    ui.showError(Bundles.format("text.server.error", Strings.parseException(e, false)));
+                    ui.showError(Bundles.format("server.error", Strings.parseException(e, false)));
                     threads.runDelay(() -> state.set(State.menu));
                 }
             }
@@ -314,7 +314,7 @@ public class Control extends Module{
 
             Timers.run(5f, () -> {
                 FloatingDialog dialog = new FloatingDialog("[accent]WARNING![]");
-                dialog.buttons().addButton("$text.ok", () -> {
+                dialog.buttons().addButton("$ok", () -> {
                     dialog.hide();
                     Settings.putBool("4.0-warning-2", true);
                     Settings.save();

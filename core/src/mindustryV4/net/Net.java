@@ -60,20 +60,20 @@ public class Net{
             String type = t.getClass().toString().toLowerCase();
 
             if(error.equals("mismatch")){
-                error = Bundles.get("text.error.mismatch");
+                error = Bundles.get("error.mismatch");
             }else if(error.contains("port out of range") || error.contains("invalid argument") || (error.contains("invalid") && error.contains("address"))){
-                error = Bundles.get("text.error.invalidaddress");
+                error = Bundles.get("error.invalidaddress");
             }else if(error.contains("connection refused") || error.contains("route to host") || type.contains("unknownhost")){
-                error = Bundles.get("text.error.unreachable");
+                error = Bundles.get("error.unreachable");
             }else if(type.contains("timeout")){
-                error = Bundles.get("text.error.timedout");
+                error = Bundles.get("error.timedout");
             }else if(error.equals("alreadyconnected")){
-                error = Bundles.get("text.error.alreadyconnected");
+                error = Bundles.get("error.alreadyconnected");
             }else if(!error.isEmpty()){
-                error = Bundles.get("text.error.any");
+                error = Bundles.get("error.any");
             }
 
-            ui.showText("", Bundles.format("text.connectfail", error));
+            ui.showText("", Bundles.format("connectfail", error));
             ui.loadfrag.hide();
 
             if(Net.client()){

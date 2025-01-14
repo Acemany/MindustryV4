@@ -43,7 +43,7 @@ public class BattleMission extends MissionWithStartingCore{
 
     @Override
     public String displayString(){
-        return Bundles.get("text.mission.battle");
+        return Bundles.get("mission.battle");
     }
 
     @Override

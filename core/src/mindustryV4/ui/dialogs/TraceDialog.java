@@ -3,7 +3,7 @@ package mindustryV4.ui.dialogs;
 public class TraceDialog extends FloatingDialog{
 
     public TraceDialog(){
-        super("$text.trace");
+        super("$trace");
 
         addCloseButton();
     }
@@ -17,15 +17,15 @@ public class TraceDialog extends FloatingDialog{
 
         /*
         table.defaults().left();
-        table.add(Bundles.format("text.trace.playername", player.name));
+        table.add(Bundles.format("trace.playername", player.name));
         table.row();
-        table.add(Bundles.format("text.trace.ip", info.ip));
+        table.add(Bundles.format("trace.ip", info.ip));
         table.row();
-        table.add(Bundles.format("text.trace.id", info.uuid));
+        table.add(Bundles.format("trace.id", info.uuid));
         table.row();
-        table.add(Bundles.format("text.trace.modclient", info.modclient));
+        table.add(Bundles.format("trace.modclient", info.modclient));
         table.row();
-        table.add(Bundles.format("text.trace.android", info.android));
+        table.add(Bundles.format("trace.android", info.android));
         table.row();
 
         table.add().pad(5);
@@ -33,19 +33,19 @@ public class TraceDialog extends FloatingDialog{
 
         //disabled until further notice
 /*
-        table.add(Bundles.format("text.trace.totalblocksbroken", info.totalBlocksBroken));
+        table.add(Bundles.format("trace.totalblocksbroken", info.totalBlocksBroken));
         table.row();
-        table.add(Bundles.format("text.trace.structureblocksbroken", info.structureBlocksBroken));
+        table.add(Bundles.format("trace.structureblocksbroken", info.structureBlocksBroken));
         table.row();
-        table.add(Bundles.format("text.trace.lastblockbroken", info.lastBlockBroken.formalName));
+        table.add(Bundles.format("trace.lastblockbroken", info.lastBlockBroken.formalName));
         table.row();
 
         table.add().pad(5);
         table.row();
 
-        table.add(Bundles.format("text.trace.totalblocksplaced", info.totalBlocksPlaced));
+        table.add(Bundles.format("trace.totalblocksplaced", info.totalBlocksPlaced));
         table.row();
-        table.add(Bundles.format("text.trace.lastblockplaced", info.lastBlockPlaced.formalName));
+        table.add(Bundles.format("trace.lastblockplaced", info.lastBlockPlaced.formalName));
         table.row();
 
         content().add(table);

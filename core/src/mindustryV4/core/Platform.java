@@ -48,7 +48,7 @@ public abstract class Platform {
 
             use[0] = to;
 
-            dialog.content().addButton("$text.ok", () -> {
+            dialog.content().addButton("$ok", () -> {
                 field.clearText();
                 field.appendText(to.getText());
                 field.change();

@@ -19,7 +19,7 @@ import static mindustryV4.Vars.control;
 public class UnlocksDialog extends FloatingDialog{
 
     public UnlocksDialog(){
-        super("$text.unlocks");
+        super("$unlocks");
 
         shouldPause = true;
         addCloseButton();

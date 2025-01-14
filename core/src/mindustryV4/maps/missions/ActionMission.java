@@ -27,6 +27,6 @@ public class ActionMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.get("text.loading");
+        return Bundles.get("loading");
     }
 }

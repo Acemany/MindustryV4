@@ -24,6 +24,6 @@ public class MechMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.format("text.mission.mech", mech.localizedName());
+        return Bundles.format("mission.mech", mech.localizedName());
     }
 }

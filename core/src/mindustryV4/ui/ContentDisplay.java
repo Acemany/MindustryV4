@@ -51,7 +51,7 @@ public class ContentDisplay{
 
             if(map.size == 0) continue;
 
-            table.add("$text.category." + cat.name()).color(Palette.accent).fillX();
+            table.add("$category." + cat.name()).color(Palette.accent).fillX();
             table.row();
 
             for(BlockStat stat : map.keys()){
@@ -88,13 +88,13 @@ public class ContentDisplay{
 
         table.left().defaults().fillX();
 
-        table.add(Bundles.format("text.item.explosiveness", (int) (item.explosiveness * 100 * 2f)));
+        table.add(Bundles.format("item.explosiveness", (int) (item.explosiveness * 100 * 2f)));
         table.row();
-        table.add(Bundles.format("text.item.flammability", (int) (item.flammability * 100 * 2f)));
+        table.add(Bundles.format("item.flammability", (int) (item.flammability * 100 * 2f)));
         table.row();
-        table.add(Bundles.format("text.item.radioactivity", (int) (item.radioactivity * 100 * 2f)));
+        table.add(Bundles.format("item.radioactivity", (int) (item.radioactivity * 100 * 2f)));
         table.row();
-        table.add(Bundles.format("text.item.fluxiness", (int) (item.fluxiness * 100 * 2f)));
+        table.add(Bundles.format("item.fluxiness", (int) (item.fluxiness * 100 * 2f)));
         table.row();
     }
 
@@ -121,15 +121,15 @@ public class ContentDisplay{
 
         table.left().defaults().fillX();
 
-        table.add(Bundles.format("text.item.explosiveness", (int) (liquid.explosiveness * 100 * 2f)));
+        table.add(Bundles.format("item.explosiveness", (int) (liquid.explosiveness * 100 * 2f)));
         table.row();
-        table.add(Bundles.format("text.item.flammability", (int) (liquid.flammability * 100 * 2f)));
+        table.add(Bundles.format("item.flammability", (int) (liquid.flammability * 100 * 2f)));
         table.row();
-        table.add(Bundles.format("text.liquid.heatcapacity", (int) (liquid.heatCapacity * 100)));
+        table.add(Bundles.format("liquid.heatcapacity", (int) (liquid.heatCapacity * 100)));
         table.row();
-        table.add(Bundles.format("text.liquid.temperature", (int) (liquid.temperature * 100)));
+        table.add(Bundles.format("liquid.temperature", (int) (liquid.temperature * 100)));
         table.row();
-        table.add(Bundles.format("text.liquid.viscosity", (int) (liquid.viscosity * 100)));
+        table.add(Bundles.format("liquid.viscosity", (int) (liquid.viscosity * 100)));
         table.row();
     }
 
@@ -156,22 +156,22 @@ public class ContentDisplay{
         table.left().defaults().fillX();
 
         if(Bundles.has("mech." + mech.name + ".weapon")){
-            table.add(Bundles.format("text.mech.weapon", Bundles.get("mech." + mech.name + ".weapon")));
+            table.add(Bundles.format("mech.weapon", Bundles.get("mech." + mech.name + ".weapon")));
             table.row();
         }
         if(Bundles.has("mech." + mech.name + ".ability")){
-            table.add(Bundles.format("text.mech.ability", Bundles.get("mech." + mech.name + ".ability")));
+            table.add(Bundles.format("mech.ability", Bundles.get("mech." + mech.name + ".ability")));
             table.row();
         }
-        table.add(Bundles.format("text.mech.armor", mech.armor));
+        table.add(Bundles.format("mech.armor", mech.armor));
         table.row();
-        table.add(Bundles.format("text.mech.itemcapacity", mech.itemCapacity));
+        table.add(Bundles.format("mech.itemcapacity", mech.itemCapacity));
         table.row();
 
         if(mech.drillPower > 0){
-            table.add(Bundles.format("text.mech.minespeed", (int) (mech.mineSpeed * 10)));
+            table.add(Bundles.format("mech.minespeed", (int) (mech.mineSpeed * 10)));
             table.row();
-            table.add(Bundles.format("text.mech.minepower", mech.drillPower));
+            table.add(Bundles.format("mech.minepower", mech.drillPower));
             table.row();
         }
     }
@@ -198,9 +198,9 @@ public class ContentDisplay{
 
         table.left().defaults().fillX();
 
-        table.add(Bundles.format("text.unit.health", unit.health));
+        table.add(Bundles.format("unit.health", unit.health));
         table.row();
-        table.add(Bundles.format("text.unit.speed", Strings.toFixed(unit.speed, 1)));
+        table.add(Bundles.format("unit.speed", Strings.toFixed(unit.speed, 1)));
         table.row();
         table.row();
     }

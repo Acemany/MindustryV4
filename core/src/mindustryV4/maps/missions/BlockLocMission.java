@@ -67,6 +67,6 @@ public class BlockLocMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.format("text.mission.block", block.formalName);
+        return Bundles.format("mission.block", block.formalName);
     }
 }

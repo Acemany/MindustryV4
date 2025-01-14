@@ -33,18 +33,18 @@ public class TelegramDialog extends Dialog{
                 i.addImage("icon-telegram").size(14 * 3);
             }).size(h).left();
 
-            t.add("$text.telegram").color(Palette.accent).growX().padLeft(10f);
+            t.add("$telegram").color(Palette.accent).growX().padLeft(10f);
         }).size(520f, h).pad(10f);
 
         buttons().defaults().size(170f, 50);
 
-        buttons().addButton("$text.back", this::hide);
-        buttons().addButton("$text.copylink", () -> {
+        buttons().addButton("$back", this::hide);
+        buttons().addButton("$copylink", () -> {
             Gdx.app.getClipboard().setContents(telegramURL);
         });
-        buttons().addButton("$text.openlink", () -> {
+        buttons().addButton("$openlink", () -> {
             if(!Gdx.net.openURI(telegramURL)){
-                ui.showError("$text.linkfail");
+                ui.showError("$linkfail");
                 Gdx.app.getClipboard().setContents(telegramURL);
             }
         });

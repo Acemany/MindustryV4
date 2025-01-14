@@ -43,7 +43,7 @@ public class Sectors{
     public void playSector(Sector sector){
         if(!headless && sector.hasSave() && SaveIO.breakingVersions.contains(sector.getSave().getBuild())){
             sector.getSave().delete();
-            ui.showInfo("$text.save.old");
+            ui.showInfo("$save.old");
         }
 
         if(!sector.hasSave()){
@@ -59,7 +59,7 @@ public class Sectors{
             world.setSector(sector);
             if(!sector.complete) sector.currentMission().onBegin();
         }else if(SaveIO.breakingVersions.contains(sector.getSave().getBuild())){
-            ui.showInfo("$text.save.old");
+            ui.showInfo("$save.old");
         }else try{
             sector.getSave().load();
             world.setSector(sector);
@@ -72,7 +72,7 @@ public class Sectors{
             playSector(sector);
 
             if(!headless){
-                threads.runGraphics(() -> ui.showError("$text.sector.corrupted"));
+                threads.runGraphics(() -> ui.showError("$sector.corrupted"));
             }
         }
     }

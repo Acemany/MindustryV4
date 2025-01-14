@@ -422,7 +422,7 @@ public class Renderer extends RendererModule{
         pixelSurface.setSize(pw, ph, false);
         Graphics.getEffectSurface().setSize(pw, ph, false);
 
-        ui.showInfoFade(Bundles.format("text.screenshot", file.toString()));
+        ui.showInfoFade(Bundles.format("screenshot", file.toString()));
     }
 
 }

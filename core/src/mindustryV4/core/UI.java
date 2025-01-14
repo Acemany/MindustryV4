@@ -197,7 +197,7 @@ public class UI extends SceneModule{
     }
 
     public void loadGraphics(Runnable call){
-        loadGraphics("$text.loading", call);
+        loadGraphics("$loading", call);
     }
 
     public void loadGraphics(String text, Runnable call){
@@ -209,7 +209,7 @@ public class UI extends SceneModule{
     }
 
     public void loadLogic(Runnable call){
-        loadLogic("$text.loading", call);
+        loadLogic("$loading", call);
     }
 
     public void loadLogic(String text, Runnable call){
@@ -229,11 +229,11 @@ public class UI extends SceneModule{
             field.setTextFieldFilter((f, c) -> field.getText().length() < 12 && filter.acceptChar(f, c));
             Platform.instance.addDialog(field);
             buttons().defaults().size(120, 54).pad(4);
-            buttons().addButton("$text.ok", () -> {
+            buttons().addButton("$ok", () -> {
                 confirmed.accept(field.getText());
                 hide();
             }).disabled(b -> field.getText().isEmpty());
-            buttons().addButton("$text.cancel", this::hide);
+            buttons().addButton("$cancel", this::hide);
         }}.show();
     }
 
@@ -253,7 +253,7 @@ public class UI extends SceneModule{
         new Dialog("", "dialog"){{
             getCell(content()).growX();
             content().margin(15).add(info).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", this::hide).size(90, 50).pad(4);
+            buttons().addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
@@ -261,7 +261,7 @@ public class UI extends SceneModule{
         new Dialog("", "dialog"){{
             getCell(content()).growX();
             content().margin(15).add(info).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", () -> {
+            buttons().addButton("$ok", () -> {
                 clicked.run();
                 hide();
             }).size(90, 50).pad(4);
@@ -269,16 +269,16 @@ public class UI extends SceneModule{
     }
 
     public void showError(String text){
-        new Dialog("$text.error.title", "dialog"){{
+        new Dialog("$error.title", "dialog"){{
             content().margin(15).add(text).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", this::hide).size(90, 50).pad(4);
+            buttons().addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
     public void showText(String title, String text){
         new Dialog(title, "dialog"){{
             content().margin(15).add(text).width(400f).wrap().get().setAlignment(Align.center, Align.center);
-            buttons().addButton("$text.ok", this::hide).size(90, 50).pad(4);
+            buttons().addButton("$ok", this::hide).size(90, 50).pad(4);
         }}.show();
     }
 
@@ -287,8 +287,8 @@ public class UI extends SceneModule{
         dialog.content().add(text).width(400f).wrap().pad(4f).get().setAlignment(Align.center, Align.center);
         dialog.buttons().defaults().size(200f, 54f).pad(2f);
         dialog.setFillParent(false);
-        dialog.buttons().addButton("$text.cancel", dialog::hide);
-        dialog.buttons().addButton("$text.ok", () -> {
+        dialog.buttons().addButton("$cancel", dialog::hide);
+        dialog.buttons().addButton("$ok", () -> {
             dialog.hide();
             confirmed.run();
         });

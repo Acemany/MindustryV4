@@ -122,7 +122,7 @@ public class PlacementFragment extends Fragment{
                                 header.left();
                                 header.add(new ImageStack(lastDisplay.getCompactIcon())).size(8*4);
                                 header.labelWrap(() ->
-                                    !control.unlocks.isUnlocked(Recipe.getByResult(lastDisplay)) ? Bundles.get("text.blocks.unknown") : lastDisplay.formalName)
+                                    !control.unlocks.isUnlocked(Recipe.getByResult(lastDisplay)) ? Bundles.get("blocks.unknown") : lastDisplay.formalName)
                                     .left().width(190f).padLeft(5);
                                 header.add().growX();
                                 if(control.unlocks.isUnlocked(Recipe.getByResult(lastDisplay))){

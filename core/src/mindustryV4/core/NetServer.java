@@ -435,7 +435,7 @@ public class NetServer extends Module{
 
         if(!headless && !closing && Net.server() && state.is(State.menu)){
             closing = true;
-            threads.runGraphics(() -> ui.loadfrag.show("$text.server.closing"));
+            threads.runGraphics(() -> ui.loadfrag.show("$server.closing"));
             Timers.runTask(5f, () -> {
                 Net.closeServer();
                 ui.loadfrag.hide();

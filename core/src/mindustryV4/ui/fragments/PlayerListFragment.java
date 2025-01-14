@@ -46,7 +46,7 @@ public class PlayerListFragment extends Fragment{
             });
 
             cont.table("button", pane -> {
-                pane.label(() -> Bundles.format(playerGroup.size() == 1 ? "text.players.single" : "text.players", playerGroup.size()));
+                pane.label(() -> Bundles.format(playerGroup.size() == 1 ? "players.single" : "players", playerGroup.size()));
                 pane.row();
                 pane.pane(content).grow().get().setScrollingDisabled(true, false);
                 pane.row();
@@ -54,9 +54,9 @@ public class PlayerListFragment extends Fragment{
                 pane.table(menu -> {
                     menu.defaults().growX().height(50f).fillY();
 
-                    menu.addButton("$text.server.bans", ui.bans::show).disabled(b -> Net.client());
-                    menu.addButton("$text.server.admins", ui.admins::show).disabled(b -> Net.client());
-                    menu.addButton("$text.close", this::toggle);
+                    menu.addButton("$server.bans", ui.bans::show).disabled(b -> Net.client());
+                    menu.addButton("$server.admins", ui.admins::show).disabled(b -> Net.client());
+                    menu.addButton("$close", this::toggle);
                 }).margin(0f).pad(10f).growX();
 
             }).touchable(Touchable.enabled).margin(14f);
@@ -110,9 +110,9 @@ public class PlayerListFragment extends Fragment{
                     t.defaults().size(bs);
 
                     t.addImageButton("icon-ban", "clear-partial", 14 * 2,
-                        () -> ui.showConfirm("$text.confirm", "$text.confirmban", () -> Call.onAdminRequest(player, AdminAction.ban)));
+                        () -> ui.showConfirm("$confirm", "$confirmban", () -> Call.onAdminRequest(player, AdminAction.ban)));
                     t.addImageButton("icon-cancel", "clear-partial", 16 * 2,
-                        () -> ui.showConfirm("$text.confirm", "$text.confirmkick", () -> Call.onAdminRequest(player, AdminAction.kick)));
+                        () -> ui.showConfirm("$confirm", "$confirmkick", () -> Call.onAdminRequest(player, AdminAction.kick)));
 
                     t.row();
 
@@ -122,9 +122,9 @@ public class PlayerListFragment extends Fragment{
                         String id = player.uuid;
 
                         if(netServer.admins.isAdmin(id, connection.address)){
-                            ui.showConfirm("$text.confirm", "$text.confirmunadmin", () -> netServer.admins.unAdminPlayer(id));
+                            ui.showConfirm("$confirm", "$confirmunadmin", () -> netServer.admins.unAdminPlayer(id));
                         }else{
-                            ui.showConfirm("$text.confirm", "$text.confirmadmin", () -> netServer.admins.adminPlayer(id, player.usid));
+                            ui.showConfirm("$confirm", "$confirmadmin", () -> netServer.admins.adminPlayer(id, player.usid));
                         }
                     })
                     .update(b -> b.setChecked(player.isAdmin))

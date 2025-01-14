@@ -7,7 +7,7 @@ import ucore.util.Bundles;
 public class MissionDialog extends FloatingDialog{
 
     public MissionDialog(){
-        super("$text.mission.complete");
+        super("$mission.complete");
         setFillParent(false);
     }
 
@@ -15,15 +15,15 @@ public class MissionDialog extends FloatingDialog{
         buttons().clear();
         content().clear();
 
-        buttons().addButton("$text.nextmission", () -> {
+        buttons().addButton("$nextmission", () -> {
             hide();
             Vars.ui.paused.runExitSave();
             Vars.ui.sectors.show();
         }).size(190f, 64f);
 
-        buttons().addButton("$text.continue", this::hide).size(190f, 64f);
+        buttons().addButton("$continue", this::hide).size(190f, 64f);
 
-        content().add(Bundles.format("text.mission.complete.body", sector.x, sector.y)).pad(10);
+        content().add(Bundles.format("mission.complete.body", sector.x, sector.y)).pad(10);
         show();
     }
 }

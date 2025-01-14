@@ -24,6 +24,6 @@ public class UnitMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.format("text.mission.unit", type.localizedName());
+        return Bundles.format("mission.unit", type.localizedName());
     }
 }

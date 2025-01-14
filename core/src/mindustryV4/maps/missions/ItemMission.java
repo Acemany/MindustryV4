@@ -32,11 +32,11 @@ public class ItemMission extends Mission{
     public String displayString(){
         TileEntity core = Vars.players[0].getClosestCore();
         if(core == null) return "imminent doom";
-        return Bundles.format("text.mission.resource", item.localizedName(), core.items.get(item), amount);
+        return Bundles.format("mission.resource", item.localizedName(), core.items.get(item), amount);
     }
 
     @Override
     public String menuDisplayString(){
-        return Bundles.format("text.mission.resource.menu", item.localizedName(), amount);
+        return Bundles.format("mission.resource.menu", item.localizedName(), amount);
     }
 }

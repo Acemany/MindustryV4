@@ -28,11 +28,11 @@ public class Packets{
 
         @Override
         public String toString(){
-            return Bundles.get("text.server.kicked." + name());
+            return Bundles.get("server.kicked." + name());
         }
 
         public String extraText(){
-            return Bundles.getOrNull("text.server.kicked." + name() + ".text");
+            return Bundles.getOrNull("server.kicked." + name() + ".text");
         }
     }
 

@@ -84,7 +84,7 @@ public class NetClient extends Module{
             reset();
 
             ui.loadfrag.hide();
-            ui.loadfrag.show("$text.connecting.data");
+            ui.loadfrag.show("$connecting.data");
 
             ui.loadfrag.setButton(() -> {
                 ui.loadfrag.hide();
@@ -102,7 +102,7 @@ public class NetClient extends Module{
             c.uuid = Platform.instance.getUUID();
 
             if(c.uuid == null){
-                ui.showError("$text.invalidid");
+                ui.showError("$invalidid");
                 ui.loadfrag.hide();
                 disconnectQuietly();
                 return;
@@ -118,7 +118,7 @@ public class NetClient extends Module{
 
             state.set(State.menu);
 
-            ui.showError("$text.disconnect");
+            ui.showError("$disconnect");
             connecting = false;
 
             //Platform.instance.updateRPC();
@@ -173,7 +173,7 @@ public class NetClient extends Module{
                 if(reason.extraText() != null){
                     ui.showText(reason.toString(), reason.extraText());
                 }else{
-                    ui.showText("$text.disconnect", reason.toString());
+                    ui.showText("$disconnect", reason.toString());
                 }
             }
             ui.loadfrag.hide();
@@ -194,7 +194,7 @@ public class NetClient extends Module{
         Net.setClientLoaded(false);
 
         threads.runGraphics(() -> {
-            ui.loadfrag.show("$text.connecting.data");
+            ui.loadfrag.show("$connecting.data");
 
             ui.loadfrag.setButton(() -> {
                 ui.loadfrag.hide();
@@ -352,7 +352,7 @@ public class NetClient extends Module{
                 Log.err("Failed to load data!");
                 ui.loadfrag.hide();
                 quiet = true;
-                ui.showError("$text.disconnect.data");
+                ui.showError("$disconnect.data");
                 Net.disconnect();
                 timeoutTime = 0f;
             }

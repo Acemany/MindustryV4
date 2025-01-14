@@ -163,10 +163,10 @@ public class AndroidLauncher extends PatchedAndroidApplication{
                                 SaveSlot slot = control.saves.importSave(file);
                                 ui.load.runLoadSave(slot);
                             }catch(IOException e){
-                                ui.showError(Bundles.format("text.save.import.fail", Strings.parseException(e, false)));
+                                ui.showError(Bundles.format("save.import.fail", Strings.parseException(e, false)));
                             }
                         }else{
-                            ui.showError("$text.save.import.invalid");
+                            ui.showError("$save.import.invalid");
                         }
                     }else if(map){ //open map
                         Gdx.app.postRunnable(() -> {

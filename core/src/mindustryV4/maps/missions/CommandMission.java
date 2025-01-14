@@ -24,6 +24,6 @@ public class CommandMission extends Mission{
 
     @Override
     public String displayString(){
-        return Bundles.format("text.mission.command", command.localized());
+        return Bundles.format("mission.command", command.localized());
     }
 }

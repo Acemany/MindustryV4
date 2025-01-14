@@ -23,9 +23,9 @@ public class CrashHandler{
     public static void handle(Throwable e){
         e.printStackTrace();
 
-        //don't create crash logs for me (anuke), as it's expected
+        //don't create crash logs for me (acemany(xarnz)), as it's expected
         //also don't create logs for custom builds
-        if(System.getProperty("user.name").equals("anuke") || Version.build == -1) return;
+        if(System.getProperty("user.name").equals("xarnz") || Version.build == -1) return;
 
         //if getting the crash report property failed, OR if it set to false... don't send it
         try{

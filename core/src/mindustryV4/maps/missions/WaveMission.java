@@ -61,14 +61,14 @@ public class WaveMission extends MissionWithStartingCore{
         return state.wave > target ?
             Bundles.format(
                 state.enemies() > 1 ?
-                "text.mission.wave.enemies" :
-                "text.mission.wave.enemy", target, target, state.enemies()) :
-            Bundles.format("text.mission.wave", state.wave, target, (int)(state.wavetime/60));
+                "mission.wave.enemies" :
+                "mission.wave.enemy", target, target, state.enemies()) :
+            Bundles.format("mission.wave", state.wave, target, (int)(state.wavetime/60));
     }
 
     @Override
     public String menuDisplayString(){
-        return Bundles.format("text.mission.wave.menu", target);
+        return Bundles.format("mission.wave.menu", target);
     }
 
     @Override

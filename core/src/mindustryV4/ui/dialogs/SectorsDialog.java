@@ -84,28 +84,28 @@ public class SectorsDialog extends FloatingDialog{
         table.background("button").margin(5);
 
         table.defaults().pad(3);
-        table.add(Bundles.format("text.sector", sector.x + ", " + sector.y));
+        table.add(Bundles.format("sector", sector.x + ", " + sector.y));
         table.row();
 
         if(selected.completedMissions < selected.missions.size && !selected.complete){
-            table.labelWrap(Bundles.format("text.mission", selected.getDominantMission().menuDisplayString())).growX();
+            table.labelWrap(Bundles.format("mission", selected.getDominantMission().menuDisplayString())).growX();
             table.row();
         }
 
         if(selected.hasSave()){
-            table.labelWrap(Bundles.format("text.sector.time", selected.getSave().getPlayTime())).growX();
+            table.labelWrap(Bundles.format("sector.time", selected.getSave().getPlayTime())).growX();
             table.row();
         }
 
         table.table(t -> {
-            Cell<?> cell = t.addImageTextButton(sector.hasSave() ? "$text.sector.resume" : "$text.sector.deploy", "icon-play", 10*3, () -> {
+            Cell<?> cell = t.addImageTextButton(sector.hasSave() ? "$sector.resume" : "$sector.deploy", "icon-play", 10*3, () -> {
                 hide();
                 Vars.ui.loadLogic(() -> world.sectors.playSector(selected));
             }).height(60f);
 
             if(selected.hasSave()){
-                t.addImageTextButton("$text.sector.abandon", "icon-cancel", 16 * 2, () ->
-                    Vars.ui.showConfirm("$text.confirm", "$text.sector.abandon.confirm", () -> {
+                t.addImageTextButton("$sector.abandon", "icon-cancel", 16 * 2, () ->
+                    Vars.ui.showConfirm("$confirm", "$sector.abandon.confirm", () -> {
                         world.sectors.abandonSector(selected);
                         // Simulate a sector selection so the buttons get updated.
                         selectSector(selected);

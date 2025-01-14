@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 import mindustryV4.Vars;
-import ucore.core.Core;
-import ucore.core.Settings;
-import ucore.core.Timers;
+import ucore.core.*;
 import ucore.util.Log;
 
 import java.util.Locale;
@@ -60,6 +58,11 @@ public class BundleLoader{
             Locale.setDefault(locale);
             if(!headless) Log.info("Got locale: {0}", locale);
             Core.bundle = I18NBundle.createBundle(handle, locale);
+
+            //router
+            if(locale.toString().equals("router")){
+                Core.bundle.debug("router");
+            }
         }
 
     }

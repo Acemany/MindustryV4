@@ -247,7 +247,7 @@ public class World extends Module{
         } catch(Exception e){
             Log.err(e);
             if(!headless){
-                ui.showError("$text.map.invalid");
+                ui.showError("$map.invalid");
                 threads.runDelay(() -> state.set(State.menu));
                 invalidMap = true;
             }
@@ -261,7 +261,7 @@ public class World extends Module{
 
         if(!headless){
             if(state.teams.get(players[0].getTeam()).cores.size == 0){
-                ui.showError("$text.map.nospawn");
+                ui.showError("$map.nospawn");
                 invalidMap = true;
             }else if(state.mode.isPvp){
                 invalidMap = true;
@@ -271,7 +271,7 @@ public class World extends Module{
                     }
                 }
                 if(invalidMap){
-                    ui.showError("$text.map.nospawn.pvp");
+                    ui.showError("$map.nospawn.pvp");
                 }
             }
         }else{

@@ -56,7 +56,7 @@ public class BlockStats{
 
     /**Adds a stat value.*/
     public void add(BlockStat stat, StatValue value){
-        if(!Bundles.has("text.blocks." + stat.name().toLowerCase(Locale.ROOT))){
+        if(!Bundles.has("blocks." + stat.name().toLowerCase(Locale.ROOT))){
             if(!errorWhenMissing){
                 Log.err("Warning: No bundle entry for stat type \"" + stat + "\"!");
             }else{
@@ -64,7 +64,7 @@ public class BlockStats{
             }
         }
 
-        if(!Bundles.has("text.category." + stat.category.name().toLowerCase(Locale.ROOT))){
+        if(!Bundles.has("category." + stat.category.name().toLowerCase(Locale.ROOT))){
             if(!errorWhenMissing){
                 Log.err("Warning: No bundle entry for stat category \"" + stat.category + "\"!");
             }else{

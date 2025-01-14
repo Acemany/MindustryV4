@@ -11,7 +11,7 @@ public class RestartDialog extends FloatingDialog{
     private Team winner;
 
     public RestartDialog(){
-        super("$text.gameover");
+        super("$gameover");
         setFillParent(false);
         shown(this::rebuild);
     }
@@ -28,33 +28,33 @@ public class RestartDialog extends FloatingDialog{
         buttons().margin(10);
 
         if(state.mode.isPvp){
-            content().add(Bundles.format("text.gameover.pvp",winner.localized())).pad(6);
-            buttons().addButton("$text.menu", () -> {
+            content().add(Bundles.format("gameover.pvp",winner.localized())).pad(6);
+            buttons().addButton("$menu", () -> {
                 hide();
                 state.set(State.menu);
                 logic.reset();
             }).size(130f, 60f);
         }else if(world.getSector() == null){
             if(control.isHighScore()){
-                content().add("$text.highscore").pad(6);
+                content().add("$highscore").pad(6);
                 content().row();
             }
-            content().add(Bundles.format("text.wave.lasted", state.wave)).pad(12);
+            content().add(Bundles.format("wave.lasted", state.wave)).pad(12);
 
-            buttons().addButton("$text.menu", () -> {
+            buttons().addButton("$menu", () -> {
                 hide();
                 state.set(State.menu);
                 logic.reset();
             }).size(130f, 60f);
         }else{
-            content().add("$text.sector.gameover");
-            buttons().addButton("$text.menu", () -> {
+            content().add("$sector.gameover");
+            buttons().addButton("$menu", () -> {
                 hide();
                 state.set(State.menu);
                 logic.reset();
             }).size(130f, 60f);
 
-            buttons().addButton("$text.sector.retry", () -> {
+            buttons().addButton("$sector.retry", () -> {
                 Sector sector = world.getSector();
                 ui.loadLogic(() -> world.sectors.playSector(sector));
                 hide();
