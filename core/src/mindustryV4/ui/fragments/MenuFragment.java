@@ -57,19 +57,22 @@ public class MenuFragment extends Fragment{
         container.defaults().size(size).pad(5).padTop(4f);
 
         MobileButton
-            play = new MobileButton("icon-play-2", isize, "$play", this::showPlaySelect),
-            maps = new MobileButton("icon-map", isize, "$maps", ui.maps::show),
+            play = new MobileButton("icon-play-2", isize, "$sectors", ui.sectors::show),
             load = new MobileButton("icon-load", isize, "$load", ui.load::show),
+            custom = new MobileButton("icon-map", isize, "$customgame", ui.levels::show),
             join = new MobileButton("icon-add", isize, "$joingame", ui.join::show),
-            editor = new MobileButton("icon-editor", isize, "$editor", () -> ui.loadGraphics(ui.editor::show)),
+            //I don't like current editor.
+            //editor = new MobileButton("icon-editor", isize, "$editor", () -> ui.loadGraphics(ui.editor::show)),
+            editor = new MobileButton("icon-editor", isize, "$maps", ui.maps::show),
             tools = new MobileButton("icon-tools", isize, "$settings", ui.settings::show),
-            unlocks = new MobileButton("icon-unlocks", isize, "$unlocks", ui.unlocks::show);
+            unlocks = new MobileButton("icon-unlocks", isize, "$unlocks", ui.unlocks::show),
+            quit = new MobileButton("icon-exit", isize, "$quit", Gdx.app::exit);
 
         if(Gdx.graphics.getWidth() > Gdx.graphics.getHeight()){
             container.add(play);
             container.add(join);
+            container.add(custom);
             container.add(load);
-            container.add(maps);
             container.row();
 
             container.table(table -> {
@@ -78,12 +81,13 @@ public class MenuFragment extends Fragment{
                 table.add(editor);
                 table.add(tools);
                 table.add(unlocks);
+                table.add(quit);
             }).colspan(4);
         }else{
             container.add(play);
-            container.add(maps);
-            container.row();
             container.add(load);
+            container.row();
+            container.add(custom);
             container.add(join);
             container.row();
             container.add(editor);
@@ -94,6 +98,7 @@ public class MenuFragment extends Fragment{
                 table.defaults().set(container.defaults());
 
                 table.add(unlocks);
+                table.add(quit);
             }).colspan(2);
         }
     }
