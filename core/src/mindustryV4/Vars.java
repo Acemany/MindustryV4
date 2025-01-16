@@ -4,7 +4,6 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
 import mindustryV4.core.*;
 import mindustryV4.entities.Player;
 import mindustryV4.entities.TileEntity;
@@ -38,7 +37,7 @@ public class Vars{
     /**URL for GitHub API for releases*/
     public static final String releasesURL = "https://api.github.com/repos/acemany/MindustryV4Builds/releases";
     /**URL for GitHub API for contributors*/
-    public static final String contributorsURL = "https://api.github.com/repos/acemany/MindustryV4_reforked/contributors";
+    public static final String contributorsURL = "https://api.github.com/repos/acemany/MindustryV4/contributors";
     /**URL for sending crash reports to*/
     //public static final String crashReportURL = "http://mindustry.us.to/report";
     //time between waves in frames (on normal mode)
@@ -93,7 +92,7 @@ public class Vars{
     public static boolean ios;
     /**whether the game is running on an Android device*/
     public static boolean android;
-    /**application data directory, equivalent to {@link ucore.core.Settings#getDataDirectory(String app)}*/
+    /**application data directory, equivalent to {@link io.anuke.arc.Settings#getDataDirectory()}*/
     public static FileHandle dataDirectory;
     /**data subdirectory used for screenshots*/
     public static FileHandle screenshotDirectory;
@@ -192,8 +191,5 @@ public class Vars{
         customMapDirectory = dataDirectory.child("maps/");
         saveDirectory = dataDirectory.child("saves/");
         baseCameraScale = Math.round(Unit.dp.scl(4));
-        Array<Locale> temp = Array.with(locales);
-        temp.add(new Locale("router"));
-        locales = temp.toArray(Locale.class);
     }
 }
