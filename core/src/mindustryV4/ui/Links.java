@@ -30,7 +30,7 @@ public class Links{
         public LinkEntry(String name, String link, Color color){
             this.name = name;
             this.color = color;
-            this.description = Bundles.getNotNull("text.link." + name + ".description");
+            this.description = Bundles.getNotNull("link." + name + ".description");
             this.link = link;
         }
     }
