@@ -23,7 +23,7 @@ import static mindustryV4.Vars.ui;
 
 public class AboutDialog extends FloatingDialog{
     private Array<Contributor> contributors = new Array<>();
-    private static ObjectSet<String> bannedItems = ObjectSet.with("dev-builds", "trello");
+    private static ObjectSet<String> bannedItems = ObjectSet.with("dev-builds", "taskboard");
 
     public AboutDialog(){
         super("$about.button");
