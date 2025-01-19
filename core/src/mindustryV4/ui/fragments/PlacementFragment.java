@@ -140,7 +140,7 @@ public class PlacementFragment extends Fragment{
                                         line.left();
                                         line.addImage(stack.item.region).size(8*2);
                                         line.add(stack.item.localizedName()).color(Color.LIGHT_GRAY).padLeft(2).left();
-                                        line.labelWrap(() -> {
+                                        line.label(() -> {
                                             TileEntity core = players[0].getClosestCore();
                                             if(core == null || state.mode.infiniteResources) return "*/*";
 

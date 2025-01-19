@@ -1,4 +1,4 @@
-package io.anuke.kryonet;
+package kryonet;
 
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.serialization.Serialization;

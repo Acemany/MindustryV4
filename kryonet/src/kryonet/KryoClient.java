@@ -1,4 +1,4 @@
-package io.anuke.kryonet;
+package kryonet;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;

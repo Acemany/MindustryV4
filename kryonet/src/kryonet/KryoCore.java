@@ -1,4 +1,4 @@
-package io.anuke.kryonet;
+package kryonet;
 
 import com.esotericsoftware.minlog.Log;
 import com.esotericsoftware.minlog.Log.Logger;

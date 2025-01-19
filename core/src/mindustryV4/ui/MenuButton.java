@@ -27,7 +27,7 @@ public class MenuButton extends TextButton{
 
 
         table(t -> {
-            t.add(text).wrap().growX().get().setAlignment(Align.center, Align.left);
+            t.add(text).wrap().growX().padRight(8).get().setAlignment(Align.center, Align.left);
             if(description != null){
                 t.row();
                 t.add(description).color(Color.LIGHT_GRAY);

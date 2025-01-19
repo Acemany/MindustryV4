@@ -1,4 +1,4 @@
-package io.anuke.kryonet;
+package kryonet;
 
 import com.badlogic.gdx.utils.Array;
 import com.dosse.upnp.UPnP;

@@ -113,25 +113,18 @@ public class MenuFragment extends Fragment{
             out.defaults().size(w, 66f).padTop(5).padRight(5);
 
             out.add(new MenuButton("icon-play-2", "$play", MenuFragment.this::showPlaySelect)).width(bw).colspan(2);
-
             out.row();
 
             out.add(new MenuButton("icon-editor", "$editor", () -> ui.loadGraphics(ui.editor::show)));
-
             out.add(new MenuButton("icon-map", "$maps", ui.maps::show));
-
             out.row();
 
             out.add(new MenuButton("icon-info", "$about.button", ui.about::show));
-
             out.add(new MenuButton("icon-tools", "$settings", ui.settings::show));
-
             out.row();
 
             out.add(new MenuButton("icon-menu", "$changelog.title", ui.changelog::show));
-
             out.add(new MenuButton("icon-unlocks", "$unlocks", ui.unlocks::show));
-
             out.row();
 
             out.add(new MenuButton("icon-exit", "$quit", Gdx.app::exit)).width(bw).colspan(2);
