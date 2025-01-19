@@ -1,6 +1,6 @@
 package mindustryV4.core;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -59,7 +59,7 @@ public class Control extends Module{
 
         Inputs.useControllers(true);
 
-        Gdx.input.setCatchBackKey(true);
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
 
         Effects.setShakeFalloff(10000f);
 

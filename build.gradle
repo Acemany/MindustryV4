@@ -23,9 +23,10 @@ allprojects {
         versionModifier = 'alpha'
         versionType = 'official'
         appName = 'Mindustry V4'
-        gdxVersion = '1.9.11'
+        gdxVersion = '1.13.1'
+        gdxControllersVersion = '2.2.3'
         roboVMVersion = '2.3.0'
-        uCoreVersion = '4085d65de0cc6b971ac4d8c744b1b690d940270e'
+        uCoreVersion = '7020d75218cabe4b1596e9252d4e33122e0b31bc'
 
         getVersionString = {
             String buildVersion = getBuildVersion()
@@ -94,7 +95,6 @@ project(":desktop") {
 
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     }
 }
@@ -176,7 +176,7 @@ project(":core") {
         }
 
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
         compileOnly project(":annotations")
