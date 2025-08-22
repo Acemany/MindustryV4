@@ -1,12 +1,10 @@
 ![Logo](https://i.imgur.com/LLlfrzb.png)
 
-[![Build Status](https://github.com/acemany/MindustryV4_reforked/actions/workflows/push.yml/badge.svg)](https://github.com/acemany/MindustryV4_reforked/actions)
-
 This version is going to improve the [mindustry](https://github.com/Anuken/Mindustry) of [V4](https://github.com/Anuken/Mindustry/releases/tag/v63), while not changing the style of the game itself much.
 
-**[Latest releases](https://github.com/acemany/MindustryV4Builds)**
-
-_[Tasks Board](https://github.com/users/acemany/projects/2)_
+> [!IMPORTANT]
+>
+> Project [migrated](https://codeberg.org/Acemany/MindustryV4) to Codeberg, there will be no more updates to this repository!
 
 ## Building
 
